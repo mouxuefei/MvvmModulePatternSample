@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		  package="com.mou.login">
+	<application>
+		<meta-data
+				android:name="com.mou.login.core.GlobalConfiguration"
+				android:value="ConfigModule"/>
+
+		<activity android:name=".mvvm.view.LoginActivity"
+				  android:label="登录"
+				  android:screenOrientation="portrait"/>
+	</application>
+</manifest>

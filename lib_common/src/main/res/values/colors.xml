@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="public_backgroundColor">#F7F7F7</color>
+    <color name="public_redText">#FF3D14</color>
+    <color name="public_pressedRedText">#D73411</color>
+    <color name="public_blueText">#70A4CD</color>
+    <color name="public_blackText">#333333</color>
+    <color name="public_grayText">#666666</color>
+    <color name="public_hintText">#999999</color>
+    <color name="public_unEnableButton">#DDDDDD</color>
+    <color name="public_unEnableText">#BBBBBB</color>
+    <color name="public_grayEdit">#CCCCCC</color>
+    <color name="public_black">#000000</color><!--黑色-->
+    <color name="public_enable_text">#fff7f7</color>
+
+    <color name="public_whiteColor">#FFFFFF</color>
+    <color name="public_grayColor">#F8F8F8</color>
+    <color name="public_hintColor">#10000000</color>
+    <color name="public_greenColor">#10C219</color>
+    <color name="public_yellowColor">#FFBD1F</color>
+    <color name="public_grayBut">#EEEEEE</color>
+    <color name="public_333333">#333333</color>
+</resources>

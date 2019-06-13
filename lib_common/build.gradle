@@ -1,0 +1,88 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+
+        buildConfigField "boolean","VERSION_ONLINE", "false"
+        buildConfigField "boolean","VERSION_TEST", "false"
+    }
+
+    flavorDimensions "verison"
+    productFlavors {
+        //打包assembleVersionDevDebug
+        versionDev{
+            dimension "verison"
+            buildConfigField "boolean","VERSION_ONLINE", "false"
+            buildConfigField "boolean","VERSION_TEST", "false"
+//            manifestPlaceholders = rootProject.ext.debugPlaceholders
+        }
+        //gradlew clean assembleVersionTestDebug
+        versionTest {
+            dimension "verison"
+            buildConfigField "boolean","VERSION_ONLINE", "false"
+            buildConfigField "boolean","VERSION_TEST", "true"
+//            manifestPlaceholders = rootProject.ext.debugPlaceholders
+        }
+        // gradlew clean assembleVersionOnlineRelease
+        versionOnline{
+            dimension "verison"
+            buildConfigField "boolean","VERSION_ONLINE", "true"
+            buildConfigField "boolean","VERSION_TEST", "true"
+//            manifestPlaceholders = rootProject.ext.releasePlaceholders
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //支持@Parcelize来实现Parcelable序列化
+    androidExtensions {
+        experimental = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.dependencies["kotlin"]
+    api(rootProject.ext.dependencies["arouter"]) {
+        exclude module: 'support-v4'
+        exclude module: 'support-annotations'
+    }
+    implementation rootProject.ext.dependencies["kotlin"]
+    api project(':lib_basemvvm')
+    api(rootProject.ext.dependencies["cardview-v7"]) {
+        exclude module: 'support-annotations'
+    }
+    api rootProject.ext.dependencies["SmartRefreshLayout"]
+    api rootProject.ext.dependencies["FlycoTabLayout"]
+    api rootProject.ext.dependencies["immersionbar"]
+    api rootProject.ext.dependencies["RecyclerViewBindingAdapter"]
+    api rootProject.ext.dependencies["PickerView"]
+    api(rootProject.ext.dependencies["PictureSelector"]) {
+        exclude module: 'glide'
+    }
+    api(rootProject.ext.dependencies["lottie"]) {
+        exclude module: 'support'
+    }
+}

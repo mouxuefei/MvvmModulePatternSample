@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+apply from: "../config_build.gradle"
+
+android {
+    defaultConfig {
+        applicationId "com.mou.mvvmmodule"
+    }
+
+    flavorDimensions  "verison"
+    productFlavors {
+        //打包assembleVersionDevDebug
+        versionDev{
+            dimension "verison"
+        }
+        //gradlew clean assembleVersionTestDebug
+        versionTest {
+            dimension "verison"
+        }
+        // gradlew clean assembleVersionOnlineRelease
+        versionOnline{
+            dimension "verison"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    if (!isBuildModule.toBoolean()) {
+        implementation project(':module_login')
+        implementation project(':module_mine')
+    }
+}

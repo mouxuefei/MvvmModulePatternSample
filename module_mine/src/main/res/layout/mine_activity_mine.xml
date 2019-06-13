@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<variable
+				name="refreshPresenter"
+				type="com.mou.basemvvm.helper.listener.RefreshPresenter"/>
+
+		<variable
+				name="viewModel"
+				type="com.mou.mine.mvvm.viewmodel.MineViewModel"/>
+	</data>
+
+	<com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
+			app:public_toolbar_title="个人中心"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+		<com.fortunes.commonsdk.view.statusview.MultipleStatusView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				bind:onError="@{refreshPresenter}"
+				bind:status="@{viewModel.pageState}">
+
+			<com.scwang.smartrefresh.layout.SmartRefreshLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					bind:onRefresh="@{refreshPresenter}"
+					bind:refreshing="@{viewModel.listState}">
+
+				<android.support.v7.widget.RecyclerView
+						android:id="@+id/recyclerView"
+						android:orientation="vertical"
+						app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"/>
+			</com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+		</com.fortunes.commonsdk.view.statusview.MultipleStatusView>
+	</com.fortunes.commonsdk.view.toolbar.MyToolBarLayout>
+</layout>

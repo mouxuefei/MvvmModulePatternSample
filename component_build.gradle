@@ -1,0 +1,21 @@
+//通过isBuildModule这个变量来确定每个模块是单独运行还是以Library的形式加载到整个App
+if (isBuildModule.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+apply from: "../config_build.gradle"
+
+android {
+    //这里进行设置使用单独运行还是合并运行的Manifest.xml
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            if (isBuildModule.toBoolean()) {
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/release/AndroidManifest.xml'
+            }
+        }
+    }
+}

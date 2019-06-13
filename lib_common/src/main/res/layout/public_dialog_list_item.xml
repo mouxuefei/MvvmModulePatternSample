@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="com.guoyang.recyclerviewbindingadapter.ItemClickPresenter"/>
+
+        <variable
+            name="item"
+            type="String"/>
+
+        <variable
+            name="position"
+            type="Integer"/>
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:onClick="@{(v)->presenter.onItemClick(v,position,item)}"
+        android:text="@{item}"
+        android:textColor="@color/public_blackText"
+        android:textSize="@dimen/public_title_size"
+        tools:text="按月等本息">
+
+    </TextView>
+</layout>

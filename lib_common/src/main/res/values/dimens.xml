@@ -1,0 +1,12 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="public_toolbar_height">44dp</dimen>
+    <dimen name="public_bottomView_height">50dp</dimen>
+    <dimen name="public_titleBar_size">32sp</dimen>
+    <dimen name="public_important_size">22sp</dimen>
+    <dimen name="public_title_size">18sp</dimen>
+    <dimen name="public_content_size">16sp</dimen>
+    <dimen name="public_contentHint_size">14sp</dimen>
+    <dimen name="public_hint_size">12sp</dimen>
+    <dimen name="public_button_radius">6dp</dimen>
+</resources>

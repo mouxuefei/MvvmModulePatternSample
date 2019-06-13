@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--状态布局-->
+    <item name="public_empty_retry_view" type="id"/>
+    <item name="public_error_retry_view" type="id"/>
+    <item name="public_no_network_retry_view" type="id"/>
+    <!--end-->
+</resources>

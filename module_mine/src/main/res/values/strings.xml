@@ -1,0 +1,3 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<string name="public_app_name" tools:ignore="ResourceName">个人中心模块</string>
+</resources>

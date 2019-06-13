@@ -1,0 +1,102 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+
+    }
+
+    dataBinding {
+        enabled = true
+    }
+    flavorDimensions  "verison"
+    productFlavors {
+        //打包assembleVersionDevDebug
+        versionDev{
+            dimension "verison"
+        }
+        //gradlew clean assembleVersionTestDebug
+        versionTest {
+            dimension "verison"
+        }
+        // gradlew clean assembleVersionOnlineRelease
+        versionOnline{
+            dimension "verison"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation rootProject.ext.dependencies["kotlin"]
+    //view
+    //support
+    api(rootProject.ext.dependencies["support-v4"]) {
+        exclude module: 'support-annotations'
+    }
+    api(rootProject.ext.dependencies["constraintLayout"]) {
+        exclude module: 'support-annotations'
+    }
+    api(rootProject.ext.dependencies["appcompat-v7"]) {
+        exclude module: 'support-annotations'
+    }
+    api rootProject.ext.dependencies["design"]
+    api(rootProject.ext.dependencies["recyclerview-v7"]) {
+        exclude module: 'support-annotations'
+    }
+    api rootProject.ext.dependencies["annotations"]
+    api rootProject.ext.dependencies["autosize"]
+    //mvvm
+    kapt rootProject.ext.dependencies["lifecycle-compiler"]
+    implementation rootProject.ext.dependencies["lifecycle-extensions"]
+    implementation rootProject.ext.dependencies["lifecycle-viewmodel"]
+    api(rootProject.ext.dependencies["background"]) {
+        exclude module: 'support'
+    }
+    //rxjava
+    api rootProject.ext.dependencies["rxandroid2"]
+    api rootProject.ext.dependencies["rxjava2"]
+    api rootProject.ext.dependencies["autodispose"]
+    api rootProject.ext.dependencies["autodispose-android-archcomponents"]
+    api rootProject.ext.dependencies["rxbus"]
+    //network
+    api rootProject.ext.dependencies["retrofit"]
+    api rootProject.ext.dependencies["retrofit-converter-gson"]
+    api rootProject.ext.dependencies["retrofit-adapter-rxjava2"]
+    api rootProject.ext.dependencies["okhttp3"]
+    api rootProject.ext.dependencies["logging-interceptor"]
+    api rootProject.ext.dependencies["glide"]
+    api rootProject.ext.dependencies["glide-transformations"]
+    api rootProject.ext.dependencies["gson"]
+    api rootProject.ext.dependencies["persistentCookieJar"]
+    //dagger
+    api rootProject.ext.dependencies["dagger2"]
+    api rootProject.ext.dependencies["dagger2-android"]
+    api rootProject.ext.dependencies["dagger2-android-support"]
+    kapt rootProject.ext.dependencies["dagger2-compiler"]
+    //tools
+    api rootProject.ext.dependencies["timber"]
+    api rootProject.ext.dependencies["multidex"]
+    api rootProject.ext.dependencies["utilcode"]
+    //test
+    testImplementation rootProject.ext.dependencies["junit"]
+}

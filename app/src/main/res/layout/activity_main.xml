@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto">
+	<data>
+		<variable name="vm" type="com.mou.mvvmmodule.di.mvvm.viewmodel.MainViewModel"/>
+	</data>
+	<com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			app:public_toolbar_img="false"
+			app:public_toolbar_title="首页">
+
+		<Button
+				android:id="@+id/btn"
+				android:text="请求"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+
+		<Button
+				android:id="@+id/btn_login"
+				android:text="去登录页"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+		<Button
+				android:id="@+id/btn_mine"
+				android:text="去个人中心"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+
+		<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		/>
+		<TextView
+				android:textColor="@color/black"
+				android:text="@{vm.chapterName}"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		/>
+		<TextView
+				android:textColor="@color/black"
+				android:text="@{vm.link}"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		/>
+	</com.fortunes.commonsdk.view.toolbar.MyToolBarLayout>
+</layout>

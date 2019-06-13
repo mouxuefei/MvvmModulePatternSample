@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--标题栏-->
+    <declare-styleable name="public_toolbar">
+        <attr name="public_toolbar_title" format="string"/>
+        <attr name="public_toolbar_res" format="reference|integer"/>
+        <attr name="public_toolbar_img" format="boolean"/>
+        <attr name="public_toolbar_tv_right" format="string"/>
+    </declare-styleable>
+
+    <!--状态布局-->
+    <declare-styleable name="public_MultipleStatusView">
+        <attr name="public_loadingView" format="reference"/>
+        <attr name="public_errorView" format="reference"/>
+        <attr name="public_emptyView" format="reference"/>
+        <attr name="public_noNetworkView" format="reference"/>
+        <attr name="public_contentView" format="reference"/>
+
+    </declare-styleable>
+
+</resources>

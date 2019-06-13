@@ -1,0 +1,25 @@
+apply from: "../component_build.gradle"
+
+android {
+    resourcePrefix "login_" //给 Module 内的资源名增加前缀, 避免资源名冲突
+    flavorDimensions "verison"
+
+    productFlavors {
+        //打包assembleVersionDevDebug
+        versionDev{
+            dimension "verison"
+        }
+        //gradlew clean assembleVersionTestDebug
+        versionTest {
+            dimension "verison"
+        }
+        // gradlew clean assembleVersionOnlineRelease
+        versionOnline{
+            dimension "verison"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+}

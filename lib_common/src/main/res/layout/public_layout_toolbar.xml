@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:background="@color/white"
+		android:padding="0dp"
+		app:contentInsetStart="0dp">
+
+
+	<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp">
+
+		<RelativeLayout
+				android:id="@+id/public_rl_back"
+				android:layout_width="44dp"
+				android:layout_height="match_parent">
+
+			<ImageView
+					android:id="@+id/public_iv_back"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="15dp"
+					android:src="@mipmap/public_back_icon"/>
+		</RelativeLayout>
+		<TextView
+				android:textColor="#333333"
+				android:textSize="20sp"
+				android:layout_centerInParent="true"
+				android:id="@+id/public_toolbar_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			/>
+
+		<RelativeLayout
+				android:id="@+id/public_rl_right"
+				android:layout_width="100dp"
+				android:layout_height="match_parent"
+				android:layout_alignParentRight="true">
+
+			<TextView
+					android:id="@+id/public_tv_right"
+					android:layout_centerVertical="true"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_marginRight="15dp"
+					android:textColor="@color/public_text_gray_color"
+					android:textSize="15sp"/>
+		</RelativeLayout>
+
+	</RelativeLayout>
+
+</android.support.v7.widget.Toolbar>

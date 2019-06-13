@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!--水波纹点击样式(白色通用)-->
+	<style name="public_rippleStyle">
+		<item name="bl_solid_color">#FFFFFF</item>
+		<item name="bl_ripple_enable">true</item>
+		<item name="bl_ripple_color">#F8F8F8</item>
+	</style>
+</resources>

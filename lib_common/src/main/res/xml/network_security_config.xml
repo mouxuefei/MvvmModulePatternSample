@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--适配Android P 将禁止 App 使用所有未加密的连接-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true"/>
+</network-security-config>
