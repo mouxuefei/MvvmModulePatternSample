@@ -25,7 +25,6 @@ object HttpUrlConstants {
     //正式环境
     private const val RELIASE_BASE_URL = "https://wanandroid.com/"
 
-
     /**
      * 根据不同的打包命令自动查找对应的base_url
      * 1,开发环境打包  gradlew clean assembleVersionDevDebug或者gradlew clean assembleVersionDevRealease
