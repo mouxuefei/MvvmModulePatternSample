@@ -18,7 +18,7 @@ import com.mou.login.mvvm.viewmodel.LoginViewModel
 class LoginActivity: BaseActivity<LoginActivityLoginBinding>() {
 
     private val mViewModel by lazy {
-        createVM(LoginViewModel::class.java)
+        createVM<LoginViewModel>()
     }
     override fun getLayoutId()= R.layout.login_activity_login
 

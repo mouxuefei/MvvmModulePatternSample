@@ -51,7 +51,7 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity(), IView, I
         initData()
     }
 
-    override fun <T : ViewModel> createVM(modelClass: Class<T>): T = ViewModelProviders.of(this, factory.get()).get(modelClass)
+     inline fun < reified T : ViewModel> createVM(): T = ViewModelProviders.of(this, factory.get()).get(T::class.java)
 
 
     override fun onClick(v: View) {

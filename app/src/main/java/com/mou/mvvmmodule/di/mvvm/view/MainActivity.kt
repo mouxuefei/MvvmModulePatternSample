@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getLayoutId() = R.layout.activity_main
     private val mViewModel by lazy {
-        createVM(MainViewModel::class.java)
+        createVM<MainViewModel>()
     }
 
     override fun initView() {

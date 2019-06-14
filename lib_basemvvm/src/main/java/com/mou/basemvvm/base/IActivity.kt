@@ -28,5 +28,4 @@ interface IActivity {
 
     fun initData()
 
-    fun <T : ViewModel> createVM(@NonNull modelClass: Class<T>): T
 }
