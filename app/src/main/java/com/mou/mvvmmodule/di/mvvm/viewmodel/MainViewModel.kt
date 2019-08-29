@@ -1,22 +1,21 @@
 package com.mou.mvvmmodule.di.mvvm.viewmodel
 
 import com.fortunes.commonsdk.network.bean.BaseBean
-import com.mou.basemvvm.base.BaseViewModel
+import com.mou.basemvvm.base.BaseVMModel
 import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
 import com.mou.mvvmmodule.di.mvvm.bean.ArticleBean
-import com.mou.mvvmmodule.di.mvvm.model.ApiService
+import com.mou.mvvmmodule.di.mvvm.model.MainModel
 import io.reactivex.Single
 import timber.log.Timber
-import javax.inject.Inject
 
 
-class MainViewModel @Inject constructor(private val apiService: ApiService) : BaseViewModel() {
+class MainViewModel : BaseVMModel<MainModel>(){
+    override var mModel: MainModel=MainModel()
     val chapterName = ObservableItemField<String>()
     val link = ObservableItemField<String>()
-
     fun getArticle(): Single<BaseBean<ArticleBean>> {
-        return apiService
+        return mModel
             .getArticle()
             .async()
             .doOnSuccess {

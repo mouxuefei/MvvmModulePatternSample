@@ -14,7 +14,6 @@ import com.mou.mine.R
 import com.mou.mine.databinding.MineActivityMineBinding
 import com.mou.mine.mvvm.viewmodel.MineItemViewModel
 import com.mou.mine.mvvm.viewmodel.MineViewModel
-import kotlinx.android.synthetic.main.mine_activity_mine.*
 
 /**
  * @FileName: LoginActivity.java
@@ -24,13 +23,12 @@ import kotlinx.android.synthetic.main.mine_activity_mine.*
  * @desc
  */
 @Route(path = RouterConstants.MINE_ACTIVITY)
-class MineActivity : BaseActivity<MineActivityMineBinding>(), RefreshPresenter, ItemClickPresenter<MineItemViewModel> {
+class MineActivity : BaseActivity<MineActivityMineBinding,MineViewModel>(), RefreshPresenter, ItemClickPresenter<MineItemViewModel> {
+    override fun providerVMClass()=MineViewModel::class.java
     override fun getLayoutId() = R.layout.mine_activity_mine
     override fun loadData(isRefresh: Boolean) = loadVMData(isRefresh)
     override fun initData() = loadVMData(true)
-    private val mViewModel by lazy {
-        createVM<MineViewModel>()
-    }
+
     private val mAdapter by lazy {
         SingleTypeAdapter(this, R.layout.mine_my_item_order, mViewModel.observableList)
             .apply { this.itemPresenter = this@MineActivity }

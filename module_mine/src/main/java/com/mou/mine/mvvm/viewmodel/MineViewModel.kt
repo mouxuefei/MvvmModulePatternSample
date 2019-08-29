@@ -2,15 +2,14 @@ package com.mou.mine.mvvm.viewmodel
 
 import com.fortunes.commonsdk.network.bean.BaseBean
 import com.guoyang.recyclerviewbindingadapter.observable.ObservableAdapterList
-import com.mou.basemvvm.base.BaseViewModel
+import com.mou.basemvvm.base.BaseVMModel
 import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
 import com.mou.basemvvm.helper.network.EmptyException
-import com.mou.mine.mvvm.model.data.MineBean
-import com.mou.mine.mvvm.model.data.SubData
-import com.mou.mine.mvvm.model.repository.ApiService
+import com.mou.mine.mvvm.bean.MineBean
+import com.mou.mine.mvvm.bean.SubData
+import com.mou.mine.mvvm.model.MineModel
 import io.reactivex.Single
-import javax.inject.Inject
 
 /**
  * @FileName: MineViewModel.java
@@ -19,11 +18,12 @@ import javax.inject.Inject
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class MineViewModel @Inject constructor(private val apiService: ApiService) : BaseViewModel() {
+class MineViewModel : BaseVMModel<MineModel>() {
+    override var mModel: MineModel=MineModel()
     private var page = 1
     val observableList = ObservableAdapterList<MineItemViewModel>()
     fun getProjectList(isRefresh: Boolean, cid: Int): Single<BaseBean<MineBean>> {
-        return apiService
+        return mModel
             .getProjectList(
                 if (isRefresh) {
                     page = 1
