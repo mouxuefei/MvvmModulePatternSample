@@ -28,7 +28,6 @@ class MineActivity : BaseActivity<MineActivityMineBinding,MineViewModel>(), Refr
     override fun getLayoutId() = R.layout.mine_activity_mine
     override fun loadData(isRefresh: Boolean) = loadVMData(isRefresh)
     override fun initData() = loadVMData(true)
-
     private val mAdapter by lazy {
         SingleTypeAdapter(this, R.layout.mine_my_item_order, mViewModel.observableList)
             .apply { this.itemPresenter = this@MineActivity }

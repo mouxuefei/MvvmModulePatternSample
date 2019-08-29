@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mou.basemvvm.helper.listener.ClickPresenter
 import com.mou.basemvvm.widget.LoadDialog
 
 
@@ -31,7 +30,7 @@ import com.mou.basemvvm.widget.LoadDialog
  * Fragment的父类
  */
 
-abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IView, IActivity, ClickPresenter {
+abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IView, IActivity {
     //上下文
     protected lateinit var mContext: Context
     protected lateinit var mBinding: B
@@ -108,8 +107,6 @@ abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IVi
         }
     }
 
-    override fun onClick(v: View) {
-    }
 
     /**
      * 显示loading框

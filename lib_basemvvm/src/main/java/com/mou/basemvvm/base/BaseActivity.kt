@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.mou.basemvvm.helper.listener.ClickPresenter
 import com.mou.basemvvm.widget.LoadDialog
 import com.noober.background.BackgroundLibrary
 
@@ -26,7 +25,7 @@ import com.noober.background.BackgroundLibrary
  * Activity的父类
  */
 
-abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActivity(), IView, IActivity, ClickPresenter {
+abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActivity(), IView, IActivity{
     protected lateinit var mBinding: B
     lateinit var mViewModel: VM
     abstract fun providerVMClass(): Class<VM>?
