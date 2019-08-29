@@ -19,4 +19,4 @@
 
  *  master=>有dagger的分支
  * noDagger=>去掉dagger的分支
-
+* noDataBinding=>去掉DataBinding和dagger的分支
