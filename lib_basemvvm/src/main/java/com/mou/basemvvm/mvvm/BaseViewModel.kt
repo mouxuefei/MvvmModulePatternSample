@@ -1,8 +1,10 @@
-package com.mou.basemvvm.base
+package com.mou.basemvvm.mvvm
 
 import android.arch.lifecycle.ViewModel
-import android.support.annotation.LayoutRes
-import android.support.annotation.NonNull
+import com.mou.basemvvm.helper.annotation.PageStateType
+import com.mou.basemvvm.helper.annotation.RefreshType
+import com.mou.basemvvm.helper.extens.ObservableItemField
+import timber.log.Timber
 
 /***
  *
@@ -17,15 +19,24 @@ import android.support.annotation.NonNull
  *           ░     ░ ░      ░  ░
  *
  * Created by mou on 2018/8/20.
- * Activity/Fragment的接口
+ * ViewModel的父类
  */
 
-interface IActivity {
-    @LayoutRes
-    fun getLayoutId(): Int
+abstract class BaseViewModel : ViewModel() {
+    //页面状态
+    @PageStateType
+    val pageState = ObservableItemField<Int>()
+    //刷新/加载更多状态
+    @RefreshType
+    val listState = ObservableItemField<Int>()
 
-    fun initView()
+    init {
+        pageState.set(PageStateType.NORMAL)
+        listState.set(RefreshType.NORMAL)
+    }
 
-    fun initData()
-
+    override fun onCleared() {
+        super.onCleared()
+        Timber.i("${javaClass.simpleName}:onCleared()")
+    }
 }

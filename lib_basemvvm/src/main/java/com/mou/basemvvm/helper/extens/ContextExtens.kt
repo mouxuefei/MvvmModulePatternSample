@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 
 
 /***

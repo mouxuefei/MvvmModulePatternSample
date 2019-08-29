@@ -1,6 +1,5 @@
-package com.mou.basemvvm.base
+package com.mou.basemvvm.mvvm
 
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -23,7 +22,7 @@ import com.noober.background.BackgroundLibrary
  * Activity的父类
  */
 
-abstract class BaseActivity<VM : ViewModel> : AppCompatActivity(), IView, IActivity {
+abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IActivity {
     lateinit var mViewModel: VM
     abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {

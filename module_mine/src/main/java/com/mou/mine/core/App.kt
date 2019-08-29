@@ -1,6 +1,6 @@
 package com.mou.mine.core
 
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 
 /***
  * 该类是module单独运行时候需要的Application类，这里我们不需要实现第三方的实例逻辑，只需要注入AppComponent就好

@@ -1,6 +1,6 @@
 package com.mou.login.mvvm.viewmodel
 
-import com.mou.basemvvm.base.BaseVMModel
+import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.login.mvvm.model.LoginModel
 
 /**

@@ -2,7 +2,7 @@ package com.mou.login.http
 
 import com.fortunes.commonsdk.network.HttpUrlConstants
 import com.fortunes.commonsdk.network.provider.BaseNetProvider
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 import com.mou.basemvvm.helper.network.NetMgr
 
 /**

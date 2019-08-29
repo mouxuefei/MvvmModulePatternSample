@@ -1,4 +1,4 @@
-package com.mou.basemvvm.base
+package com.mou.basemvvm
 
 import android.app.Application
 import android.content.Context

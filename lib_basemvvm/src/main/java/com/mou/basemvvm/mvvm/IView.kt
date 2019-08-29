@@ -1,11 +1,15 @@
-package com.mou.basemvvm.base
+package com.mou.basemvvm.mvvm
 
-import android.arch.lifecycle.ViewModel
-import com.mou.basemvvm.helper.annotation.PageStateType
-import com.mou.basemvvm.helper.annotation.RefreshType
-import com.mou.basemvvm.helper.extens.ObservableItemField
-import timber.log.Timber
+import android.arch.lifecycle.LifecycleOwner
 
+/***
+ * You may think you know what the following code does.
+ * But you dont. Trust me.
+ * Fiddle with it, and youll spend many a sleepless
+ * night cursing the moment you thought youd be clever
+ * enough to "optimize" the code below.
+ * Now close this file and go play with something else.
+ */
 /***
  *
  *   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗
@@ -18,25 +22,11 @@ import timber.log.Timber
  *  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░
  *           ░     ░ ░      ░  ░
  *
- * Created by mou on 2018/8/20.
- * ViewModel的父类
+ * Created by mou on 2018/12/3.
+ * Activity/Fragment的接口
  */
+interface IView : LifecycleOwner {
+    fun showLoading(message: String = "请稍后...")
 
-abstract class BaseViewModel : ViewModel() {
-    //页面状态
-    @PageStateType
-    val pageState = ObservableItemField<Int>()
-    //刷新/加载更多状态
-    @RefreshType
-    val listState = ObservableItemField<Int>()
-
-    init {
-        pageState.set(PageStateType.NORMAL)
-        listState.set(RefreshType.NORMAL)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("${javaClass.simpleName}:onCleared()")
-    }
+    fun hideLoading()
 }

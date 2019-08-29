@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.HandlerThread
 import com.google.gson.Gson
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 import java.lang.reflect.Field
 
 /***

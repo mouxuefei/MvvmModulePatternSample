@@ -2,7 +2,7 @@ package com.mou.mine.mvvm.viewmodel
 
 import com.fortunes.commonsdk.network.bean.BaseBean
 import com.guoyang.recyclerviewbindingadapter.observable.ObservableAdapterList
-import com.mou.basemvvm.base.BaseVMModel
+import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
 import com.mou.basemvvm.helper.network.EmptyException

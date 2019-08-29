@@ -2,7 +2,7 @@ package com.mou.login.mvvm.view
 
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.fortunes.commonsdk.core.RouterConstants
-import com.mou.basemvvm.base.BaseActivity
+import com.mou.basemvvm.mvvm.BaseActivity
 import com.mou.login.R
 import com.mou.login.mvvm.viewmodel.LoginViewModel
 

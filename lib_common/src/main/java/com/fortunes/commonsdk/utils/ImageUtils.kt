@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 
 
 /***

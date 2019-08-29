@@ -1,6 +1,6 @@
 package com.mou.login.mvvm.model
 
-import com.mou.basemvvm.base.BaseModel
+import com.mou.basemvvm.mvvm.BaseModel
 
 /**
  * @FileName: LoginModel.java

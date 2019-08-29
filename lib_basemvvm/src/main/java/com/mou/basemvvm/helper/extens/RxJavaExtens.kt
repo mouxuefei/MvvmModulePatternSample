@@ -2,11 +2,11 @@ package com.mou.basemvvm.helper.extens
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
-import com.mou.basemvvm.base.BaseViewModel
-import com.mou.basemvvm.base.IView
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.network.EmptyException
+import com.mou.basemvvm.mvvm.BaseViewModel
+import com.mou.basemvvm.mvvm.IView
 import com.uber.autodispose.AutoDispose
 import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.SingleSubscribeProxy

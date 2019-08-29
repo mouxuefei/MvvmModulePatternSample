@@ -1,9 +1,9 @@
 package com.mou.mvvmmodule.di.mvvm.viewmodel
 
 import com.fortunes.commonsdk.network.bean.BaseBean
-import com.mou.basemvvm.base.BaseVMModel
 import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
+import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.mvvmmodule.di.mvvm.bean.ArticleBean
 import com.mou.mvvmmodule.di.mvvm.model.MainModel
 import io.reactivex.Single

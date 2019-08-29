@@ -1,7 +1,7 @@
 package com.fortunes.commonsdk.utils
 
 import android.widget.Toast
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 
 /**
  * 解决小米吐司带app名称问题

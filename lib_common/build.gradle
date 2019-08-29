@@ -85,4 +85,10 @@ dependencies {
     api(rootProject.ext.dependencies["lottie"]) {
         exclude module: 'support'
     }
+    kapt rootProject.ext.dependencies["lifecycle-compiler"]
+    implementation rootProject.ext.dependencies["lifecycle-extensions"]
+    implementation rootProject.ext.dependencies["lifecycle-viewmodel"]
+    api(rootProject.ext.dependencies["background"]) {
+        exclude module: 'support'
+    }
 }

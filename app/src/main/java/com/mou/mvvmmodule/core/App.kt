@@ -1,6 +1,6 @@
 package com.mou.mvvmmodule.core
 
-import com.mou.basemvvm.base.BaseApplication
+import com.mou.basemvvm.BaseApplication
 
 
 class App : BaseApplication() {

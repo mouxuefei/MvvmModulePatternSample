@@ -1,4 +1,4 @@
-package com.mou.basemvvm.base
+package com.mou.basemvvm.mvvm
 
 /**
  * @FileName: BaseModel.java

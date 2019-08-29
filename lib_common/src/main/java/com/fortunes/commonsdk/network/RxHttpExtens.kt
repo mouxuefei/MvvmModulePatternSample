@@ -21,7 +21,7 @@ import java.net.UnknownHostException
 /**
  * 关于Http请求结果的统一处理类
  */
-fun <T> SingleSubscribeProxy<T>.onHttpSubscribe(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
+fun <T> SingleSubscribeProxy<T>.dealResult(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
     this.subscribe({
         success?.invoke(it)
     }, {
@@ -45,7 +45,7 @@ fun <T> SingleSubscribeProxy<T>.onHttpSubscribe(context: Context, subErr: ((Thro
     })
 }
 
-fun <T> SingleSubscribeProxy<T>.onHttpSubscribeNoToast(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
+fun <T> SingleSubscribeProxy<T>.dealResultNoToast(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
     this.subscribe({
         success?.invoke(it)
     }, {

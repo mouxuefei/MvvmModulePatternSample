@@ -1,6 +1,6 @@
 package com.mou.mvvmmodule.di.mvvm.model
 
-import com.mou.basemvvm.base.BaseModel
+import com.mou.basemvvm.mvvm.BaseModel
 import com.mou.mvvmmodule.di.http.HomeApiManager
 
 /**
