@@ -31,10 +31,11 @@ import com.mou.basemvvm.widget.LoadDialog
  * Fragment的父类
  */
 
-abstract class BaseFragment<B : ViewDataBinding> : Fragment(), IView, IActivity, ClickPresenter {
+abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IView, IActivity, ClickPresenter {
     //上下文
     protected lateinit var mContext: Context
     protected lateinit var mBinding: B
+    lateinit var mViewModel: VM
     //数据是否加载标识
     private var isDataInitiated = false
     //view是否加载标识
@@ -45,8 +46,6 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), IView, IActivity,
     private val progressDialog: LoadDialog by lazy {
         LoadDialog.create(mContext)
     }
-
-
 
     /**
      * 是否懒加载
@@ -63,6 +62,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), IView, IActivity,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mContext = activity ?: throw Exception("activity is null")
+        initVM()
         initView()
         //判断是否懒加载
         if (lazyLoad()) {
@@ -95,15 +95,18 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), IView, IActivity,
         }
     }
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), null, false)
-        mBinding.setLifecycleOwner(this)
+        mBinding.lifecycleOwner = this
         return mBinding.root
     }
 
-    inline fun <reified T : ViewModel> createVM(): T = ViewModelProviders.of(this).get(T::class.java)
+    abstract fun providerVMClass(): Class<VM>?
+    private fun initVM() {
+        providerVMClass()?.let {
+            mViewModel = ViewModelProviders.of(this).get(it)
+        }
+    }
 
     override fun onClick(v: View) {
     }

@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import com.mou.basemvvm.helper.listener.ClickPresenter
 import com.mou.basemvvm.widget.LoadDialog
 import com.noober.background.BackgroundLibrary
@@ -27,10 +26,10 @@ import com.noober.background.BackgroundLibrary
  * Activity的父类
  */
 
-abstract class BaseActivity<B : ViewDataBinding,VM: ViewModel> : AppCompatActivity(), IView, IActivity, ClickPresenter {
+abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActivity(), IView, IActivity, ClickPresenter {
     protected lateinit var mBinding: B
     lateinit var mViewModel: VM
-
+    abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {
         LoadDialog.create(this)
     }
@@ -44,30 +43,17 @@ abstract class BaseActivity<B : ViewDataBinding,VM: ViewModel> : AppCompatActivi
         initView()
         initData()
     }
-    abstract fun providerVMClass(): Class<VM>?
     private fun initVM() {
         providerVMClass()?.let {
             mViewModel = ViewModelProviders.of(this).get(it)
         }
     }
 
-    override fun onClick(v: View) {
-
-    }
-
-
-
-    /**
-     * 显示loading框
-     */
     override fun showLoading(message: String) {
         progressDialog.setMessage(message)
         progressDialog.show()
     }
 
-    /**
-     * 隐藏loading框
-     */
     override fun hideLoading() {
         progressDialog.dismiss()
     }
@@ -76,6 +62,4 @@ abstract class BaseActivity<B : ViewDataBinding,VM: ViewModel> : AppCompatActivi
         super.onDestroy()
         progressDialog.dismiss()
     }
-
-
 }
