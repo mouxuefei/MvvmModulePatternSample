@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.RelativeLayout
@@ -34,6 +35,7 @@ import timber.log.Timber
  *
  * Created by mou on 2018/9/11.
  */
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActivityLifecycleCallbacksImpl : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         Timber.i("${activity.javaClass.simpleName} onActivityCreated")

@@ -53,12 +53,6 @@ ext {
             "autodispose-android-archcomponents": "com.uber.autodispose:autodispose-android-archcomponents:0.8.0",
             "rxbus"                             : "com.blankj:rxbus:1.5",
 
-            //dagger2
-            "dagger2"                           : "com.google.dagger:dagger:${version["dagger2SdkVersion"]}",
-            "dagger2-android"                   : "com.google.dagger:dagger-android:${version["dagger2SdkVersion"]}",
-            "dagger2-android-support"           : "com.google.dagger:dagger-android-support:${version["dagger2SdkVersion"]}",
-            "dagger2-compiler"                  : "com.google.dagger:dagger-compiler:${version["dagger2SdkVersion"]}",
-            "dagger2-android-processor"         : "com.google.dagger:dagger-android-processor:${version["dagger2SdkVersion"]}",
 
             //view
             //日期选择

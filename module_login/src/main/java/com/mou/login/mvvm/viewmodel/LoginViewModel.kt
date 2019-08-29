@@ -1,8 +1,7 @@
 package com.mou.login.mvvm.viewmodel
 
-import com.mou.basemvvm.base.BaseViewModel
-import com.mou.login.mvvm.model.repository.ApiService
-import javax.inject.Inject
+import com.mou.basemvvm.base.BaseVMModel
+import com.mou.login.mvvm.model.LoginModel
 
 /**
  * @FileName: LoginViewModel.java
@@ -11,6 +10,8 @@ import javax.inject.Inject
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class LoginViewModel @Inject constructor(private val apiService: ApiService) : BaseViewModel() {
+class LoginViewModel: BaseVMModel<LoginModel>() {
+    override var mModel: LoginModel=LoginModel()
+
 
 }

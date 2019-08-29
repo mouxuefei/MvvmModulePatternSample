@@ -88,11 +88,7 @@ dependencies {
     api rootProject.ext.dependencies["glide-transformations"]
     api rootProject.ext.dependencies["gson"]
     api rootProject.ext.dependencies["persistentCookieJar"]
-    //dagger
-    api rootProject.ext.dependencies["dagger2"]
-    api rootProject.ext.dependencies["dagger2-android"]
-    api rootProject.ext.dependencies["dagger2-android-support"]
-    kapt rootProject.ext.dependencies["dagger2-compiler"]
+
     //tools
     api rootProject.ext.dependencies["timber"]
     api rootProject.ext.dependencies["multidex"]

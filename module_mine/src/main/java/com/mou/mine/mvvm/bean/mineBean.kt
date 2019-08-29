@@ -1,4 +1,4 @@
-package com.mou.mine.mvvm.model.data
+package com.mou.mine.mvvm.bean
 
 /**
  * @FileName: LoginBean.java

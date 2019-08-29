@@ -99,8 +99,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation rootProject.ext.dependencies["kotlin"]
-    kapt rootProject.ext.dependencies["dagger2-compiler"]
-    kapt rootProject.ext.dependencies["dagger2-android-processor"]
     kapt rootProject.ext.dependencies["arouter-compiler"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
