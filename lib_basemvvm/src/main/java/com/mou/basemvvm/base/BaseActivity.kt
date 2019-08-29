@@ -2,8 +2,6 @@ package com.mou.basemvvm.base
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.mou.basemvvm.widget.LoadDialog
@@ -25,8 +23,7 @@ import com.noober.background.BackgroundLibrary
  * Activity的父类
  */
 
-abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActivity(), IView, IActivity{
-    protected lateinit var mBinding: B
+abstract class BaseActivity<VM : ViewModel> : AppCompatActivity(), IView, IActivity {
     lateinit var mViewModel: VM
     abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {
@@ -35,13 +32,13 @@ abstract class BaseActivity<B : ViewDataBinding, VM : ViewModel> : AppCompatActi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BackgroundLibrary.inject(this)
-        mBinding = DataBindingUtil.setContentView(this, getLayoutId())
+        setContentView(getLayoutId())
         super.onCreate(savedInstanceState)
-        mBinding.lifecycleOwner = this
         initVM()
         initView()
         initData()
     }
+
     private fun initVM() {
         providerVMClass()?.let {
             mViewModel = ViewModelProviders.of(this).get(it)

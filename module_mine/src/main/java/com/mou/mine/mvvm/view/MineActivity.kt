@@ -1,7 +1,10 @@
 package com.mou.mine.mvvm.view
 
+import android.arch.lifecycle.Observer
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.fortunes.commonsdk.binds.bindRefreshing
+import com.fortunes.commonsdk.binds.bindStatus
 import com.fortunes.commonsdk.core.RouterConstants
 import com.fortunes.commonsdk.network.onHttpSubscribeNoToast
 import com.guoyang.recyclerviewbindingadapter.ItemClickPresenter
@@ -11,9 +14,11 @@ import com.mou.basemvvm.helper.extens.bindStatusOrLifeCycle
 import com.mou.basemvvm.helper.extens.toast
 import com.mou.basemvvm.helper.listener.RefreshPresenter
 import com.mou.mine.R
-import com.mou.mine.databinding.MineActivityMineBinding
 import com.mou.mine.mvvm.viewmodel.MineItemViewModel
 import com.mou.mine.mvvm.viewmodel.MineViewModel
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import kotlinx.android.synthetic.main.mine_activity_mine.*
 
 /**
  * @FileName: LoginActivity.java
@@ -23,7 +28,7 @@ import com.mou.mine.mvvm.viewmodel.MineViewModel
  * @desc
  */
 @Route(path = RouterConstants.MINE_ACTIVITY)
-class MineActivity : BaseActivity<MineActivityMineBinding,MineViewModel>(), RefreshPresenter, ItemClickPresenter<MineItemViewModel> {
+class MineActivity : BaseActivity<MineViewModel>(), RefreshPresenter, ItemClickPresenter<MineItemViewModel> {
     override fun providerVMClass()=MineViewModel::class.java
     override fun getLayoutId() = R.layout.mine_activity_mine
     override fun loadData(isRefresh: Boolean) = loadVMData(isRefresh)
@@ -34,11 +39,27 @@ class MineActivity : BaseActivity<MineActivityMineBinding,MineViewModel>(), Refr
     }
 
     override fun initView() {
-        mBinding.apply {
-            viewModel = mViewModel
-            this.refreshPresenter = this@MineActivity
-            recyclerView.adapter = mAdapter
-        }
+        recyclerView.adapter = mAdapter
+        mViewModel.pageState.observe(this, Observer {
+            it?.let {
+                bindStatus(sv,it)
+            }
+        })
+        sv.setOnRetryClickListener(View.OnClickListener {
+            loadData(true)
+        })
+        mViewModel.listState.observe(this, Observer {
+            it?.let { bindRefreshing(srl,it) }
+        })
+        srl.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                loadData(false)
+            }
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                srl.setNoMoreData(false)
+                loadData(true)
+            }
+        })
     }
 
     override fun onItemClick(v: View, position: Int, item: MineItemViewModel) {
@@ -48,6 +69,5 @@ class MineActivity : BaseActivity<MineActivityMineBinding,MineViewModel>(), Refr
     private fun loadVMData(isRefresh: Boolean) =
         mViewModel.getProjectList(isRefresh, 294)
             .bindStatusOrLifeCycle(isRefresh, viewModel = mViewModel, owner = this@MineActivity)
-            .onHttpSubscribeNoToast(this@MineActivity) {
-            }
+            .onHttpSubscribeNoToast(this@MineActivity)
 }

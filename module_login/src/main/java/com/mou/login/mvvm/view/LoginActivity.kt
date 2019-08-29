@@ -4,7 +4,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.fortunes.commonsdk.core.RouterConstants
 import com.mou.basemvvm.base.BaseActivity
 import com.mou.login.R
-import com.mou.login.databinding.LoginActivityLoginBinding
 import com.mou.login.mvvm.viewmodel.LoginViewModel
 
 /**
@@ -15,7 +14,7 @@ import com.mou.login.mvvm.viewmodel.LoginViewModel
  * @desc
  */
 @Route(path = RouterConstants.LOGIN_ACTIVITY)
-class LoginActivity: BaseActivity<LoginActivityLoginBinding,LoginViewModel>() {
+class LoginActivity: BaseActivity<LoginViewModel>() {
     override fun providerVMClass()=LoginViewModel::class.java
     override fun getLayoutId()= R.layout.login_activity_login
 

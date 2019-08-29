@@ -12,6 +12,4 @@ import com.mou.login.mvvm.model.LoginModel
  */
 class LoginViewModel: BaseVMModel<LoginModel>() {
     override var mModel: LoginModel=LoginModel()
-
-
 }

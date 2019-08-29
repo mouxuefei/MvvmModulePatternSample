@@ -30,10 +30,9 @@ import com.mou.basemvvm.widget.LoadDialog
  * Fragment的父类
  */
 
-abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IView, IActivity {
+abstract class BaseFragment<VM: ViewModel> : Fragment(), IView, IActivity {
     //上下文
     protected lateinit var mContext: Context
-    protected lateinit var mBinding: B
     lateinit var mViewModel: VM
     //数据是否加载标识
     private var isDataInitiated = false
@@ -95,9 +94,7 @@ abstract class BaseFragment<B : ViewDataBinding,VM: ViewModel> : Fragment(), IVi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), null, false)
-        mBinding.lifecycleOwner = this
-        return mBinding.root
+        return inflater.inflate(getLayoutId(), null, false)
     }
 
     abstract fun providerVMClass(): Class<VM>?
