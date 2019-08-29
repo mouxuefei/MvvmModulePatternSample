@@ -11,6 +11,6 @@
 6. [**Rxjava**](https://github.com/ReactiveX/RxJava)  
 7. [**Retrofit**](http://square.github.io/retrofit/)  
 
-###### 去掉了dagger
+###### 去掉了Databinding
 
 
