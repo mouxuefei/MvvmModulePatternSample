@@ -28,7 +28,6 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
                 .bindDialogOrLifeCycle(this)
                 .onHttpSubscribeNoToast(this) {
                     toast("成功")
-
                 }
         }
         btn_login.setOnClickListener {
