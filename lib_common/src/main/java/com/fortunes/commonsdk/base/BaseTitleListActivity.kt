@@ -44,8 +44,11 @@ abstract class BaseTitleListActivity<VM : BaseViewModel>: BaseActivity<VM>() , R
                 loadData(true)
             }
         })
+        toolBar.setTitle(getPageTitle())
         initCommonView()
     }
+
+    abstract fun getPageTitle(): String
 
     abstract fun initCommonView()
 }

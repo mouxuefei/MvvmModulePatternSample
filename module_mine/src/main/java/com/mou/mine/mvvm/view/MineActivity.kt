@@ -22,6 +22,7 @@ import com.mou.mine.mvvm.viewmodel.MineViewModel
  */
 @Route(path = RouterConstants.MINE_ACTIVITY)
 class MineActivity : BaseTitleListActivity<MineViewModel>(), ItemClickPresenter<MineItemViewModel> {
+    override fun getPageTitle()="个人中心"
     override fun providerVMClass() = MineViewModel::class.java
     override fun loadData(isRefresh: Boolean) = loadVMData(isRefresh)
     override fun initData() = loadVMData(true)
