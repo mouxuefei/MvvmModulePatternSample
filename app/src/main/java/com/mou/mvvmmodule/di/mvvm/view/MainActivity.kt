@@ -2,11 +2,11 @@ package com.mou.mvvmmodule.di.mvvm.view
 
 import android.arch.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.fortunes.commonsdk.base.BaseActivity
 import com.fortunes.commonsdk.core.RouterConstants
 import com.fortunes.commonsdk.network.dealResult
 import com.fortunes.commonsdk.utils.NavigationUtils
 import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
-import com.mou.basemvvm.mvvm.BaseActivity
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.di.mvvm.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*

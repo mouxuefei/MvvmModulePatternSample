@@ -7,7 +7,6 @@ import com.fortunes.commonsdk.R
 import com.fortunes.commonsdk.binds.bindRefreshing
 import com.fortunes.commonsdk.binds.bindStatus
 import com.mou.basemvvm.helper.listener.RefreshPresenter
-import com.mou.basemvvm.mvvm.BaseActivity
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
