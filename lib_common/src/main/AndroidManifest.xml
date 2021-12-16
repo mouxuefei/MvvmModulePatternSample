@@ -46,7 +46,7 @@
 
         <!-- 适配7.0获取uri路径 -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -61,13 +61,7 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2"/>
-        <!-- 屏幕适配 -->
-        <meta-data
-            android:name="design_width_in_dp"
-            android:value="360"/>
-        <meta-data
-            android:name="design_height_in_dp"
-            android:value="640"/>
+     
         <!--项目Application运行的初始化文件-->
         <meta-data
             android:name="com.fortunes.commonsdk.core.GlobalConfiguration"

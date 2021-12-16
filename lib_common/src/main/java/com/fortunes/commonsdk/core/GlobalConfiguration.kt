@@ -2,7 +2,8 @@ package com.fortunes.commonsdk.core
 
 import android.app.Application
 import android.content.Context
-import android.support.v4.app.FragmentManager
+import android.util.Log
+import androidx.fragment.app.FragmentManager
 import com.fortunes.commonsdk.R
 import com.mou.basemvvm.integration.AppLifeCycles
 import com.mou.basemvvm.integration.ConfigModule
@@ -39,6 +40,7 @@ class GlobalConfiguration : ConfigModule {
     }
 
     override fun injectAppLifecycle(context :Context, lifeCycles: MutableList<AppLifeCycles>) {
+        Log.e("villa","aaaaaaa")
         lifeCycles.add(ApplicationLifeCyclesImpl())
     }
 

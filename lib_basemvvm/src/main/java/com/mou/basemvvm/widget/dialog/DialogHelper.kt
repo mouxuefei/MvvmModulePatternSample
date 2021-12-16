@@ -9,8 +9,8 @@ package com.mou.basemvvm.widget.dialog
  * Now close this file and go play with something else.
  */
 
-import android.support.v7.app.AlertDialog
 
+import androidx.appcompat.app.AlertDialog
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.PermissionUtils
 import com.mou.easymvvm.R

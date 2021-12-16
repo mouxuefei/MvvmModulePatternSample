@@ -1,11 +1,16 @@
 package com.mou.basemvvm.helper.annotation;
 
-import android.support.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.mou.basemvvm.helper.annotation.PageStateType.*;
+import androidx.annotation.IntDef;
+
+import static com.mou.basemvvm.helper.annotation.PageStateType.CONTENT;
+import static com.mou.basemvvm.helper.annotation.PageStateType.EMPTY;
+import static com.mou.basemvvm.helper.annotation.PageStateType.ERROR;
+import static com.mou.basemvvm.helper.annotation.PageStateType.LOADING;
+import static com.mou.basemvvm.helper.annotation.PageStateType.NORMAL;
+import static com.mou.basemvvm.helper.annotation.PageStateType.NOWORK;
 
 
 /***

@@ -1,7 +1,9 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+}
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
@@ -71,7 +73,7 @@ dependencies {
     }
     implementation rootProject.ext.dependencies["kotlin"]
     api project(':lib_basemvvm')
-    api(rootProject.ext.dependencies["cardview-v7"]) {
+    api(rootProject.ext.dependencies["cardview"]) {
         exclude module: 'support-annotations'
     }
     api rootProject.ext.dependencies["SmartRefreshLayout"]

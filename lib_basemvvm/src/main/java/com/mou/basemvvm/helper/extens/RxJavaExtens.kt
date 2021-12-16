@@ -1,7 +1,7 @@
 package com.mou.basemvvm.helper.extens
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.network.EmptyException

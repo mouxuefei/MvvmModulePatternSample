@@ -9,37 +9,40 @@ ext {
     ]
 
     version = [
-            androidSupportSdkVersion: "28.0.0",
-            retrofitSdkVersion      : "2.4.0",
-            dagger2SdkVersion       : "2.16",
-            glideSdkVersion         : "4.5.0",
-            lifeVersion             : "1.1.1",
-            kotlin_version          : "1.2.71",
+            appcompatVersion  : "1.0.0",
+            constraintLayoutVersion:'1.1.3',
+            retrofitSdkVersion: "2.4.0",
+            dagger2SdkVersion : "2.16",
+            glideSdkVersion   : "4.5.0",
+            lifeVersion       : "1.1.1",
+            kotlin_version    : "1.2.71",
+            okhttp3Version    : "3.10.0"
     ]
+
 
     dependencies = [
             //kotlin
             "kotlin"                            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${version["kotlin_version"]}",
 
             //support
-            "appcompat-v7"                      : "com.android.support:appcompat-v7:${version["androidSupportSdkVersion"]}",
-            "design"                            : "com.android.support:design:${version["androidSupportSdkVersion"]}",
-            "support-v4"                        : "com.android.support:support-v4:${version["androidSupportSdkVersion"]}",
-            "cardview-v7"                       : "com.android.support:cardview-v7:${version["androidSupportSdkVersion"]}",
-            "annotations"                       : "com.android.support:support-annotations:${version["androidSupportSdkVersion"]}",
-            "recyclerview-v7"                   : "com.android.support:recyclerview-v7:${version["androidSupportSdkVersion"]}",
-            "constraintLayout"                  : "com.android.support.constraint:constraint-layout:1.1.3",
+            "appcompat"                         : "androidx.appcompat:appcompat:${version["appcompatVersion"]}",
+            "design"                            : "com.google.android.material:material:${version["appcompatVersion"]}",
+            "support-v4"                        : "androidx.legacy:legacy-support-v4:${version["appcompatVersion"]}",
+            "cardview"                          : "androidx.cardview:cardview:${version["appcompatVersion"]}",
+            "annotations"                       : "androidx.annotation:annotation:${version["appcompatVersion"]}",
+            "recyclerview"                      : "androidx.recyclerview:recyclerview:${version["appcompatVersion"]}",
+            "constraintLayout"                  : "androidx.constraintlayout:constraintlayout:${version["constraintLayoutVersion"]}",
 
             //mvvm
-            "lifecycle-extensions"              : "android.arch.lifecycle:extensions:${version["lifeVersion"]}",
-            "lifecycle-viewmodel"               : "android.arch.lifecycle:viewmodel:${version["lifeVersion"]}",
-            "lifecycle-compiler"                : "android.arch.lifecycle:compiler:${version["lifeVersion"]}",
+            "lifecycle-extensions"              : 'androidx.lifecycle:lifecycle-extensions:2.0.0',
+            "lifecycle-viewmodel"               : 'androidx.lifecycle:lifecycle-viewmodel:2.0.0',
+            "lifecycle-compiler"                : 'androidx.lifecycle:lifecycle-compiler:2.0.0',
 
             //network
             "retrofit"                          : "com.squareup.retrofit2:retrofit:${version["retrofitSdkVersion"]}",
             "retrofit-converter-gson"           : "com.squareup.retrofit2:converter-gson:${version["retrofitSdkVersion"]}",
             "retrofit-adapter-rxjava2"          : "com.squareup.retrofit2:adapter-rxjava2:${version["retrofitSdkVersion"]}",
-            "okhttp3"                           : "com.squareup.okhttp3:okhttp:3.10.0",
+            "okhttp3"                           : "com.squareup.okhttp3:okhttp:${version["okhttp3Version"]}",
             "logging-interceptor"               : "com.squareup.okhttp3:logging-interceptor:3.9.0",
             "glide"                             : "com.github.bumptech.glide:glide:${version["glideSdkVersion"]}",
             "glide-transformations"             : "jp.wasabeef:glide-transformations:2.0.1",
@@ -54,13 +57,10 @@ ext {
             "rxbus"                             : "com.blankj:rxbus:1.5",
 
 
-            //view
             //日期选择
             "PickerView"                        : "com.contrarywind:Android-PickerView:4.1.6",
             //tabLayout
             "FlycoTabLayout"                    : "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar",
-            //屏幕适配
-            "autosize"                          : "me.jessyan:autosize:0.7.0",
             //刷新控件
             "SmartRefreshLayout"                : "com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14",
             //透明状态栏
@@ -74,11 +74,10 @@ ext {
             //通过标签直接生成shape，无需再写shape.xml
             "background"                        : "com.noober.background:core:1.3.1",
 
-            //tools
-            //组件化路由
-            "arouter"                           : "com.alibaba:arouter-api:1.4.0",
-            "arouter-compiler"                  : "com.alibaba:arouter-compiler:1.2.1",
-            "multidex"                          : "com.android.support:multidex:1.0.3",
+            //组件化路由()
+            "arouter"                           : "com.alibaba:arouter-api:1.5.0",
+            "arouter-compiler"                  : "com.alibaba:arouter-compiler:1.2.2",
+            "multidex"                          : 'androidx.multidex:multidex:2.0.0',
             "utilcode"                          : "com.blankj:utilcode:1.23.6",
 
             //test

@@ -1,8 +1,8 @@
 package com.fortunes.commonsdk.core
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import timber.log.Timber
 
 
@@ -14,6 +14,5 @@ class FragmentLifecycleCallbacksImpl : FragmentManager.FragmentLifecycleCallback
     override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
         super.onFragmentCreated(fm, f, savedInstanceState)
         Timber.i("${f.javaClass.simpleName} onFragmentCreated")
-
     }
 }

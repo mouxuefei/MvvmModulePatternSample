@@ -1,8 +1,8 @@
 package com.fortunes.commonsdk.base
 
-import android.arch.lifecycle.Observer
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.fortunes.commonsdk.R
 import com.fortunes.commonsdk.binds.bindRefreshing
 import com.fortunes.commonsdk.binds.bindStatus
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.public_activity_list.*
  */
 abstract class BaseTitleListActivity<VM : BaseViewModel>: BaseActivity<VM>() , RefreshPresenter {
     override fun getLayoutId()= R.layout.public_activity_list
-    lateinit var mRecyclerView:RecyclerView
+    lateinit var mRecyclerView: RecyclerView
     override fun initView() {
         mRecyclerView=recyclerView
         mViewModel.pageState.observe(this, Observer {

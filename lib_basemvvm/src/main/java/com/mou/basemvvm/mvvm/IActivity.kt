@@ -1,6 +1,7 @@
 package com.mou.basemvvm.mvvm
 
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
+
 
 /***
  *

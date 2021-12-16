@@ -2,6 +2,7 @@ package com.fortunes.commonsdk.core
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.fortunes.commonsdk.BuildConfig
 import com.mou.basemvvm.integration.AppLifeCycles
@@ -41,8 +42,9 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
         if (BuildConfig.DEBUG) {//debug模式下初始化
             Timber.plant(Timber.DebugTree())
             ARouter.openLog()     // 打印日志
-            ARouter.openDebug()   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
+        ARouter.openDebug()
+        Log.e("villa","bb")
         ARouter.init(application) // 尽可能早,推荐在Application中初始化
 
     }

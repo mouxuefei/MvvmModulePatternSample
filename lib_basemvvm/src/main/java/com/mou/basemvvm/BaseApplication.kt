@@ -2,9 +2,8 @@ package com.mou.basemvvm
 
 import android.app.Application
 import android.content.Context
-import android.support.multidex.MultiDex
+import androidx.multidex.MultiDex
 import com.mou.basemvvm.integration.AppDelegate
-
 
 
 /***

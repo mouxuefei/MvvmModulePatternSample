@@ -1,8 +1,8 @@
 package com.fortunes.commonsdk.base
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView

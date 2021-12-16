@@ -2,6 +2,7 @@ package com.fortunes.commonsdk.view.photoviewer
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import com.fortunes.commonsdk.R
 import com.fortunes.commonsdk.view.photoviewer.photoview.PhotoView
 
@@ -49,6 +51,7 @@ class PhotoViewerFragment : BaseLazyFragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onLazyLoad() {
 
         if (PhotoViewer.mInterface != null) {

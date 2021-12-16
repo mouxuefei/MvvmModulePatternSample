@@ -1,7 +1,7 @@
 package com.mou.basemvvm.helper.extens
 
-import android.databinding.BindingAdapter
 import android.view.View
+import androidx.databinding.BindingAdapter
 
 /***
  *

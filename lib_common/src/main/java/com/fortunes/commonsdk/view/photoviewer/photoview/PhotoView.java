@@ -24,8 +24,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.View;
@@ -33,6 +31,9 @@ import android.widget.Scroller;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
 
 
 /**

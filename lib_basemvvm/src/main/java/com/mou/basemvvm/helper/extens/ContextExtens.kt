@@ -1,9 +1,9 @@
 package com.mou.basemvvm.helper.extens
 
 import android.content.Context
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.widget.Toast
+import androidx.annotation.ColorRes
 import com.mou.basemvvm.BaseApplication
 
 

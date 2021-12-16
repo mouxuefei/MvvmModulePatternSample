@@ -1,6 +1,6 @@
 package com.mou.basemvvm.mvvm
 
-import android.arch.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleOwner
 
 /***
  * You may think you know what the following code does.
