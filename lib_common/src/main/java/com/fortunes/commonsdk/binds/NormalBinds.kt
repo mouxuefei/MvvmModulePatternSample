@@ -1,9 +1,9 @@
 package com.fortunes.commonsdk.binds
 
-import android.databinding.BindingAdapter
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import com.fortunes.commonsdk.view.statusview.MultipleStatusView
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType

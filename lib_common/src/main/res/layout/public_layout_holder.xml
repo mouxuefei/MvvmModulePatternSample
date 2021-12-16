@@ -13,7 +13,7 @@
                 name="vm"
                 type="String"/>
     </data>
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -25,5 +25,5 @@
                 android:id="@+id/toolbar_back"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 </layout>

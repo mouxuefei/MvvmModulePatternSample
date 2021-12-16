@@ -1,7 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
@@ -56,11 +57,11 @@ dependencies {
     api(rootProject.ext.dependencies["constraintLayout"]) {
         exclude module: 'support-annotations'
     }
-    api(rootProject.ext.dependencies["appcompat-v7"]) {
+    api(rootProject.ext.dependencies["appcompat"]) {
         exclude module: 'support-annotations'
     }
     api rootProject.ext.dependencies["design"]
-    api(rootProject.ext.dependencies["recyclerview-v7"]) {
+    api(rootProject.ext.dependencies["recyclerview"]) {
         exclude module: 'support-annotations'
     }
     api rootProject.ext.dependencies["annotations"]

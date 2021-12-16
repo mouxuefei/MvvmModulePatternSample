@@ -1,6 +1,6 @@
 package com.mou.mine.di.module
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.mou.basemvvm.android.ViewModelKey
 import com.mou.mine.mvvm.viewmodel.MineViewModel
 import dagger.Binds

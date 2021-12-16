@@ -1,16 +1,16 @@
 package com.mou.basemvvm.base
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.mou.basemvvm.helper.listener.ClickPresenter
 import com.mou.basemvvm.widget.LoadDialog
 import dagger.Lazy
@@ -107,7 +107,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), IView, IActivity,
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), null, false)
-        mBinding.setLifecycleOwner(this)
+        mBinding.lifecycleOwner = this
         return mBinding.root
     }
 

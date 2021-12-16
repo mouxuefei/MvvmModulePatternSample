@@ -1,6 +1,6 @@
 package com.mou.login.di.module
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.mou.basemvvm.android.ViewModelKey
 import com.mou.login.mvvm.viewmodel.LoginViewModel
 import dagger.Binds

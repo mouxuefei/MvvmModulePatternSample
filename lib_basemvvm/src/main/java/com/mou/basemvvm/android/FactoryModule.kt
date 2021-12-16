@@ -1,6 +1,6 @@
 package com.mou.basemvvm.android
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import com.mou.basemvvm.base.ViewModelFactory
 import dagger.Binds
 import dagger.Module

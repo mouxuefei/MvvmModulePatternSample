@@ -1,11 +1,17 @@
 package com.mou.basemvvm.helper.annotation;
 
-import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.mou.basemvvm.helper.annotation.RefreshType.*;
+import androidx.annotation.IntDef;
+
+import static com.mou.basemvvm.helper.annotation.RefreshType.LOADMORE;
+import static com.mou.basemvvm.helper.annotation.RefreshType.LOADMOREFAIL;
+import static com.mou.basemvvm.helper.annotation.RefreshType.NORMAL;
+import static com.mou.basemvvm.helper.annotation.RefreshType.NOTMORE;
+import static com.mou.basemvvm.helper.annotation.RefreshType.REFRESH;
+import static com.mou.basemvvm.helper.annotation.RefreshType.REFRESHFAIL;
 
 
 /***

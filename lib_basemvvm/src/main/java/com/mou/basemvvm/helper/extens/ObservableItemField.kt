@@ -1,6 +1,7 @@
 package com.mou.basemvvm.helper.extens
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
+
 
 /***
  * You may think you know what the following code does.

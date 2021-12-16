@@ -2,7 +2,7 @@ package com.mou.mine.core
 
 import android.app.Application
 import android.content.Context
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.FragmentManager
 import com.mou.basemvvm.integration.AppLifeCycles
 import com.mou.basemvvm.integration.ConfigModule
 

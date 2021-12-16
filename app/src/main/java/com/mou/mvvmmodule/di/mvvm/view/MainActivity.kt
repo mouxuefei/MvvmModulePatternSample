@@ -1,6 +1,5 @@
 package com.mou.mvvmmodule.di.mvvm.view
 
-import android.support.v4.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.fortunes.commonsdk.core.RouterConstants
 import com.fortunes.commonsdk.network.onHttpSubscribeNoToast

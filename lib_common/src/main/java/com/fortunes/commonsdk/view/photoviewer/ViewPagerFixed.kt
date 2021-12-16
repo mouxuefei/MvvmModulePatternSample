@@ -1,10 +1,13 @@
 package com.fortunes.commonsdk.view.photoviewer
 
 import android.content.Context
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.viewpager.widget.ViewPager
 
+/**
+ * 不能滚动的ViewPager
+ */
 class ViewPagerFixed : ViewPager {
 
     constructor(context: Context) : super(context)

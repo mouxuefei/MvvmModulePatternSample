@@ -1,6 +1,7 @@
 package com.mou.basemvvm.base
 
-import android.arch.lifecycle.ViewModel
+import android.annotation.SuppressLint
+import androidx.lifecycle.ViewModel
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.extens.ObservableItemField
@@ -24,9 +25,11 @@ import timber.log.Timber
 
 abstract class BaseViewModel : ViewModel() {
     //页面状态
+    @SuppressLint("SupportAnnotationUsage")
     @PageStateType
     val pageState = ObservableItemField<Int>()
     //刷新/加载更多状态
+    @SuppressLint("SupportAnnotationUsage")
     @RefreshType
     val listState = ObservableItemField<Int>()
 

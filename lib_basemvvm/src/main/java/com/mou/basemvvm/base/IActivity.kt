@@ -1,8 +1,7 @@
 package com.mou.basemvvm.base
 
-import android.arch.lifecycle.ViewModel
-import android.support.annotation.LayoutRes
-import android.support.annotation.NonNull
+import androidx.annotation.LayoutRes
+
 
 /***
  *

@@ -21,7 +21,6 @@ import android.graphics.Matrix.ScaleToFit;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +31,8 @@ import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.OverScroller;
+
+import androidx.annotation.RequiresApi;
 
 import static com.fortunes.commonsdk.view.photoviewer.photoview.Util.checkZoomLevels;
 import static com.fortunes.commonsdk.view.photoviewer.photoview.Util.hasDrawable;
