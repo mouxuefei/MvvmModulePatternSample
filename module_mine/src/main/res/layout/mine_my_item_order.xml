@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingTop="10dp"
+    android:paddingRight="15dp">
 
-	<data>
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/public_hintText"
+        android:textSize="@dimen/public_contentHint_size" />
 
-		<variable
-				name="presenter"
-				type="com.guoyang.recyclerviewbindingadapter.ItemClickPresenter"/>
+    <TextView
+        android:id="@+id/item_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:textColor="@color/public_blackText"
+        android:textSize="@dimen/public_contentHint_size" />
 
-		<variable
-				name="item"
-				type="com.mou.mine.mvvm.viewmodel.MineItemViewModel"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EAEAEA" />
 
-		<variable
-				name="position"
-				type="Integer"/>
-	</data>
+</LinearLayout>
 
-
-	<LinearLayout
-			style="@style/public_rippleStyle"
-			android:paddingTop="10dp"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:onClick="@{(v)->presenter.onItemClick(v,position,item)}"
-			android:orientation="vertical"
-			android:paddingLeft="15dp"
-			android:paddingRight="15dp"
-			android:layout_gravity="center"
-			android:gravity="center">
-
-		<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@{item.chapterName}"
-				android:textColor="@color/public_hintText"
-				android:textSize="@dimen/public_contentHint_size"/>
-
-		<TextView
-				android:lines="2"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@{item.desc}"
-				android:textColor="@color/public_blackText"
-				android:textSize="@dimen/public_contentHint_size"/>
-
-		<View
-				android:background="#EAEAEA"
-				android:layout_width="match_parent"
-				android:layout_height="1dp"/>
-
-	</LinearLayout>
-
-</layout>

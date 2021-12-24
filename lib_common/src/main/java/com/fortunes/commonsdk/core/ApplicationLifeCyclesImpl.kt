@@ -44,7 +44,6 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
             ARouter.openLog()     // 打印日志
         }
         ARouter.openDebug()
-        Log.e("villa","bb")
         ARouter.init(application) // 尽可能早,推荐在Application中初始化
 
     }

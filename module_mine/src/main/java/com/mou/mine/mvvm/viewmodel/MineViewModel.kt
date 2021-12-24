@@ -1,7 +1,8 @@
 package com.mou.mine.mvvm.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.fortunes.commonsdk.network.bean.BaseBean
-import com.guoyang.recyclerviewbindingadapter.observable.ObservableAdapterList
 import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
@@ -19,29 +20,26 @@ import io.reactivex.Single
  * @desc
  */
 class MineViewModel : BaseVMModel<MineModel>() {
-    override var mModel: MineModel=MineModel()
+    override var mModel: MineModel = MineModel()
+    val mineItemLiveData: ObservableItemField<MutableList<SubData>> = ObservableItemField()
     private var page = 1
-    val observableList = ObservableAdapterList<MineItemViewModel>()
     fun getProjectList(isRefresh: Boolean, cid: Int): Single<BaseBean<MineBean>> {
+        val currentPage = if (isRefresh) 1 else page
+        Log.e("villa", "page===" + currentPage)
         return mModel
-            .getProjectList(
-                if (isRefresh) {
-                    page = 1
-                    page
-                } else page, cid
-            )
+            .getProjectList(currentPage, cid)
             .async()
             .doOnSuccess {
                 if (it.data.datas.isNotEmpty()) {
-                    val list = mutableListOf<MineItemViewModel>()
-                    it.data.datas.forEach { orderBean: SubData ->
-                        list.add(MineItemViewModel(orderBean))
-                    }
                     page++
+                    val liveData = it.data.datas
                     if (isRefresh) {
-                        observableList.setNewData(list)
+                        mineItemLiveData.set(liveData)
                     } else {
-                        observableList.addAll(list)
+                        val oldData = mineItemLiveData.get()
+                        val newData = oldData ?: mutableListOf()
+                        newData.addAll(liveData)
+                        mineItemLiveData.set(newData)
                     }
                 } else {
                     throw EmptyException()
@@ -50,13 +48,3 @@ class MineViewModel : BaseVMModel<MineModel>() {
     }
 }
 
-class MineItemViewModel(bean: SubData) {
-    val chapterName = ObservableItemField<String>()
-    val desc = ObservableItemField<String>()
-    val data = bean
-
-    init {
-        chapterName.set(bean.chapterName)
-        desc.set(bean.desc)
-    }
-}

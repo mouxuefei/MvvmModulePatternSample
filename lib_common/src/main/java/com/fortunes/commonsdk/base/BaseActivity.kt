@@ -46,6 +46,7 @@ abstract class BaseActivity< VM : BaseViewModel> : AppCompatActivity(), IView, I
         providerVMClass()?.let {
             mViewModel = ViewModelProviders.of(this).get(it)
         }
+
     }
 
     override fun showLoading(message: String) {

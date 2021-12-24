@@ -14,6 +14,7 @@ class MainViewModel : BaseVMModel<MainModel>(){
     override var mModel: MainModel=MainModel()
     val chapterName = ObservableItemField<String>()
     val link = ObservableItemField<String>()
+
     fun getArticle(): Single<BaseBean<ArticleBean>> {
         return mModel
             .getArticle()

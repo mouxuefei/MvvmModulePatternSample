@@ -19,31 +19,31 @@ android {
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
 
-        buildConfigField "boolean","VERSION_ONLINE", "false"
-        buildConfigField "boolean","VERSION_TEST", "false"
+        buildConfigField "boolean", "VERSION_ONLINE", "false"
+        buildConfigField "boolean", "VERSION_TEST", "false"
     }
 
     flavorDimensions "verison"
     productFlavors {
         //打包assembleVersionDevDebug
-        versionDev{
+        versionDev {
             dimension "verison"
-            buildConfigField "boolean","VERSION_ONLINE", "false"
-            buildConfigField "boolean","VERSION_TEST", "false"
+            buildConfigField "boolean", "VERSION_ONLINE", "false"
+            buildConfigField "boolean", "VERSION_TEST", "false"
 //            manifestPlaceholders = rootProject.ext.debugPlaceholders
         }
         //gradlew clean assembleVersionTestDebug
         versionTest {
             dimension "verison"
-            buildConfigField "boolean","VERSION_ONLINE", "false"
-            buildConfigField "boolean","VERSION_TEST", "true"
+            buildConfigField "boolean", "VERSION_ONLINE", "false"
+            buildConfigField "boolean", "VERSION_TEST", "true"
 //            manifestPlaceholders = rootProject.ext.debugPlaceholders
         }
         // gradlew clean assembleVersionOnlineRelease
-        versionOnline{
+        versionOnline {
             dimension "verison"
-            buildConfigField "boolean","VERSION_ONLINE", "true"
-            buildConfigField "boolean","VERSION_TEST", "true"
+            buildConfigField "boolean", "VERSION_ONLINE", "true"
+            buildConfigField "boolean", "VERSION_TEST", "true"
 //            manifestPlaceholders = rootProject.ext.releasePlaceholders
         }
     }
@@ -79,7 +79,6 @@ dependencies {
     api rootProject.ext.dependencies["SmartRefreshLayout"]
     api rootProject.ext.dependencies["FlycoTabLayout"]
     api rootProject.ext.dependencies["immersionbar"]
-    api rootProject.ext.dependencies["RecyclerViewBindingAdapter"]
     api rootProject.ext.dependencies["PickerView"]
     api(rootProject.ext.dependencies["PictureSelector"]) {
         exclude module: 'glide'
@@ -93,4 +92,5 @@ dependencies {
     api(rootProject.ext.dependencies["background"]) {
         exclude module: 'support'
     }
+    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 }

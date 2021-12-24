@@ -1,5 +1,6 @@
 package com.mou.mvvmmodule.di.mvvm.view
 
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.fortunes.commonsdk.base.BaseActivity
@@ -18,6 +19,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun providerVMClass()=MainViewModel::class.java
     override fun getLayoutId() = R.layout.activity_main
     override fun initView() {
+
         btn.setOnClickListener {
             mViewModel.run {
                     this.getArticle()

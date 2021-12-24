@@ -10,7 +10,7 @@ package com.mou.mine.mvvm.bean
 
 data class MineBean(
     val curPage: Int,
-    val datas: List<SubData>,
+    val datas: MutableList<SubData>,
     val offset: Int,
     val over: Boolean,
     val pageCount: Int,

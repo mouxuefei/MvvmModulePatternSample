@@ -1,17 +1,16 @@
 package com.mou.mine.mvvm.view
 
-import android.view.View
+import android.util.Log
+import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.fortunes.commonsdk.base.BaseTitleListActivity
 import com.fortunes.commonsdk.core.RouterConstants
 import com.fortunes.commonsdk.network.dealResult
-import com.guoyang.recyclerviewbindingadapter.ItemClickPresenter
-import com.guoyang.recyclerviewbindingadapter.adapter.SingleTypeAdapter
 import com.mou.basemvvm.helper.extens.bindStatusOrLifeCycle
-import com.mou.basemvvm.helper.extens.toast
-import com.mou.mine.R
-import com.mou.mine.mvvm.viewmodel.MineItemViewModel
+import com.mou.mine.mvvm.adapter.MineListAdapter
 import com.mou.mine.mvvm.viewmodel.MineViewModel
+import kotlin.math.log
 
 /**
  * @FileName: LoginActivity.java
@@ -21,28 +20,44 @@ import com.mou.mine.mvvm.viewmodel.MineViewModel
  * @desc
  */
 @Route(path = RouterConstants.MINE_ACTIVITY)
-class MineActivity : BaseTitleListActivity<MineViewModel>(), ItemClickPresenter<MineItemViewModel> {
-    override fun getPageTitle()="个人中心"
+class MineActivity : BaseTitleListActivity<MineViewModel>() {
+    override fun getPageTitle() = "个人中心"
     override fun providerVMClass() = MineViewModel::class.java
     override fun loadData(isRefresh: Boolean) = loadVMData(isRefresh)
     override fun initData() = loadVMData(true)
-    private val mAdapter by lazy {
-        SingleTypeAdapter(this, R.layout.mine_my_item_order, mViewModel.observableList)
-                .apply { this.itemPresenter = this@MineActivity }
-    }
+    private val mAdapter by lazy { MineListAdapter() }
 
     override fun initCommonView() {
         with(mRecyclerView) {
-            this.adapter = mAdapter
+            adapter = mAdapter
+        }
+        mAdapter.run {
+            setOnItemClickListener { _, _, position: Int ->
+                Log.e("villa", "position==" + position)
+            }
+            setOnItemChildClickListener { _, _, position: Int ->
+
+            }
+            loadMoreModule.setOnLoadMoreListener {
+                Log.e("villa", "setOnLoadMoreListener")
+                loadVMData(false)
+            }
+
         }
     }
 
-    override fun onItemClick(v: View, position: Int, item: MineItemViewModel) {
-        toast("position=" + position)
+
+    override fun startObserve() {
+        mViewModel.apply {
+            mineItemLiveData.observe(this@MineActivity, {
+                mAdapter.setList(it)
+            })
+        }
     }
 
+
     private fun loadVMData(isRefresh: Boolean) =
-            mViewModel.getProjectList(isRefresh, 294)
-                    .bindStatusOrLifeCycle(isRefresh, viewModel = mViewModel, owner = this@MineActivity)
-                    .dealResult(this@MineActivity)
+        mViewModel.getProjectList(isRefresh, 294)
+            .bindStatusOrLifeCycle(isRefresh, viewModel = mViewModel, owner = this@MineActivity)
+            .dealResult(this@MineActivity)
 }
