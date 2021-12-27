@@ -6,8 +6,8 @@ import com.mou.basemvvm.helper.extens.async
 import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.mvvmmodule.di.mvvm.bean.ArticleBean
 import com.mou.mvvmmodule.di.mvvm.model.MainModel
+import com.orhanobut.logger.Logger
 import io.reactivex.Single
-import timber.log.Timber
 
 
 class MainViewModel : BaseVMModel<MainModel>(){
@@ -24,7 +24,7 @@ class MainViewModel : BaseVMModel<MainModel>(){
                 link.set(it.data.datas[0].link)
             }
             .doOnError {
-                Timber.d("doOnError")
+                Logger.d("doOnError")
             }
     }
 }

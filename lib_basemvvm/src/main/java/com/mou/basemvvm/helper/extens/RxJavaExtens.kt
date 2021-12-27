@@ -15,7 +15,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.net.ConnectException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
@@ -147,9 +146,7 @@ private fun <T> Single<T>.bindDialog(view: IView): Single<T> =
  */
 private fun <T> Observable<T>.bindDialog(view: IView): Observable<T> =
         this.doOnSubscribe {
-            Timber.i("showLoading")
             view.showLoading()
         }.doFinally {
-            Timber.i("hideLoading")
             view.hideLoading()
         }

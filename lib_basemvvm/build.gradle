@@ -90,7 +90,7 @@ dependencies {
     api rootProject.ext.dependencies["persistentCookieJar"]
 
     //tools
-    api rootProject.ext.dependencies["timber"]
+    api rootProject.ext.dependencies["logger"]
     api rootProject.ext.dependencies["multidex"]
     api rootProject.ext.dependencies["utilcode"]
     //test

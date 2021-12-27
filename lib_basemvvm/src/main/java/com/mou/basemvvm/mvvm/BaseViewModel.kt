@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.extens.ObservableItemField
-import timber.log.Timber
+import com.orhanobut.logger.Logger
 
 /***
  *
@@ -40,6 +40,6 @@ abstract class BaseViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Timber.i("${javaClass.simpleName}:onCleared()")
+        Logger.i("${javaClass.simpleName}:onCleared()")
     }
 }

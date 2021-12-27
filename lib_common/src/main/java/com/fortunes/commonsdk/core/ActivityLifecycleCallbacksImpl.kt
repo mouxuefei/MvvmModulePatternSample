@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.fortunes.commonsdk.R
 import com.gyf.barlibrary.ImmersionBar
-import timber.log.Timber
+import com.orhanobut.logger.Logger
 
 /***
  * You may think you know what the following code does.
@@ -38,7 +38,7 @@ import timber.log.Timber
 @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActivityLifecycleCallbacksImpl : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        Timber.i("${activity.javaClass.simpleName} onActivityCreated")
+        Logger.i("${activity.javaClass.simpleName} onActivityCreated")
         ImmersionBar.with(activity)
                 .statusBarDarkFont(true)
                 .init()
