@@ -2,7 +2,7 @@ package com.fortunes.commonsdk.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
@@ -25,7 +25,7 @@ import com.noober.background.BackgroundLibrary
  * Activity的父类
  */
 
-abstract class BaseActivity< VM : BaseViewModel> : AppCompatActivity(), IView, IActivity {
+abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IActivity {
     lateinit var mViewModel: VM
     abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {
@@ -44,7 +44,8 @@ abstract class BaseActivity< VM : BaseViewModel> : AppCompatActivity(), IView, I
 
     private fun initVM() {
         providerVMClass()?.let {
-            mViewModel = ViewModelProviders.of(this).get(it)
+            mViewModel =
+                ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(it)
         }
 
     }

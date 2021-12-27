@@ -22,6 +22,7 @@ import io.reactivex.Single
 class MineViewModel : BaseVMModel<MineModel>() {
     override var mModel: MineModel = MineModel()
     val mineItemLiveData: ObservableItemField<MutableList<SubData>> = ObservableItemField()
+    val isMoreData: ObservableItemField<Boolean> = ObservableItemField()
     private var page = 1
     fun getProjectList(isRefresh: Boolean, cid: Int): Single<BaseBean<MineBean>> {
         val currentPage = if (isRefresh) 1 else page

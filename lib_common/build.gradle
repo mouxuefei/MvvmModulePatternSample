@@ -87,8 +87,8 @@ dependencies {
         exclude module: 'support'
     }
     kapt rootProject.ext.dependencies["lifecycle-compiler"]
-    implementation rootProject.ext.dependencies["lifecycle-extensions"]
-    implementation rootProject.ext.dependencies["lifecycle-viewmodel"]
+    implementation rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
+    implementation rootProject.ext.dependencies["lifecycle-livedata-ktx"]
     api(rootProject.ext.dependencies["background"]) {
         exclude module: 'support'
     }

@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
 import com.mou.basemvvm.widget.LoadDialog
-
 
 
 /***
@@ -30,14 +29,17 @@ import com.mou.basemvvm.widget.LoadDialog
  * Fragment的父类
  */
 
-abstract class BaseFragment<VM: ViewModel> : Fragment(), IView, IActivity {
+abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
     //上下文
     protected lateinit var mContext: Context
     lateinit var mViewModel: VM
+
     //数据是否加载标识
     private var isDataInitiated = false
+
     //view是否加载标识
     private var isViewInitiated = false
+
     //fragment是否显示
     private var isVisibleToUser = false
 
@@ -93,14 +95,22 @@ abstract class BaseFragment<VM: ViewModel> : Fragment(), IView, IActivity {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(getLayoutId(), null, false)
     }
 
     abstract fun providerVMClass(): Class<VM>?
     private fun initVM() {
         providerVMClass()?.let {
-            mViewModel = ViewModelProviders.of(this).get(it)
+            activity?.application?.let { app ->
+                ViewModelProvider.AndroidViewModelFactory.getInstance(
+                    app
+                ).create(it)
+            }
         }
     }
 
