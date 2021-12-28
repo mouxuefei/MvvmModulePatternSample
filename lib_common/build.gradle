@@ -76,7 +76,9 @@ dependencies {
     api(rootProject.ext.dependencies["cardview"]) {
         exclude module: 'support-annotations'
     }
-    api rootProject.ext.dependencies["SmartRefreshLayout"]
+    api rootProject.ext.dependencies["refresh-layout"]
+    api rootProject.ext.dependencies["refresh-header"]
+
     api rootProject.ext.dependencies["FlycoTabLayout"]
     api rootProject.ext.dependencies["immersionbar"]
     api rootProject.ext.dependencies["PickerView"]

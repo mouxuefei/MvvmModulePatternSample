@@ -61,8 +61,7 @@ ext {
             "PickerView"                        : "com.contrarywind:Android-PickerView:4.1.6",
             //tabLayout
             "FlycoTabLayout"                    : "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar",
-            //刷新控件
-            "SmartRefreshLayout"                : "com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14",
+
             //透明状态栏
             "immersionbar"                      : "com.gyf.immersionbar:immersionbar:2.3.1",
             //加载json动画控件
@@ -72,6 +71,10 @@ ext {
             //通过标签直接生成shape，无需再写shape.xml
             "background"                        : "com.noober.background:core:1.3.1",
             "BaseRecyclerViewAdapterHelper"     : "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7",
+
+            //刷新控件
+            "refresh-layout"                    : "io.github.scwang90:refresh-layout-kernel:2.0.5",
+            "refresh-header"                    : "io.github.scwang90:refresh-header-classics:2.0.5",
 
             //组件化路由()
             "arouter"                           : "com.alibaba:arouter-api:1.5.0",

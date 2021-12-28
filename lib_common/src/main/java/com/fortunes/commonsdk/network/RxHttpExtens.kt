@@ -4,6 +4,8 @@ import android.content.Context
 import com.google.gson.JsonParseException
 import com.mou.basemvvm.helper.extens.toast
 import com.mou.basemvvm.helper.network.ApiException
+import com.mou.basemvvm.helper.network.EmptyException
+import com.mou.basemvvm.helper.network.NoMoreDataException
 import com.mou.easymvvm.BuildConfig
 import com.uber.autodispose.SingleSubscribeProxy
 import org.json.JSONException
@@ -21,7 +23,11 @@ import java.net.UnknownHostException
 /**
  * 关于Http请求结果的统一处理类
  */
-fun <T> SingleSubscribeProxy<T>.dealResult(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
+fun <T> SingleSubscribeProxy<T>.dealResult(
+    context: Context,
+    subErr: ((Throwable) -> Unit)? = null,
+    success: ((T) -> Unit)? = null
+) {
     this.subscribe({
         success?.invoke(it)
     }, {
@@ -45,7 +51,11 @@ fun <T> SingleSubscribeProxy<T>.dealResult(context: Context, subErr: ((Throwable
     })
 }
 
-fun <T> SingleSubscribeProxy<T>.dealResultNoToast(context: Context, subErr: ((Throwable) -> Unit)? = null, success: ((T) -> Unit)? = null) {
+fun <T> SingleSubscribeProxy<T>.dealResultNoToast(
+    context: Context,
+    subErr: ((Throwable) -> Unit)? = null,
+    success: ((T) -> Unit)? = null
+) {
     this.subscribe({
         success?.invoke(it)
     }, {
@@ -89,6 +99,8 @@ fun Context.toastHttpFail(error: Throwable?) {
             toast("网络未连接")
         } else if (throwable is JSONException || throwable is JsonParseException) {
             toast("数据解析错误")
+        } else if (throwable is NoMoreDataException || throwable is EmptyException) {
+            //TODO:
         } else {
             toast("网络连接失败")
         }

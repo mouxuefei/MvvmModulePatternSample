@@ -8,9 +8,9 @@ import com.fortunes.commonsdk.view.statusview.MultipleStatusView
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.listener.RefreshPresenter
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 
 
 /***

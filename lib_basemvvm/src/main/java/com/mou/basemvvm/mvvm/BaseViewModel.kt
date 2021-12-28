@@ -1,10 +1,10 @@
 package com.mou.basemvvm.mvvm
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
-import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.orhanobut.logger.Logger
 
 /***
@@ -27,15 +27,15 @@ abstract class BaseViewModel : ViewModel() {
     //页面状态
     @SuppressLint("SupportAnnotationUsage")
     @PageStateType
-    val pageState = ObservableItemField<Int>()
+    val pageState = MutableLiveData<Int>()
     //刷新/加载更多状态
     @SuppressLint("SupportAnnotationUsage")
     @RefreshType
-    val listState = ObservableItemField<Int>()
+    val listState = MutableLiveData<Int>()
 
     init {
-        pageState.set(PageStateType.NORMAL)
-        listState.set(RefreshType.NORMAL)
+        pageState.value=PageStateType.NORMAL
+        listState.value=RefreshType.NORMAL
     }
 
     override fun onCleared() {

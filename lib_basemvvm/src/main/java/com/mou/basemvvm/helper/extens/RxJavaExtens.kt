@@ -5,8 +5,10 @@ import androidx.lifecycle.LifecycleOwner
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
 import com.mou.basemvvm.helper.network.EmptyException
+import com.mou.basemvvm.helper.network.NoMoreDataException
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IView
+import com.orhanobut.logger.Logger
 import com.uber.autodispose.AutoDispose
 import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.SingleSubscribeProxy
@@ -37,97 +39,118 @@ import java.util.concurrent.TimeUnit
  * Single扩展的异步请求
  */
 fun <T> Single<T>.async(withDelay: Long = 0): Single<T> =
-        this.subscribeOn(Schedulers.io())
-                .delay(withDelay, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+    this.subscribeOn(Schedulers.io())
+        .delay(withDelay, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
 
 /**
  * Observable扩展的异步请求
  */
 fun <T> Observable<T>.async(withDelay: Long = 0): Observable<T> =
-        this.subscribeOn(Schedulers.io())
-                .delay(withDelay, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+    this.subscribeOn(Schedulers.io())
+        .delay(withDelay, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
 
 /**
  * Single扩展函数绑定刷新/状态布局/生命周期
  */
-fun <T> Single<T>.bindStatusOrLifeCycle(isRefresh: Boolean = true, viewModel: BaseViewModel, owner: LifecycleOwner): SingleSubscribeProxy<T> =
-        this.bindStatus(isRefresh, viewModel)
-                .bindLifeCycle(owner)
+fun <T> Single<T>.bindStatusOrLifeCycle(
+    isRefresh: Boolean = true,
+    viewModel: BaseViewModel,
+    owner: LifecycleOwner
+): SingleSubscribeProxy<T> =
+    this.bindStatus(isRefresh, viewModel)
+        .bindLifeCycle(owner)
 
 /**
  * Single扩展函数绑定加载dialog/生命周期
  */
 fun <T> Single<T>.bindDialogOrLifeCycle(view: IView): SingleSubscribeProxy<T> =
-        this.bindDialog(view)
-                .bindLifeCycle(view)
+    this.bindDialog(view)
+        .bindLifeCycle(view)
 
 /**
  * Observable扩展函数绑定加载dialog/生命周期
  */
 fun <T> Observable<T>.bindDialogOrLifeCycle(view: IView): ObservableSubscribeProxy<T> =
-        this.bindDialog(view)
-                .bindLifeCycle(view)
+    this.bindDialog(view)
+        .bindLifeCycle(view)
 
 
 /**
  * Single扩展绑定生命周期
  */
 fun <T> Single<T>.bindLifeCycle(owner: LifecycleOwner): SingleSubscribeProxy<T> =
-        this.`as`(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY)))
+    this.`as`(
+        AutoDispose.autoDisposable(
+            AndroidLifecycleScopeProvider.from(
+                owner,
+                Lifecycle.Event.ON_DESTROY
+            )
+        )
+    )
 
 
 /**
  * Observable扩展绑定生命周期
  */
 fun <T> Observable<T>.bindLifeCycle(owner: LifecycleOwner): ObservableSubscribeProxy<T> =
-        this.`as`(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY)))
+    this.`as`(
+        AutoDispose.autoDisposable(
+            AndroidLifecycleScopeProvider.from(
+                owner,
+                Lifecycle.Event.ON_DESTROY
+            )
+        )
+    )
 
 /**
  * Single扩展函数绑定刷新/状态布局
  */
-private fun <T> Single<T>.bindStatus(isRefresh: Boolean = true, viewModel: BaseViewModel): Single<T> {
+private fun <T> Single<T>.bindStatus(
+    isRefresh: Boolean = true,
+    viewModel: BaseViewModel
+): Single<T> {
     return viewModel.run {
         this@bindStatus
-                .doOnSubscribe {
-                    //注册前先判断是否显示加载loading
-                    if (pageState.get() != PageStateType.CONTENT)
-                        pageState.set(PageStateType.LOADING)
+            .doOnSubscribe {
+                //注册前先判断是否显示加载loading
+                if (pageState.value != PageStateType.CONTENT)
+                    pageState.postValue(PageStateType.LOADING)
+            }
+            .doOnSuccess {
+                //成功
+                if (pageState.value != PageStateType.CONTENT)
+                    pageState.postValue(PageStateType.CONTENT)
+                //给列表设置是刷新还是加载更多
+                if (isRefresh) {
+                    listState.postValue(RefreshType.REFRESH)
+                } else {
+                    listState.postValue(RefreshType.LOADMORE)
                 }
-                .doOnSuccess {
-                    //成功
-                    if (pageState.get() != PageStateType.CONTENT)
-                        pageState.set(PageStateType.CONTENT)
-                    //给列表设置是刷新还是加载更多
-                    if (isRefresh) {
-                        listState.set(RefreshType.REFRESH)
+            }
+            .doOnError {
+                //页面状态
+                if (pageState.value != PageStateType.CONTENT) {
+                    if (it is EmptyException) {
+                        pageState.postValue(PageStateType.EMPTY)
+                    } else if (it is UnknownHostException || it is ConnectException) {
+                        pageState.postValue(PageStateType.NOWORK)
                     } else {
-                        listState.set(RefreshType.LOADMORE)
+                        pageState.postValue(PageStateType.ERROR)
                     }
                 }
-                .doOnError {
-                    //页面状态
-                    if (pageState.get() != PageStateType.CONTENT) {
-                        if (it is EmptyException) {
-                            pageState.set(PageStateType.EMPTY)
-                        } else if (it is UnknownHostException || it is ConnectException) {
-                            pageState.set(PageStateType.NOWORK)
-                        } else {
-                            pageState.set(PageStateType.ERROR)
-                        }
-                    }
-                    //smartrefreshLayout状态
-                    if (isRefresh) {
-                        listState.set(RefreshType.REFRESHFAIL)
+                // smartrefreshLayout状态
+                if (isRefresh) {
+                    listState.postValue(RefreshType.REFRESHFAIL)
+                } else {
+                    if (it is EmptyException || it is NoMoreDataException) {
+                        listState.postValue(RefreshType.NOTMORE)
                     } else {
-                        if (it is EmptyException) {
-                            listState.set(RefreshType.NOTMORE)
-                        } else {
-                            listState.set(RefreshType.LOADMOREFAIL)
-                        }
+                        listState.postValue(RefreshType.LOADMOREFAIL)
                     }
                 }
+            }
     }
 }
 
@@ -135,18 +158,20 @@ private fun <T> Single<T>.bindStatus(isRefresh: Boolean = true, viewModel: BaseV
  * Single扩展函数绑定加载dialog
  */
 private fun <T> Single<T>.bindDialog(view: IView): Single<T> =
-        this.doOnSubscribe {
-            view.showLoading()
-        }.doFinally {
-            view.hideLoading()
-        }
+    this.doOnSubscribe {
+        view.showLoading()
+    }.doFinally {
+        view.hideLoading()
+    }
 
 /**
  * Observable扩展函数绑定加载dialog
  */
 private fun <T> Observable<T>.bindDialog(view: IView): Observable<T> =
-        this.doOnSubscribe {
-            view.showLoading()
-        }.doFinally {
-            view.hideLoading()
-        }
+    this.doOnSubscribe {
+        Logger.i("showLoading")
+        view.showLoading()
+    }.doFinally {
+        Logger.i("hideLoading")
+        view.hideLoading()
+    }

@@ -9,8 +9,6 @@ import com.fortunes.commonsdk.binds.bindStatus
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.listener.RefreshPresenter
 import com.mou.basemvvm.mvvm.BaseViewModel
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.android.synthetic.main.public_activity_list.*
 
 /**
@@ -42,7 +40,9 @@ abstract class BaseTitleListActivity<VM : BaseViewModel> : BaseActivity<VM>(), R
         srl.setOnRefreshListener {
             loadData(true)
         }
-        srl.setEnableLoadMore(false)
+        srl.setOnLoadMoreListener {
+            loadData(false)
+        }
         toolBar.setTitle(getPageTitle())
         initCommonView()
         startObserve()

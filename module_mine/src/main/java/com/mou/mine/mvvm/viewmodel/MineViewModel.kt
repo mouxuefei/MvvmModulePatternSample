@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.fortunes.commonsdk.network.bean.BaseBean
 import com.mou.basemvvm.mvvm.BaseVMModel
-import com.mou.basemvvm.helper.extens.ObservableItemField
 import com.mou.basemvvm.helper.extens.async
 import com.mou.basemvvm.helper.network.EmptyException
+import com.mou.basemvvm.helper.network.NoMoreDataException
 import com.mou.mine.mvvm.bean.MineBean
 import com.mou.mine.mvvm.bean.SubData
 import com.mou.mine.mvvm.model.MineModel
@@ -21,10 +21,18 @@ import io.reactivex.Single
  */
 class MineViewModel : BaseVMModel<MineModel>() {
     override var mModel: MineModel = MineModel()
-    val mineItemLiveData: ObservableItemField<MutableList<SubData>> = ObservableItemField()
-    val isMoreData: ObservableItemField<Boolean> = ObservableItemField()
+
+    /**
+     * MutableList的setValue()只能在主线程中调用，postValue()可以在任何线程中调用。
+     */
+    val mineItemLiveData: MutableLiveData<MutableList<SubData>> = MutableLiveData()
+    val isMoreData: MutableLiveData<Boolean> = MutableLiveData(false)
     private var page = 1
-    fun getProjectList(isRefresh: Boolean, cid: Int): Single<BaseBean<MineBean>> {
+    private val pageSize = 15
+    fun getProjectList(
+        isRefresh: Boolean,
+        cid: Int
+    ): Single<BaseBean<MineBean>> {
         val currentPage = if (isRefresh) 1 else page
         Log.e("villa", "page===" + currentPage)
         return mModel
@@ -35,15 +43,19 @@ class MineViewModel : BaseVMModel<MineModel>() {
                     page++
                     val liveData = it.data.datas
                     if (isRefresh) {
-                        mineItemLiveData.set(liveData)
+                        mineItemLiveData.value = liveData
                     } else {
-                        val oldData = mineItemLiveData.get()
+                        val oldData = mineItemLiveData.value
                         val newData = oldData ?: mutableListOf()
                         newData.addAll(liveData)
-                        mineItemLiveData.set(newData)
+                        mineItemLiveData.postValue(newData)
+                        if (liveData.size < pageSize) {
+                            throw NoMoreDataException()
+                        }
                     }
                 } else {
-                    throw EmptyException()
+                    //判断是真的空还是加载更多为空
+                    if (page == 1) throw EmptyException() else throw NoMoreDataException()
                 }
             }
     }
