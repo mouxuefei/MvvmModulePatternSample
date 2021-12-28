@@ -4,9 +4,13 @@ import android.app.Application
 import android.content.Context
 import com.alibaba.android.arouter.launcher.ARouter
 import com.fortunes.commonsdk.BuildConfig
+import com.fortunes.commonsdk.R
 import com.mou.basemvvm.integration.AppLifeCycles
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.ClassicsHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 
 /***
@@ -45,6 +49,17 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
         ARouter.openDebug()
         ARouter.init(application) // 尽可能早,推荐在Application中初始化
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
+            layout.setPrimaryColorsId(R.color.public_backgroundColor)//全局设置主题颜色
+            layout.setEnableFooterFollowWhenNoMoreData(true)//是否在全部加载结束之后Footer跟随内容
+            ClassicsHeader(context)//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+        }
+
+        SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
+            //指定为经典Footer，默认是 BallPulseFooter
+            ClassicsFooter(context).setDrawableSize(20f).setFinishDuration(100)
+        }
     }
 
     override fun onTerminate(application: Application) {

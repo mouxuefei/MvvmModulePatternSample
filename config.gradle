@@ -2,7 +2,7 @@ ext {
     android = [
             compileSdkVersion: 28,
             buildToolsVersion: "28.0.3",
-            minSdkVersion    : 16,
+            minSdkVersion    : 21,
             targetSdkVersion : 28,
             versionCode      : 1060,
             versionName      : "1.0.6"
@@ -67,7 +67,7 @@ ext {
             //加载json动画控件
             "lottie"                            : "com.airbnb.android:lottie:2.7.0",
             //图片选择/拍照库
-            "PictureSelector"                   : "io.github.lucksiege:pictureselector:v2.7.3-rc10",
+            "PictureSelector"                   : "com.github.LuckSiege.PictureSelector:picture_library:v2.6.1",
             //通过标签直接生成shape，无需再写shape.xml
             "background"                        : "com.github.JavaNoober.BackgroundLibrary:libraryx:1.7.3",
             "BaseRecyclerViewAdapterHelper"     : "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7",

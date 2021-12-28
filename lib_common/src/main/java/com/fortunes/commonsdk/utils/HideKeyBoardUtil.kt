@@ -32,7 +32,7 @@ object HideKeyBoardUtil {
     fun hideKeyboard(v: View?, event: MotionEvent) {
         if (event.action == MotionEvent.ACTION_DOWN) {
             if (isShouldHideKeyboard(v, event)) {
-                KeyboardUtils.hideSoftInput(v)
+                v?.let { KeyboardUtils.hideSoftInput(it) }
             }
         }
     }
