@@ -88,7 +88,7 @@ class EasySharedPreferences(clazz: Class<*>) : SharedPreferences.OnSharedPrefere
                 }
             }
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            type = type.superclass
+            type = type.superclass as Class<*>
         }
         read()
     }

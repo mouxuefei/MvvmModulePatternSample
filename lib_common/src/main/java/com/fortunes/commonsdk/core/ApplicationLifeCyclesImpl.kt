@@ -2,7 +2,6 @@ package com.fortunes.commonsdk.core
 
 import android.app.Application
 import android.content.Context
-import com.alibaba.android.arouter.launcher.ARouter
 import com.fortunes.commonsdk.BuildConfig
 import com.fortunes.commonsdk.R
 import com.mou.basemvvm.integration.AppLifeCycles
@@ -43,11 +42,6 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
     }
 
     override fun onCreate(application: Application) {
-        if (BuildConfig.DEBUG) {//debug模式下初始化
-            ARouter.openLog()     // 打印日志
-        }
-        ARouter.openDebug()
-        ARouter.init(application) // 尽可能早,推荐在Application中初始化
         Logger.addLogAdapter(AndroidLogAdapter())
 
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->

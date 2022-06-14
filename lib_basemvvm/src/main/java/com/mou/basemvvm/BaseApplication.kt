@@ -45,7 +45,6 @@ abstract class BaseApplication : Application() {
         super.onCreate()
         instance = this
         mAppDelegate?.onCreate(this)
-
     }
 
     override fun onTerminate() {

@@ -67,10 +67,6 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     implementation rootProject.ext.dependencies["kotlin"]
-    api(rootProject.ext.dependencies["arouter"]) {
-        exclude module: 'support-v4'
-        exclude module: 'support-annotations'
-    }
     implementation rootProject.ext.dependencies["kotlin"]
     api project(':lib_basemvvm')
     api(rootProject.ext.dependencies["cardview"]) {

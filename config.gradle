@@ -1,11 +1,11 @@
 ext {
     android = [
-            compileSdkVersion: 28,
-            buildToolsVersion: "28.0.3",
+            compileSdkVersion: 29,
+            buildToolsVersion: "30.0.2",
             minSdkVersion    : 21,
-            targetSdkVersion : 28,
-            versionCode      : 1060,
-            versionName      : "1.0.6"
+            targetSdkVersion : 29,
+            versionCode      : 1000,
+            versionName      : "1.0.0"
     ]
 
     versions = [
@@ -76,9 +76,6 @@ ext {
             "refresh-layout"                    : "io.github.scwang90:refresh-layout-kernel:2.0.5",
             "refresh-header"                    : "io.github.scwang90:refresh-header-classics:2.0.5",
 
-            //组件化路由()
-            "arouter"                           : "com.alibaba:arouter-api:1.5.0",
-            "arouter-compiler"                  : "com.alibaba:arouter-compiler:1.2.2",
             "multidex"                          : 'androidx.multidex:multidex:2.0.0',
             "utilcode"                          : "com.blankj:utilcodex:1.31.0",
 

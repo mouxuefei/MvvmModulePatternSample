@@ -98,7 +98,7 @@ internal class AlertController(val dialog: CommonDialog, val window: Window) {
             if (viewHelper == null) {
                 throw IllegalArgumentException("请设置布局setContentView()")
             }
-            mAlert.dialog.setContentView(viewHelper.contentView)
+            viewHelper.contentView?.let { mAlert.dialog.setContentView(it) }
 
             mAlert.setViewHelper(viewHelper)
 
