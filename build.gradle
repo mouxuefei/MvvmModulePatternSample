@@ -1,4 +1,4 @@
-apply from: "config.gradle"
+apply from: "dependence.gradle"
 buildscript {
     ext.kotlin_version = '1.4.10'
     repositories {

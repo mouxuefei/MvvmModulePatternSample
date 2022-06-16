@@ -49,21 +49,12 @@ android {
 
 dependencies {
     implementation rootProject.ext.dependencies["kotlin"]
-    //view
     //support
-    api(rootProject.ext.dependencies["support-v4"]) {
-        exclude module: 'support-annotations'
-    }
-    api(rootProject.ext.dependencies["constraintLayout"]) {
-        exclude module: 'support-annotations'
-    }
-    api(rootProject.ext.dependencies["appcompat"]) {
-        exclude module: 'support-annotations'
-    }
+    api(rootProject.ext.dependencies["support-v4"])
+    api(rootProject.ext.dependencies["constraintLayout"])
+    api(rootProject.ext.dependencies["appcompat"])
     api rootProject.ext.dependencies["design"]
-    api(rootProject.ext.dependencies["recyclerview"]) {
-        exclude module: 'support-annotations'
-    }
+    api(rootProject.ext.dependencies["recyclerview"])
     api rootProject.ext.dependencies["annotations"]
     //mvvm
     kapt rootProject.ext.dependencies["lifecycle-compiler"]

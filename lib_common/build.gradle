@@ -69,9 +69,7 @@ dependencies {
     implementation rootProject.ext.dependencies["kotlin"]
     implementation rootProject.ext.dependencies["kotlin"]
     api project(':lib_basemvvm')
-    api(rootProject.ext.dependencies["cardview"]) {
-        exclude module: 'support-annotations'
-    }
+    api(rootProject.ext.dependencies["cardview"])
     api rootProject.ext.dependencies["refresh-layout"]
     api rootProject.ext.dependencies["refresh-header"]
 
