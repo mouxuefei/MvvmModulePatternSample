@@ -2,6 +2,7 @@ package com.fortunes.commonsdk.network
 
 import android.content.Context
 import com.fortunes.commonsdk.network.bean.EmptyException
+import com.fortunes.commonsdk.network.bean.NoMoreDataException
 import com.google.gson.JsonParseException
 import com.mou.basemvvm.helper.extens.toast
 import com.mou.easymvvm.BuildConfig

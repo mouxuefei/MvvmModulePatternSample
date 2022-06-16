@@ -4,7 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
-import com.fortunes.commonsdk.network.NoMoreDataException
+import com.fortunes.commonsdk.network.bean.NoMoreDataException
 import com.fortunes.commonsdk.network.bean.EmptyException
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IView
@@ -144,7 +144,7 @@ private fun <T> Single<T>.bindStatus(
                 if (isRefresh) {
                     listState.postValue(RefreshType.REFRESHFAIL)
                 } else {
-                    if (it is EmptyException || it is com.fortunes.commonsdk.network.NoMoreDataException) {
+                    if (it is EmptyException || it is NoMoreDataException) {
                         listState.postValue(RefreshType.NOTMORE)
                     } else {
                         listState.postValue(RefreshType.LOADMOREFAIL)
