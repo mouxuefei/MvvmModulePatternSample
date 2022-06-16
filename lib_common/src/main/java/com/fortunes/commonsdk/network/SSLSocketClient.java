@@ -63,7 +63,6 @@ public class SSLSocketClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return trustManager;
     }
 }

@@ -16,7 +16,7 @@ package com.fortunes.commonsdk.network
  * Created by mou on 2018/8/22.
  */
 
-object HttpUrlConstants {
+object BaseUrlConstants {
     //开发环境
     private const val DEV_BASE_URL = "https://wanandroid.com/"
     //测试环境

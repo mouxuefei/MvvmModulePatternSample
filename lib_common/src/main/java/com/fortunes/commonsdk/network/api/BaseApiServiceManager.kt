@@ -1,6 +1,6 @@
 package com.fortunes.commonsdk.network.api
 
-import com.fortunes.commonsdk.network.HttpUrlConstants
+import com.fortunes.commonsdk.network.BaseUrlConstants
 import com.fortunes.commonsdk.network.provider.BaseNetProvider
 import com.mou.basemvvm.BaseApplication
 import com.fortunes.commonsdk.network.NetMgr
@@ -31,7 +31,7 @@ import com.fortunes.commonsdk.network.NetMgr
 object BaseApiServiceManager {
      val apiService by lazy {
         NetMgr.getRetrofit(
-            HttpUrlConstants.getBaseUrl(),
+            BaseUrlConstants.getBaseUrl(),
             BaseNetProvider(BaseApplication.instance())
         ).create(BaseApiService::class.java)
     }
