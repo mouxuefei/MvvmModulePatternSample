@@ -1,4 +1,4 @@
-package com.mou.basemvvm.helper.network
+package com.fortunes.commonsdk.network.bean
 
 import java.io.IOException
 

@@ -3,7 +3,7 @@ package com.fortunes.commonsdk.network.api
 import com.fortunes.commonsdk.network.HttpUrlConstants
 import com.fortunes.commonsdk.network.provider.BaseNetProvider
 import com.mou.basemvvm.BaseApplication
-import com.mou.basemvvm.helper.network.NetMgr
+import com.fortunes.commonsdk.network.NetMgr
 
 /***
  * You may think you know what the following code does.

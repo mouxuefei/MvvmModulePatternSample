@@ -1,4 +1,4 @@
-package com.mou.basemvvm.helper.network
+package com.fortunes.commonsdk.network.api
 
 import okhttp3.Interceptor
 import okhttp3.Request

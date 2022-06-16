@@ -1,5 +1,6 @@
-package com.mou.basemvvm.helper.network
+package com.fortunes.commonsdk.network
 
+import com.fortunes.commonsdk.network.api.NetProvider
 import com.google.gson.GsonBuilder
 import com.orhanobut.logger.Logger
 import okhttp3.Interceptor
@@ -9,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
 
 /***
  *
@@ -136,7 +138,8 @@ object NetMgr {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(loggingInterceptor)
         }
-
+        builder.sslSocketFactory(HttpsUtils.getSslSocketFactory(null,null,null))
+        builder.hostnameVerifier(HostnameVerifier { _, _ -> return@HostnameVerifier true })
         val client = builder.build()
         clientMap[baseUrl] = client
         providerMap[baseUrl] = provider

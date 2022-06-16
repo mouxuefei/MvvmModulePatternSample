@@ -3,7 +3,7 @@ package com.mou.mvvmmodule.di.http
 import com.fortunes.commonsdk.network.HttpUrlConstants
 import com.fortunes.commonsdk.network.provider.BaseNetProvider
 import com.mou.basemvvm.BaseApplication
-import com.mou.basemvvm.helper.network.NetMgr
+import com.fortunes.commonsdk.network.NetMgr
 
 /**
  * @FileName: HomeApiManager.java

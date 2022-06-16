@@ -1,11 +1,9 @@
 package com.fortunes.commonsdk.network
 
 import android.content.Context
+import com.fortunes.commonsdk.network.bean.EmptyException
 import com.google.gson.JsonParseException
 import com.mou.basemvvm.helper.extens.toast
-import com.mou.basemvvm.helper.network.ApiException
-import com.mou.basemvvm.helper.network.EmptyException
-import com.mou.basemvvm.helper.network.NoMoreDataException
 import com.mou.easymvvm.BuildConfig
 import com.uber.autodispose.SingleSubscribeProxy
 import org.json.JSONException

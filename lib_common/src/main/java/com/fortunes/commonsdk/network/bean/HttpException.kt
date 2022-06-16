@@ -1,7 +1,6 @@
-package com.fortunes.commonsdk.network
+package com.fortunes.commonsdk.network.bean
 
-import com.fortunes.commonsdk.network.bean.BaseBean
-import com.mou.basemvvm.helper.network.ApiException
+import com.fortunes.commonsdk.network.ApiException
 
 /**
  * @auther:MR-Cheng

@@ -5,8 +5,8 @@ import com.fortunes.commonsdk.BuildConfig
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.mou.basemvvm.helper.network.NetProvider
-import com.mou.basemvvm.helper.network.RequestHandler
+import com.fortunes.commonsdk.network.api.NetProvider
+import com.fortunes.commonsdk.network.api.RequestHandler
 import okhttp3.*
 
 /***
