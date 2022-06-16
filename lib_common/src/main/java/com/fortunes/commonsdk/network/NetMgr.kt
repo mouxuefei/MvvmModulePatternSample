@@ -138,8 +138,9 @@ object NetMgr {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(loggingInterceptor)
         }
-        builder.sslSocketFactory(HttpsUtils.getSslSocketFactory(null,null,null))
-        builder.hostnameVerifier(HostnameVerifier { _, _ -> return@HostnameVerifier true })
+        //https验证
+        builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.getX509TrustManager())
+        builder.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
         val client = builder.build()
         clientMap[baseUrl] = client
         providerMap[baseUrl] = provider
