@@ -17,26 +17,9 @@ android {
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
-
     }
-
     dataBinding {
         enabled = true
-    }
-    flavorDimensions  "verison"
-    productFlavors {
-        //打包assembleVersionDevDebug
-        versionDev{
-            dimension "verison"
-        }
-        //gradlew clean assembleVersionTestDebug
-        versionTest {
-            dimension "verison"
-        }
-        // gradlew clean assembleVersionOnlineRelease
-        versionOnline{
-            dimension "verison"
-        }
     }
     buildTypes {
         release {

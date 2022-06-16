@@ -1,6 +1,5 @@
 package com.fortunes.commonsdk.network
 
-import com.fortunes.commonsdk.BuildConfig
 
 /***
  *
@@ -31,7 +30,5 @@ object HttpUrlConstants {
      * 2,测试环境打包  gradlew clean assembleVersionTestDebug或者gradlew clean assembleVersionTestRealease
      * 3,正式环境打包 gradlew clean assembleVersionOnlineRelease
      */
-    fun getBaseUrl(): String = if (BuildConfig.VERSION_ONLINE) RELIASE_BASE_URL else{
-            if (BuildConfig.VERSION_TEST) TEST_BASE_URL  else DEV_BASE_URL
-        }
+    fun getBaseUrl(): String = DEV_BASE_URL
 }

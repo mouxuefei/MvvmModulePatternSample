@@ -18,34 +18,6 @@ android {
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
-
-        buildConfigField "boolean", "VERSION_ONLINE", "false"
-        buildConfigField "boolean", "VERSION_TEST", "false"
-    }
-
-    flavorDimensions "verison"
-    productFlavors {
-        //打包assembleVersionDevDebug
-        versionDev {
-            dimension "verison"
-            buildConfigField "boolean", "VERSION_ONLINE", "false"
-            buildConfigField "boolean", "VERSION_TEST", "false"
-//            manifestPlaceholders = rootProject.ext.debugPlaceholders
-        }
-        //gradlew clean assembleVersionTestDebug
-        versionTest {
-            dimension "verison"
-            buildConfigField "boolean", "VERSION_ONLINE", "false"
-            buildConfigField "boolean", "VERSION_TEST", "true"
-//            manifestPlaceholders = rootProject.ext.debugPlaceholders
-        }
-        // gradlew clean assembleVersionOnlineRelease
-        versionOnline {
-            dimension "verison"
-            buildConfigField "boolean", "VERSION_ONLINE", "true"
-            buildConfigField "boolean", "VERSION_TEST", "true"
-//            manifestPlaceholders = rootProject.ext.releasePlaceholders
-        }
     }
     buildTypes {
         release {

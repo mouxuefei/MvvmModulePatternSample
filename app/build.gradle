@@ -5,23 +5,6 @@ android {
     defaultConfig {
         applicationId "com.mou.mvvmmodule"
     }
-
-    flavorDimensions  "verison"
-    productFlavors {
-        //打包assembleVersionDevDebug
-        versionDev{
-            dimension "verison"
-        }
-        //gradlew clean assembleVersionTestDebug
-        versionTest {
-            dimension "verison"
-        }
-        // gradlew clean assembleVersionOnlineRelease
-        versionOnline{
-            dimension "verison"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
