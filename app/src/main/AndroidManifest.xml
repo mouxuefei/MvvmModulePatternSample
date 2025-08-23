@@ -37,7 +37,7 @@
         android:name=".core.App"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".di.mvvm.view.MainActivity"
+            android:name=".ui.main.views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

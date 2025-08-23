@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.di.mvvm.bean
+package com.mou.mvvmmodule.ui.main.bean
 
 /**
  * @FileName: ArticleBean.java

@@ -1,15 +1,12 @@
-package com.mou.mvvmmodule.di.mvvm.view
+package com.mou.mvvmmodule.ui.main.views
 
-import android.widget.Button
 import androidx.lifecycle.Observer
-import androidx.viewbinding.ViewBinding
 import com.fortunes.commonsdk.base.BaseActivity
 import com.fortunes.commonsdk.network.dealResult
 import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
 import com.mou.basemvvm.helper.extens.toast
-import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
-import com.mou.mvvmmodule.di.mvvm.viewmodel.MainViewModel
+import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<MainViewModel>() {
     override val binding: ActivityMainBinding by lazy {

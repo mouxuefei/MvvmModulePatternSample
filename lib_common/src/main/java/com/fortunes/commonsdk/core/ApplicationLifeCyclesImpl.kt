@@ -2,10 +2,14 @@ package com.fortunes.commonsdk.core
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import com.fortunes.commonsdk.BuildConfig
 import com.fortunes.commonsdk.R
 import com.mou.basemvvm.integration.AppLifeCycles
 import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
+import com.orhanobut.logger.PrettyFormatStrategy
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -41,7 +45,17 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
     }
 
     override fun onCreate(application: Application) {
-        Logger.addLogAdapter(AndroidLogAdapter())
+        val formatStrategy: FormatStrategy = PrettyFormatStrategy.newBuilder()
+            .showThreadInfo(false) // (Optional) Whether to show thread info or not. Default true
+            .methodCount(0) // (Optional) How many method line to show. Default 2
+            .methodOffset(7) // (Optional) Hides internal method calls up to offset. Default 5
+            .tag("villa") // (Optional) Global tag for every log. Default PRETTY_LOGGER
+            .build()
+        Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
+            override fun isLoggable(priority: Int, tag: String?): Boolean {
+                return BuildConfig.DEBUG
+            }
+        })
 
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
             layout.setPrimaryColorsId(R.color.public_backgroundColor)//全局设置主题颜色

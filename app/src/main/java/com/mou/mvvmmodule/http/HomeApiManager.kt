@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.di.http
+package com.mou.mvvmmodule.http
 
 import com.fortunes.commonsdk.network.BaseUrlConstants
 import com.fortunes.commonsdk.network.provider.BaseNetProvider

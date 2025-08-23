@@ -1,7 +1,7 @@
-package com.mou.mvvmmodule.di.http
+package com.mou.mvvmmodule.http
 
 import com.fortunes.commonsdk.network.bean.BaseBean
-import com.mou.mvvmmodule.di.mvvm.bean.ArticleBean
+import com.mou.mvvmmodule.ui.main.bean.ArticleBean
 import io.reactivex.Single
 import retrofit2.http.GET
 

@@ -1,7 +1,7 @@
-package com.mou.mvvmmodule.di.mvvm.model
+package com.mou.mvvmmodule.ui.main.model
 
 import com.mou.basemvvm.mvvm.BaseModel
-import com.mou.mvvmmodule.di.http.HomeApiManager
+import com.mou.mvvmmodule.http.HomeApiManager
 
 /**
  * @FileName: MainModel.java
