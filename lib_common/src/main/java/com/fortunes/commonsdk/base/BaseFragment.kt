@@ -86,6 +86,7 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
         prepareData()
     }
 
+
     /**
      * 懒加载的方法
      */
@@ -110,11 +111,12 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
     private fun initVM() {
         providerVMClass()?.let {
             activity?.application?.let { app ->
-                ViewModelProvider.AndroidViewModelFactory.getInstance(
+                mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(
                     app
                 ).create(it)
             }
         }
+
     }
 
 

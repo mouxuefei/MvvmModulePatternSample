@@ -1,42 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical"
-			app:public_toolbar_img="false"
-			app:public_toolbar_title="首页">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/container"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-		<Button
-				android:id="@+id/btn"
-				android:text="请求"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
+	<androidx.viewpager2.widget.ViewPager2
+		android:id="@+id/mainViewpager"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
 
-		<Button
-				android:id="@+id/btnLogin"
-				android:text="去登录页"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-		<Button
-				android:id="@+id/btnMine"
-				android:text="去个人中心"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
 
-		<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		/>
-		<TextView
-			android:id="@+id/name"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		/>
-		<TextView
-			android:id="@+id/desc"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		/>
-	</com.fortunes.commonsdk.view.toolbar.MyToolBarLayout>
+	<com.google.android.material.bottomnavigation.BottomNavigationView
+		android:id="@+id/navView"
+		style="@style/Widget.Design.BottomNavigationView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:menu="@menu/bottom_bar" />
+
+</LinearLayout>

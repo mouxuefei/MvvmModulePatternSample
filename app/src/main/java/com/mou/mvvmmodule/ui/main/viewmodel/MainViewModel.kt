@@ -12,20 +12,6 @@ import io.reactivex.Single
 
 class MainViewModel : BaseVMModel<MainModel>(){
     override var mModel: MainModel = MainModel()
-    val chapterName = MutableLiveData<String>()
-    val link = MutableLiveData<String>()
 
-    fun getArticle(): Single<BaseBean<ArticleBean>> {
-        return mModel
-            .getArticle()
-            .async()
-            .doOnSuccess {
-                chapterName.value=it.data.datas[0].chapterName
-                link.postValue(it.data.datas[0].link)
-            }
-            .doOnError {
-                Logger.d("doOnError")
-            }
-    }
 }
 

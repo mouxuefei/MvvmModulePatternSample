@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:public_toolbar_img="false"
+    app:public_toolbar_title="首页">
+
+    <Button
+        android:id="@+id/btn"
+        android:text="请求"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:text="去登录页"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnMine"
+        android:text="去个人中心"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</com.fortunes.commonsdk.view.toolbar.MyToolBarLayout>

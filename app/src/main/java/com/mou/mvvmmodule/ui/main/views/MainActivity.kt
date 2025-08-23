@@ -1,10 +1,15 @@
 package com.mou.mvvmmodule.ui.main.views
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.fortunes.commonsdk.base.BaseActivity
 import com.fortunes.commonsdk.network.dealResult
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
 import com.mou.basemvvm.helper.extens.toast
+import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
 
@@ -13,32 +18,66 @@ class MainActivity : BaseActivity<MainViewModel>() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private val fragmentList = arrayListOf<Fragment>()
+    private val mainFragment by lazy { HomeFragment() }
+    private val blogFragment by lazy { HomeFragment() }
+
+    private val bottomIds =
+        arrayListOf<Int>(R.id.home, R.id.blog)
+
+    init {
+        fragmentList.run {
+            add(mainFragment)
+            add(blogFragment)
+        }
+    }
     override fun providerVMClass() = MainViewModel::class.java
 
     override fun initView() {
-        binding.btn.setOnClickListener {
-            mViewModel.run {
-                this.getArticle().bindDialogOrLifeCycle(this@MainActivity)
-                    .dealResult(this@MainActivity)
+        initViewPager()
+        binding.navView.setOnNavigationItemSelectedListener(onNavigationItemSelected)
+    }
+
+    private fun initViewPager() {
+        binding.mainViewpager.isUserInputEnabled = true
+        binding.mainViewpager.offscreenPageLimit = 2
+        val adapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+            override fun createFragment(position: Int) = fragmentList[position]
+
+            override fun getItemCount() = fragmentList.size
+        }
+        binding.mainViewpager.adapter = adapter
+
+        binding.mainViewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                bottomIds.forEachIndexed { index, item ->
+                    if (position == index) {
+                        binding.navView.selectedItemId = item
+                    }
+                }
+
             }
-
-        }
-
-
-        binding.btnLogin.setOnClickListener {
-            toast("login")
-        }
-
-        binding.btnMine.setOnClickListener {}
+        })
     }
 
     override fun initData() {
-        mViewModel.chapterName.observe(this, Observer {
-            it?.let { binding.name.text = it }
-        })
-        mViewModel.link.observe(this, Observer {
-            it?.let { binding.desc.text = it }
-        })
+
     }
+
+    private val onNavigationItemSelected = BottomNavigationView.OnNavigationItemSelectedListener {
+        bottomIds.forEachIndexed { index, item ->
+            if (it.itemId == item) {
+                switchFragment(index, false)
+            }
+        }
+
+        true
+    }
+
+    private fun switchFragment(position: Int, smoothScroll: Boolean): Boolean {
+        binding.mainViewpager.setCurrentItem(position, smoothScroll)
+        return true
+    }
+
 }
 
