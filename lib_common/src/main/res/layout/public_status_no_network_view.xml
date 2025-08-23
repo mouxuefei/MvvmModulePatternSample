@@ -41,6 +41,5 @@
         android:layout_marginTop="100dp"
         android:text="重新加载"
         android:textColor="@color/public_whiteColor"
-        app:bl_corners_radius="6dp"
-        app:bl_solid_color="@color/public_redText"/>
+       />
 </LinearLayout>

@@ -1,18 +1,95 @@
 apply plugin: 'com.android.application'
-apply from: "../config_build.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
 
 android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
-        applicationId "com.mou.mvvmmodule"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        multiDexEnabled true
+        ndk { //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            keyAlias 'key'
+            keyPassword '123456'
+            storeFile file("./mvvm.jks")
+            storePassword '123456'
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            keyAlias 'key'
+            keyPassword '123456'
+            storeFile file("./mvvm.jks")
+            storePassword '123456'
         }
     }
+
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //是否开启混淆
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            // Zipalign优化
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+//不进行代码静态检测
+    lintOptions {
+        abortOnError false
+    }
+
+//支持java8
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+//开启databinding
+    dataBinding {
+        enabled = true
+    }
+
+//生成libs目录
+    sourceSets {
+        main.jniLibs.srcDirs = ['libs']
+    }
+
+
+
+//支持@Parcelize来实现Parcelable序列化
+    androidExtensions {
+        experimental = true
+    }
+
 }
-
 dependencies {
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions["kotlin_version"]}"
+    api project(':lib_common')
 }

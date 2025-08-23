@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="20dp"
-        app:bl_corners_radius="6dp"
-        app:bl_solid_color="#FFFFFF">
+      >
 
         <ProgressBar
             android:layout_width="30dp"

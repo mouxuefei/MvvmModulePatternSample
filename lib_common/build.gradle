@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android-extensions'
 }
 android {
+
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
 
@@ -38,27 +39,25 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation rootProject.ext.dependencies["kotlin"]
-    implementation rootProject.ext.dependencies["kotlin"]
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions["kotlin_version"]}"
     api project(':lib_basemvvm')
-    api(rootProject.ext.dependencies["cardview"])
-    api rootProject.ext.dependencies["refresh-layout"]
-    api rootProject.ext.dependencies["refresh-header"]
+    api "androidx.cardview:cardview:${versions["appcompatVersion"]}"
+    api "io.github.scwang90:refresh-layout-kernel:2.0.5"
+    api "io.github.scwang90:refresh-header-classics:2.0.5"
 
-    api rootProject.ext.dependencies["FlycoTabLayout"]
-    api rootProject.ext.dependencies["immersionbar"]
-    api rootProject.ext.dependencies["PickerView"]
-    api(rootProject.ext.dependencies["PictureSelector"]) {
+    api "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar"
+    api "com.gyf.immersionbar:immersionbar:2.3.1"
+    api "com.contrarywind:Android-PickerView:4.1.6"
+    api ("com.github.LuckSiege.PictureSelector:picture_library:v2.6.1") {
         exclude module: 'glide'
     }
-    api(rootProject.ext.dependencies["lottie"]) {
+    api("com.airbnb.android:lottie:2.7.0") {
         exclude module: 'support'
     }
-    kapt rootProject.ext.dependencies["lifecycle-compiler"]
-    implementation rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
-    implementation rootProject.ext.dependencies["lifecycle-livedata-ktx"]
-    api(rootProject.ext.dependencies["background"]) {
-        exclude module: 'support'
-    }
-    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+
+    kapt "androidx.lifecycle:lifecycle-compiler:${versions["lifeVersion"]}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions["lifeVersion"]}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions["lifeVersion"]}"
+
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
 }

@@ -31,42 +31,37 @@ android {
 }
 
 dependencies {
-    implementation rootProject.ext.dependencies["kotlin"]
-    //support
-    api(rootProject.ext.dependencies["support-v4"])
-    api(rootProject.ext.dependencies["constraintLayout"])
-    api(rootProject.ext.dependencies["appcompat"])
-    api rootProject.ext.dependencies["design"]
-    api(rootProject.ext.dependencies["recyclerview"])
-    api rootProject.ext.dependencies["annotations"]
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions["kotlin_version"]}"
+    api "androidx.appcompat:appcompat:${versions["appcompatVersion"]}"
+    api "androidx.legacy:legacy-support-v4:${versions["appcompatVersion"]}"
+    api "com.google.android.material:material:${versions["appcompatVersion"]}"
+    api "androidx.recyclerview:recyclerview:${versions["recyclerviewVersion"]}"
+    api "androidx.annotation:annotation:${versions["appcompatVersion"]}"
+
     //mvvm
-    kapt rootProject.ext.dependencies["lifecycle-compiler"]
-    implementation rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
-    implementation rootProject.ext.dependencies["lifecycle-livedata-ktx"]
-    api(rootProject.ext.dependencies["background"]) {
-        exclude module: 'support'
-    }
+    kapt "androidx.lifecycle:lifecycle-compiler:${versions["lifeVersion"]}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions["lifeVersion"]}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions["lifeVersion"]}"
+
     //rxjava
-    api rootProject.ext.dependencies["rxandroid2"]
-    api rootProject.ext.dependencies["rxjava2"]
-    api rootProject.ext.dependencies["autodispose"]
-    api rootProject.ext.dependencies["autodispose-android-archcomponents"]
-    api rootProject.ext.dependencies["rxbus"]
+    api "io.reactivex.rxjava2:rxandroid:2.0.2"
+    api "io.reactivex.rxjava2:rxjava:2.1.12"
+    api "com.uber.autodispose:autodispose:0.8.0"
+    api "com.uber.autodispose:autodispose-android-archcomponents:0.8.0"
+
     //network
-    api rootProject.ext.dependencies["retrofit"]
-    api rootProject.ext.dependencies["retrofit-converter-gson"]
-    api rootProject.ext.dependencies["retrofit-adapter-rxjava2"]
-    api rootProject.ext.dependencies["okhttp3"]
-    api rootProject.ext.dependencies["logging-interceptor"]
-    api rootProject.ext.dependencies["glide"]
-    api rootProject.ext.dependencies["glide-transformations"]
-    api rootProject.ext.dependencies["gson"]
-    api rootProject.ext.dependencies["persistentCookieJar"]
+    api "com.squareup.retrofit2:retrofit:${versions["retrofitSdkVersion"]}"
+    api "com.squareup.retrofit2:converter-gson:${versions["retrofitSdkVersion"]}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${versions["retrofitSdkVersion"]}"
+    api "com.squareup.okhttp3:okhttp:${versions["okhttp3Version"]}"
+    api "com.squareup.okhttp3:logging-interceptor:3.9.0"
+    api "com.github.bumptech.glide:glide:${versions["glideSdkVersion"]}"
+    api "jp.wasabeef:glide-transformations:2.0.1"
+    api "com.google.code.gson:gson:2.8.2"
+    api "com.github.franmontiel:PersistentCookieJar:v1.0.1"
 
     //tools
-    api rootProject.ext.dependencies["logger"]
-    api rootProject.ext.dependencies["multidex"]
-    api rootProject.ext.dependencies["utilcode"]
-    //test
-    testImplementation rootProject.ext.dependencies["junit"]
+    api "com.orhanobut:logger:2.2.0"
+    api 'androidx.multidex:multidex:2.0.0'
+    api "com.blankj:utilcodex:1.31.0"
 }

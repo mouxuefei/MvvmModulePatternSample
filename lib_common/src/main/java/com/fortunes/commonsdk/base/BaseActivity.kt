@@ -7,7 +7,6 @@ import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
 import com.mou.basemvvm.widget.LoadDialog
-import com.noober.background.BackgroundLibrary
 
 /***
  *
@@ -34,7 +33,6 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BackgroundLibrary.inject(this)
         setContentView(getLayoutId())
         super.onCreate(savedInstanceState)
         initVM()
