@@ -4,19 +4,14 @@ plugins {
     id 'kotlin-kapt'
 }
 android {
-    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
-    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
-
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
-    }
+    compileSdkVersion 29
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android["minSdkVersion"]
-        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
-        versionCode rootProject.ext.android["versionCode"]
-        versionName rootProject.ext.android["versionName"]
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1000
+        versionName "1000"
     }
     dataBinding {
         enabled = true
@@ -31,17 +26,17 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions["kotlin_version"]}"
-    api "androidx.appcompat:appcompat:${versions["appcompatVersion"]}"
-    api "androidx.legacy:legacy-support-v4:${versions["appcompatVersion"]}"
-    api "com.google.android.material:material:${versions["appcompatVersion"]}"
-    api "androidx.recyclerview:recyclerview:${versions["recyclerviewVersion"]}"
-    api "androidx.annotation:annotation:${versions["appcompatVersion"]}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
+    api "androidx.appcompat:appcompat:1.0.0"
+    api "androidx.legacy:legacy-support-v4:1.0.0"
+    api "com.google.android.material:material:1.0.0"
+    api "androidx.recyclerview:recyclerview:1.2.0"
+    api "androidx.annotation:annotation:1.0.0"
 
     //mvvm
-    kapt "androidx.lifecycle:lifecycle-compiler:${versions["lifeVersion"]}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions["lifeVersion"]}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions["lifeVersion"]}"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 
     //rxjava
     api "io.reactivex.rxjava2:rxandroid:2.0.2"
@@ -50,12 +45,12 @@ dependencies {
     api "com.uber.autodispose:autodispose-android-archcomponents:0.8.0"
 
     //network
-    api "com.squareup.retrofit2:retrofit:${versions["retrofitSdkVersion"]}"
-    api "com.squareup.retrofit2:converter-gson:${versions["retrofitSdkVersion"]}"
-    api "com.squareup.retrofit2:adapter-rxjava2:${versions["retrofitSdkVersion"]}"
-    api "com.squareup.okhttp3:okhttp:${versions["okhttp3Version"]}"
+    api "com.squareup.retrofit2:retrofit:2.4.0"
+    api "com.squareup.retrofit2:converter-gson:2.4.0"
+    api "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    api "com.squareup.okhttp3:okhttp:3.10.0"
     api "com.squareup.okhttp3:logging-interceptor:3.9.0"
-    api "com.github.bumptech.glide:glide:${versions["glideSdkVersion"]}"
+    api "com.github.bumptech.glide:glide:4.5.0"
     api "jp.wasabeef:glide-transformations:2.0.1"
     api "com.google.code.gson:gson:2.8.2"
     api "com.github.franmontiel:PersistentCookieJar:v1.0.1"
