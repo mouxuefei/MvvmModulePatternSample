@@ -2,18 +2,21 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
 }
 android {
-
-    compileSdkVersion 29
-    buildToolsVersion "30.0.2"
-
+    namespace "com.fortunes.commonsdk"
+    compileSdk 34
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdk 34
         versionCode 1000
         versionName "1000"
+
     }
     buildTypes {
         release {
@@ -22,19 +25,25 @@ android {
         }
     }
 
-    //支持@Parcelize来实现Parcelable序列化
-    androidExtensions {
-        experimental = true
-    }
+
 
     dataBinding {
         enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20"
     api project(':lib_basemvvm')
     api "androidx.cardview:cardview:1.0.0"
     api "io.github.scwang90:refresh-layout-kernel:2.0.5"
@@ -50,9 +59,9 @@ dependencies {
         exclude module: 'support'
     }
 
-    kapt "androidx.lifecycle:lifecycle-compiler:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.9.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.9.2"
 
     api "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
 }

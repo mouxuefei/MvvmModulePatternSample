@@ -15,12 +15,12 @@
 				android:layout_height="wrap_content"/>
 
 		<Button
-				android:id="@+id/btn_login"
+				android:id="@+id/btnLogin"
 				android:text="去登录页"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"/>
 		<Button
-				android:id="@+id/btn_mine"
+				android:id="@+id/btnMine"
 				android:text="去个人中心"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"/>

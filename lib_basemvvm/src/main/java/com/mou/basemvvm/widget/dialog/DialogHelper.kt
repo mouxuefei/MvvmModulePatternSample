@@ -13,7 +13,7 @@ package com.mou.basemvvm.widget.dialog
 import androidx.appcompat.app.AlertDialog
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.PermissionUtils
-import com.mou.easymvvm.R
+import com.mou.basemvvm.R
 
 /***
  *

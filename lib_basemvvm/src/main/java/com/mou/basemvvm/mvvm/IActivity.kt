@@ -20,8 +20,6 @@ import androidx.annotation.LayoutRes
  */
 
 interface IActivity {
-    @LayoutRes
-    fun getLayoutId(): Int
 
     fun initView()
 

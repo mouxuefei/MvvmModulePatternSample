@@ -6,8 +6,7 @@ import android.content.DialogInterface
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-
-import com.mou.easymvvm.R
+import com.mou.basemvvm.R
 
 
 /**

@@ -2,7 +2,6 @@ package com.fortunes.commonsdk.core
 
 import android.app.Application
 import android.content.Context
-import com.fortunes.commonsdk.BuildConfig
 import com.fortunes.commonsdk.R
 import com.mou.basemvvm.integration.AppLifeCycles
 import com.orhanobut.logger.AndroidLogAdapter

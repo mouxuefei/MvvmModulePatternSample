@@ -1,16 +1,16 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt' // 如果使用注解处理器
+    id 'kotlin-parcelize'
+}
 
 android {
-
-    compileSdkVersion 29
-    buildToolsVersion "30.0.2"
+    namespace "com.mou.mvvmmodule" // 新版必须指定
+    compileSdk 34
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdk 34
         versionCode 1000
         versionName "1000"
         multiDexEnabled true
@@ -18,6 +18,11 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
 
+    }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
     }
 
     signingConfigs {
@@ -58,20 +63,18 @@ android {
         }
     }
 
-//不进行代码静态检测
-    lintOptions {
-        abortOnError false
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-//支持java8
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
 //开启databinding
     dataBinding {
-        enabled = true
+        enabled = false
     }
 
 //生成libs目录
@@ -79,12 +82,16 @@ android {
         main.jniLibs.srcDirs = ['libs']
     }
 
-
-
-//支持@Parcelize来实现Parcelable序列化
-    androidExtensions {
-        experimental = true
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+        textReport = false
+        textOutput = file("lint-report.txt")
+        // 可选：配置报告类型
+        htmlReport = true
+        htmlOutput = file("$buildDir/reports/lint/lint.html")
     }
+
 
 }
 dependencies {

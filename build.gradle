@@ -1,32 +1,7 @@
-
-buildscript {
-    ext.kotlin_version = '1.5.0'
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+plugins {
+    id 'com.android.application' version '8.3.2' apply false
+    id 'com.android.library' version '8.3.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.23' apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/spring/'}
-        maven { url 'https://maven.aliyun.com/repository/google/'}
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/'}
-        maven { url 'https://maven.aliyun.com/repository/spring-plugin/'}
-        maven { url 'https://maven.aliyun.com/repository/grails-core/'}
-        maven { url 'https://maven.aliyun.com/repository/apache-snapshots/'}
-    }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

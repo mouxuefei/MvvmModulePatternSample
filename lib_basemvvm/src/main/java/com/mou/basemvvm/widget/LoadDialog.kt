@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.TextView
+import com.mou.basemvvm.R
 import com.mou.basemvvm.widget.dialog.CommonDialog
-import com.mou.easymvvm.R
 
 /***
  * You may think you know what the following code does.

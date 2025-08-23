@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
 import com.mou.basemvvm.widget.LoadDialog
@@ -33,6 +34,8 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
     //上下文
     protected lateinit var mContext: Context
     lateinit var mViewModel: VM
+
+    protected abstract val binding: ViewBinding
 
     //数据是否加载标识
     private var isDataInitiated = false
@@ -100,7 +103,7 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(getLayoutId(), null, false)
+        return binding.root
     }
 
     abstract fun providerVMClass(): Class<VM>?

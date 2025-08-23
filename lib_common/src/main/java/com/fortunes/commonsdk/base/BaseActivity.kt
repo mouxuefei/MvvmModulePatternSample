@@ -3,6 +3,7 @@ package com.fortunes.commonsdk.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
@@ -26,6 +27,8 @@ import com.mou.basemvvm.widget.LoadDialog
 
 abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IActivity {
     lateinit var mViewModel: VM
+    // 子类提供 ViewBinding
+    protected abstract val binding: ViewBinding
     abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {
         LoadDialog.create(this)
@@ -33,7 +36,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(getLayoutId())
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         initVM()
         initView()

@@ -5,7 +5,6 @@ import com.fortunes.commonsdk.network.bean.EmptyException
 import com.fortunes.commonsdk.network.bean.NoMoreDataException
 import com.google.gson.JsonParseException
 import com.mou.basemvvm.helper.extens.toast
-import com.mou.easymvvm.BuildConfig
 import com.uber.autodispose.SingleSubscribeProxy
 import org.json.JSONException
 import java.net.ConnectException
@@ -87,9 +86,6 @@ fun <T> SingleSubscribeProxy<T>.dealResultNoToast(
  */
 fun Context.toastHttpFail(error: Throwable?) {
     error?.let { throwable ->
-        if (BuildConfig.DEBUG) {
-            throwable.printStackTrace()
-        }
         if (throwable is ApiException) {
             throwable.message?.let { toast(it) }
         } else if (throwable is SocketTimeoutException) {
