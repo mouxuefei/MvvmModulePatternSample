@@ -33,9 +33,9 @@ import com.mou.basemvvm.widget.dialog.CommonDialog
 class LoadDialog private constructor(private val context: Context) {
     private val mCommonDialog by lazy {
         CommonDialog.Builder(context)
-                .setContentView(contentView)
-                .setCancelableOnTouchOutside(false)
-                .create()
+            .setContentView(contentView)
+            .setCancelableOnTouchOutside(false)
+            .create()
     }
 
     private val contentView by lazy {
@@ -51,7 +51,7 @@ class LoadDialog private constructor(private val context: Context) {
         mCommonDialog.show()
     }
 
-    fun setMessage(message: String) {
+    fun setMessage(message: String? = "") {
         titleTv.text = message
     }
 

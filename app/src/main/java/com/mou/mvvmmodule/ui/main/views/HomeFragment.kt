@@ -5,7 +5,6 @@ import com.fortunes.commonsdk.base.BaseFragment
 import com.fortunes.commonsdk.network.dealResult
 import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
 import com.mou.basemvvm.helper.extens.toast
-import com.mou.basemvvm.mvvm.BaseVMModel
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.HomeFragmentViewModel
 
@@ -28,8 +27,7 @@ class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
     override fun initView() {
         binding.btn.setOnClickListener {
             mViewModel.run {
-                this.getArticle().bindDialogOrLifeCycle(this@HomeFragment)
-                    .dealResult(mContext)
+                this.loadUser()
             }
 
         }

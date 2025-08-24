@@ -29,6 +29,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
     lateinit var mViewModel: VM
     // 子类提供 ViewBinding
     protected abstract val binding: ViewBinding
+
     abstract fun providerVMClass(): Class<VM>?
     private val progressDialog: LoadDialog by lazy {
         LoadDialog.create(this)
@@ -41,6 +42,17 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
         initVM()
         initView()
         initData()
+        initLoadingObserver()
+    }
+
+    private fun initLoadingObserver() {
+        mViewModel.loadingState.observe(this) { state ->
+            if (state.isLoading) {
+                showLoading(state.message)
+            } else {
+                hideLoading()
+            }
+        }
     }
 
     private fun initVM() {
@@ -51,7 +63,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
 
     }
 
-    override fun showLoading(message: String) {
+    override fun showLoading(message: String?) {
         progressDialog.setMessage(message)
         progressDialog.show()
     }

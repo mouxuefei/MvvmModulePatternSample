@@ -26,7 +26,7 @@ import androidx.lifecycle.LifecycleOwner
  * Activity/Fragment的接口
  */
 interface IView : LifecycleOwner {
-    fun showLoading(message: String = "请稍后...")
+    fun showLoading(message: String ?= "请求中...")
 
     fun hideLoading()
 }

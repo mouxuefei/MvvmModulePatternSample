@@ -58,18 +58,18 @@ dependencies {
     api "com.uber.autodispose:autodispose-android-archcomponents:0.8.0"
 
     //network
-    api "com.squareup.retrofit2:retrofit:2.4.0"
-    api "com.squareup.retrofit2:converter-gson:2.4.0"
-    api "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    api "com.squareup.retrofit2:retrofit:2.9.0"
+    api "com.squareup.retrofit2:converter-gson:2.9.0"
+    api "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     api "com.squareup.okhttp3:okhttp:3.10.0"
     api "com.squareup.okhttp3:logging-interceptor:3.9.0"
-    api "com.github.bumptech.glide:glide:4.5.0"
+    api "com.github.bumptech.glide:glide:4.16.0"
     api "jp.wasabeef:glide-transformations:2.0.1"
-    api "com.google.code.gson:gson:2.8.2"
+    api "com.google.code.gson:gson:2.10.1"
     api "com.github.franmontiel:PersistentCookieJar:v1.0.1"
 
     //tools
     api "com.orhanobut:logger:2.2.0"
-    api 'androidx.multidex:multidex:2.0.0'
+    api 'androidx.multidex:multidex:2.0.1'
     api "com.blankj:utilcodex:1.31.0"
 }

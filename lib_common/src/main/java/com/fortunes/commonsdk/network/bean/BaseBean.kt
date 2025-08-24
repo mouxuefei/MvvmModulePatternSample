@@ -24,7 +24,7 @@ package com.fortunes.commonsdk.network.bean
 
 
  */
-data class BaseBean<T> constructor(var data: T, var errorCode: Int, var errorMsg: String)
+data class BaseBean<T>(var data: T, var errorCode: Int, var errorMsg: String)
 class EmptyBean
 
 

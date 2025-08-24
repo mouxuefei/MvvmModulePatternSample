@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IActivity
 import com.mou.basemvvm.mvvm.IView
 import com.mou.basemvvm.widget.LoadDialog
@@ -30,7 +31,7 @@ import com.mou.basemvvm.widget.LoadDialog
  * Fragment的父类
  */
 
-abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
+abstract class BaseFragment<VM : BaseViewModel> : Fragment(), IView, IActivity {
     //上下文
     protected lateinit var mContext: Context
     lateinit var mViewModel: VM
@@ -62,6 +63,7 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
      */
     protected open fun reLoad() = false
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mContext = activity ?: throw Exception("activity is null")
@@ -74,6 +76,18 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
             prepareData()
         } else {
             initData()
+        }
+        initLoadingObserver()
+    }
+
+
+    private fun initLoadingObserver() {
+        mViewModel.loadingState.observe(viewLifecycleOwner) { state ->
+            if (state.isLoading) {
+                showLoading(state.message)
+            } else {
+                hideLoading()
+            }
         }
     }
 
@@ -123,7 +137,7 @@ abstract class BaseFragment<VM : ViewModel> : Fragment(), IView, IActivity {
     /**
      * 显示loading框
      */
-    override fun showLoading(message: String) {
+    override fun showLoading(message: String?) {
         progressDialog.setMessage(message)
         progressDialog.show()
     }

@@ -11,5 +11,5 @@ interface ApiService {
      * 判断是否上线
      */
     @GET("article/list/1/json")
-    fun getArticle(): Single<BaseBean<ArticleBean>>
+    suspend fun getArticle(): BaseBean<ArticleBean>
 }
