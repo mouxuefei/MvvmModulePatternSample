@@ -2,7 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+
     <application android:label="@string/app_name">
+
+        <!-- AppKey 配置，可在此设置，也可在 SDKOptions 中提供
+           若两处都提供，优先使用 SDKOptions 中的值 -->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="e8e39ee4489561a3d820185d79887792" />
+
+        <!-- 云信后台服务声明 -->
+        <service android:name="com.netease.nimlib.service.NimServiceV2" />
+
+        <provider
+            android:name="com.netease.nimlib.ipc.NIMContentProviderV2"
+            android:authorities="${applicationId}.ipc.provider.v2"
+            android:exported="false" />
+
+
+        <!--配置 小米推送 receiver-->
+        <receiver
+            android:name=".receiver.XiaoMiMiPushMessageReceiver"
+            android:exported="true">
+            <intent-filter android:priority="0x7fffffff">
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
+                <action android:name="com.xiaomi.mipush.ERROR"/>
+            </intent-filter>
+        </receiver>
+
+
         <activity
             android:name=".views.ChatGroupActivity"
             android:exported="true"

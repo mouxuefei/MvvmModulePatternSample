@@ -21,3 +21,27 @@
 #-renamesourcefileattribute SourceFile
 -keep class com.google.android.material.** { *; }
 -keep interface com.google.android.material.** { *; }
+
+#im
+-dontwarn com.netease.nim.**
+-keep class com.netease.nim.** {*;}
+
+-dontwarn com.netease.nimlib.**
+-keep class com.netease.nimlib.** {*;}
+
+-dontwarn com.netease.share.**
+-keep class com.netease.share.** {*;}
+
+-dontwarn com.netease.mobsec.**
+-keep class com.netease.mobsec.** {*;}
+
+#全文检索插件需要添加
+-dontwarn org.apache.lucene.**
+-keep class org.apache.lucene.** {*;}
+
+#数据库功能需要添加
+-keep class net.sqlcipher.** {*;}
+
+
+#小米推送
+-keep class com.xiaomi.** {*;}
