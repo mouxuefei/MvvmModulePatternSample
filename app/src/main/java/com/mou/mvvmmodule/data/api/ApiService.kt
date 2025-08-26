@@ -1,8 +1,7 @@
-package com.mou.mvvmmodule.http
+package com.mou.mvvmmodule.data.api
 
 import com.fortunes.commonsdk.network.bean.BaseBean
-import com.mou.mvvmmodule.ui.main.bean.ArticleBean
-import io.reactivex.Single
+import com.mou.mvvmmodule.data.model.ArticleBean
 import retrofit2.http.GET
 
 interface ApiService {
