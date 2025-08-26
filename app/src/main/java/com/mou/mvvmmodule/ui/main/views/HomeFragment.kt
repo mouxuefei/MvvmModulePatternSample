@@ -1,12 +1,15 @@
 package com.mou.mvvmmodule.ui.main.views
 
+import androidx.core.app.NavUtils
 import androidx.viewbinding.ViewBinding
 import com.fortunes.commonsdk.base.BaseFragment
 import com.fortunes.commonsdk.network.dealResult
+import com.fortunes.commonsdk.utils.ActRouter
 import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
 import com.mou.basemvvm.helper.extens.toast
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.HomeFragmentViewModel
+import com.scheartmed.lib_im.views.ConversationListActivity
 
 /**
  * @FileName: HomeFragment.java
@@ -34,9 +37,8 @@ class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
 
 
         binding.btnLogin.setOnClickListener {
-
+            ActRouter.startActivity(mContext,ConversationListActivity::class.java)
         }
-
         binding.btnMine.setOnClickListener {}
     }
 

@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.utils
+package com.fortunes.commonsdk.utils
 
 import android.content.Context
 import android.content.SharedPreferences

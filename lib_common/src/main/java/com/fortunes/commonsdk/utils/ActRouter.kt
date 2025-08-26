@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.utils
+package com.fortunes.commonsdk.utils
 
 import android.app.Activity
 import android.content.Context
@@ -15,10 +15,7 @@ object ActRouter {
      * @param flags Intent Flags
      */
     fun startActivity(
-        context: Context,
-        clazz: Class<out Activity>,
-        bundle: Bundle? = null,
-        flags: Int? = null
+        context: Context, clazz: Class<out Activity>, bundle: Bundle? = null, flags: Int? = null
     ) {
         val intent = Intent(context, clazz)
         bundle?.let { intent.putExtras(it) }
@@ -30,10 +27,7 @@ object ActRouter {
      * 带返回值跳转 (Activity Result API 推荐使用)
      */
     fun startActivityForResult(
-        activity: Activity,
-        clazz: Class<out Activity>,
-        requestCode: Int,
-        bundle: Bundle? = null
+        activity: Activity, clazz: Class<out Activity>, requestCode: Int, bundle: Bundle? = null
     ) {
         val intent = Intent(activity, clazz)
         bundle?.let { intent.putExtras(it) }
@@ -44,8 +38,7 @@ object ActRouter {
      * Kotlin 泛型方式跳转
      */
     inline fun <reified T : Activity> Context.startActivity(
-        bundle: Bundle? = null,
-        flags: Int? = null
+        bundle: Bundle? = null, flags: Int? = null
     ) {
         val intent = Intent(this, T::class.java)
         bundle?.let { intent.putExtras(it) }
@@ -57,8 +50,7 @@ object ActRouter {
      * 带返回值的泛型跳转
      */
     inline fun <reified T : Activity> Activity.startActivityForResult(
-        requestCode: Int,
-        bundle: Bundle? = null
+        requestCode: Int, bundle: Bundle? = null
     ) {
         val intent = Intent(this, T::class.java)
         bundle?.let { intent.putExtras(it) }

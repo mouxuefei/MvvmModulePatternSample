@@ -1,7 +1,7 @@
 package com.mou.mvvmmodule.core
 
+import com.fortunes.commonsdk.utils.SpUtil
 import com.mou.basemvvm.BaseApplication
-import com.mou.mvvmmodule.utils.SpUtil
 
 
 class App : BaseApplication() {
