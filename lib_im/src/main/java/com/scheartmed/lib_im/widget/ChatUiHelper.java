@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.scheartmed.lib_im.R;
-import com.scheartmed.lib_im.widget.emoji.CommonVpAdapter;
 import com.scheartmed.lib_im.widget.morelayout.MoreAdapter;
 import com.scheartmed.lib_im.widget.morelayout.MoreLayoutItemBean;
 

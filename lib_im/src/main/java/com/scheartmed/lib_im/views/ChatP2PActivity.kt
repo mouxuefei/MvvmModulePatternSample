@@ -1,17 +1,12 @@
 package com.scheartmed.lib_im.views
 
-import android.graphics.Color
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fortunes.commonsdk.base.BaseActivity
 import com.scheartmed.lib_im.R
-import com.scheartmed.lib_im.data.model.IconFontEntity
 import com.scheartmed.lib_im.data.model.MessageCustomType
 import com.scheartmed.lib_im.data.model.MessageListEntity
 import com.scheartmed.lib_im.data.model.SystemTextListEntity
@@ -20,6 +15,7 @@ import com.scheartmed.lib_im.viewmodels.ChatP2PViewModel
 import com.scheartmed.lib_im.views.adapter.ChatAdapter
 import com.scheartmed.lib_im.views.adapter.SystemActionListener
 import com.scheartmed.lib_im.widget.ChatUiHelper
+import com.scheartmed.lib_im.widget.MsgRecyclerView
 import com.scheartmed.lib_im.widget.morelayout.MoreLayoutItemBean
 import java.io.File
 
@@ -30,7 +26,7 @@ import java.io.File
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class ChatP2PActivity : BaseActivity<ChatP2PViewModel>(), SwipeRefreshLayout.OnRefreshListener {
+class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     override val binding: ActivityChatP2pBinding by lazy {
         ActivityChatP2pBinding.inflate(layoutInflater)
     }
@@ -135,7 +131,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>(), SwipeRefreshLayout.OnR
     private fun initRv() {
         mAdapter = ChatAdapter(this, ArrayList())
         binding.rvChatList.adapter = mAdapter
-        binding.swipeChat.setOnRefreshListener(this)
         mAdapter?.addChildClickViewIds(
             R.id.chat_item_header,
             R.id.chat_item_layout_content,
@@ -167,19 +162,11 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>(), SwipeRefreshLayout.OnR
             val item = adapter.getItem(position) as String
             binding.chatInputContainer.etContent.setText(item)
         }
-        binding.rvChatList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-//                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-//                val firstItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-//                val position = (mLastConditionDataItemPosition ?: 0) + 1
-//                if (mLastConditionDataItem != null && firstItemPosition >= position && layout_patient_info.visibility == View.GONE) {
-//                    layout_patient_info.visibility = View.VISIBLE
-//                } else if (mLastConditionDataItem != null && firstItemPosition < position && layout_patient_info.visibility == View.VISIBLE) {
-//                    layout_patient_info.visibility = View.GONE
-//                }
-            }
-        })
+
+
+        binding.rvChatList.setLoadingListener {
+            loadHistoryMsg()
+        }
         //点击上传资料的查看资料
         mAdapter?.setSystemActionListener(object : SystemActionListener {
             override fun clickView(item: MessageListEntity, child: SystemTextListEntity) {
@@ -206,6 +193,13 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>(), SwipeRefreshLayout.OnR
                 }
             }
         })
+    }
+
+    private fun loadHistoryMsg() {
+        //TODO:加载历史数据
+        binding.rvChatList.postDelayed({
+            binding.rvChatList.hideHeadView()
+        }, 2000)
     }
 
     /**
@@ -296,18 +290,9 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>(), SwipeRefreshLayout.OnR
     }
 
     override fun initData() {
+
+
     }
 
-    override fun onRefresh() {
-//        mConversationId?.let {
-//            mPresenter.getByOrderId(it, false)
-//            val data = mAdapter?.data
-//            if (data?.size!! > 0) {
-//                val item = mAdapter?.getItem(data.size - 1)
-//                mPresenter.fetchMessageList(item?.time, it, true)
-//            } else {
-//                swipeChat.isRefreshing = false
-//            }
-//        }
-    }
+
 }

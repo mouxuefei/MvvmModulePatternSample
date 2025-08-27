@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
@@ -26,27 +26,18 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipeChat"
+                <com.scheartmed.lib_im.widget.MsgRecyclerView
+                    android:id="@+id/rvChatList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:descendantFocusability="blocksDescendants"
-                    android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvChatList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:overScrollMode="never"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <include
                     android:id="@+id/chatInputContainer"
-                    layout="@layout/layout_chat_input"
-                    />
+                    layout="@layout/layout_chat_input" />
             </LinearLayout>
 
             <RelativeLayout
@@ -69,14 +60,14 @@
 
 
         <com.scheartmed.lib_im.widget.EvaFloatView
-            android:visibility="gone"
             android:id="@+id/act_chat_float_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="100dp"
-            android:background="@drawable/shape_eva">
+            android:background="@drawable/shape_eva"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"

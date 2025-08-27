@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.widget.emoji;
+package com.scheartmed.lib_im.widget;
 
 import android.view.View;
 import android.view.ViewGroup;
