@@ -5,6 +5,7 @@ import com.fortunes.commonsdk.utils.ActRouter
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.HomeFragmentViewModel
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.v2.V2NIMError
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginListener
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
@@ -13,6 +14,7 @@ import com.netease.nimlib.sdk.v2.auth.enums.V2NIMLoginStatus
 import com.netease.nimlib.sdk.v2.auth.model.V2NIMKickedOfflineDetail
 import com.netease.nimlib.sdk.v2.auth.model.V2NIMLoginClient
 import com.orhanobut.logger.Logger
+import com.scheartmed.lib_im.views.ChatP2PActivity
 import com.scheartmed.lib_im.views.ConversationListActivity
 
 
@@ -49,6 +51,8 @@ class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
                 {
                     // TODO
                     Logger.e("success==")
+
+                    ActRouter.startActivity(mContext, ChatP2PActivity::class.java)
                 }
             ) { error ->
                 val code = error.code
@@ -66,6 +70,7 @@ class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
 
     private val listener = object : V2NIMLoginListener {
         override fun onLoginStatus(status: V2NIMLoginStatus) {
+
             // Handle login status
             Logger.e("onLoginStatus==" + status.name)
             Logger.e("onLoginStatus value==" + status.value)

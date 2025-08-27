@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Progressbar加载背景样式 -->
+    <style name="dialog_transparent_style" parent="@android:style/Theme.Dialog">
+        <!-- Dialog的windowFrame 无边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 浮动与Activity窗口之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否半透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 没有title -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景色 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景模糊显示 -->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="NiceDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="popwindow_bottom_style" parent="@android:style/Animation">
+
+    </style>
+
+    <style name="popwindow_center_style" parent="@android:style/Animation">
+
+    </style>
+
+    <style name="TUIKit_AlertDialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="like_toast_dialog_style">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+    </style>
+
+    <style name="common_my_dialog_style" parent="android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+    </style>
+
+    <style name="dialog_center_style" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/centershow</item>
+        <item name="android:windowExitAnimation">@anim/centerhide</item>
+    </style>
+
+
+</resources>

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">lib_im</string>
+
+    <string name="date_year_short">年</string>
+    <string name="date_month_short">月</string>
+    <string name="date_day_short">天</string>
+    <string name="date_hour_short">时</string>
+    <string name="date_minute_short">分</string>
+    <string name="date_second_short">秒</string>
+    <string name="date_yesterday">昨天</string>
 </resources>

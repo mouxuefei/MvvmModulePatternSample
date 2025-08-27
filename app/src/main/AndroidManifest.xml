@@ -73,6 +73,11 @@
             android:name="com.fortunes.commonsdk.core.GlobalConfiguration"
             android:value="ConfigModule" />
 
+        <!-- 告知 XXPermissions 当前项目已经适配了分区存储特性 -->
+        <meta-data
+            android:name="ScopedStorage"
+            android:value="true" />
+
     </application>
 
 </manifest>

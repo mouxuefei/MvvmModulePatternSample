@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/rootAddPanel"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutMore"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.scheartmed.lib_im.widget.WrapContentHeightViewPager
+            android:id="@+id/VpMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp" />
+
+
+        <com.scheartmed.lib_im.widget.IndicatorView
+            android:id="@+id/indMore"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="6dp"
+            app:indicatorColor="#B0B3BF"
+            app:indicatorColorSelected="#0077FF"
+            app:indicatorHeight="4"
+            app:indicatorNormalWidth="4"
+            app:indicatorSelectedWidth="12" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="#03081A"
+        android:textSize="18sp" />
+</LinearLayout>
