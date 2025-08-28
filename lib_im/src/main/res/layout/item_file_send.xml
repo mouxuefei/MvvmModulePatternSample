@@ -121,4 +121,12 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/chat_item_tv_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="72dp"
+        android:text="未读" />
+
 </LinearLayout>

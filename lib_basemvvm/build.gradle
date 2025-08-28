@@ -71,5 +71,4 @@ dependencies {
     //tools
     api "com.orhanobut:logger:2.2.0"
     api 'androidx.multidex:multidex:2.0.1'
-    api "com.blankj:utilcodex:1.31.0"
 }

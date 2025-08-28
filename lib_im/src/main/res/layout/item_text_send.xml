@@ -43,11 +43,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:gravity="center_horizontal"
                 android:id="@+id/chat_item_content_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_send_item_bg"
+                android:gravity="center_horizontal"
                 android:minWidth="64dp"
                 android:text="你好"
                 android:textColor="@color/white"
@@ -76,6 +76,15 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/chat_item_layout_content"
             android:visibility="invisible" />
+
+
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/chat_item_tv_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="72dp"
+        android:text="未读" />
 </LinearLayout>
