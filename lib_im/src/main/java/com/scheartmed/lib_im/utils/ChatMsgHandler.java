@@ -9,12 +9,22 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.v2.V2NIMError;
 import com.netease.nimlib.sdk.v2.V2NIMFailureCallback;
+import com.netease.nimlib.sdk.v2.V2NIMProgressCallback;
 import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageCreator;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService;
+import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageAntispamConfig;
+import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageConfig;
+import com.netease.nimlib.sdk.v2.message.config.V2NIMMessagePushConfig;
+import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageRobotConfig;
+import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageRouteConfig;
+import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageQueryDirection;
 import com.netease.nimlib.sdk.v2.message.option.V2NIMMessageListOption;
+import com.netease.nimlib.sdk.v2.message.params.V2NIMSendMessageParams;
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult;
+import com.netease.nimlib.sdk.v2.message.result.V2NIMSendMessageResult;
+import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil;
 import com.scheartmed.lib_im.data.MessageItem;
 import com.scheartmed.lib_im.data.model.ChatSession;
 
@@ -30,8 +40,8 @@ public class ChatMsgHandler {
 
     private static final String TAG = ChatMsgHandler.class.getSimpleName();
 
-    private static final int ONE_QUERY_LIMIT = 20;
-    private static final long TEN_MINUTE = 1000 * 60 * 10;
+    public static final int ONE_QUERY_LIMIT = 15;
+    public static final long TEN_MINUTE = 1000 * 60 * 10;
 
     private Context mContext;
     private ChatSession mChatSession;
@@ -49,6 +59,42 @@ public class ChatMsgHandler {
     public V2NIMMessage createTextMessage(String text) {
         return V2NIMMessageCreator.createTextMessage(text);
     }
+
+    public void sendMsg(V2NIMMessage v2Message, String conversationId,
+                        V2NIMSuccessCallback<V2NIMSendMessageResult> sendMessageResultV2NIMSuccessCallback, V2NIMFailureCallback failCallback, V2NIMProgressCallback progressCallback) {
+        V2NIMMessageService v2MessageService = NIMClient.getService(V2NIMMessageService.class);
+
+
+        V2NIMMessageConfig messageConfig = V2NIMMessageConfig.V2NIMMessageConfigBuilder.builder()
+                .withLastMessageUpdateEnabled(true)
+                .withHistoryEnabled(true)
+                .withOfflineEnabled(true)
+                .withOnlineSyncEnabled(true)
+                .withReadReceiptEnabled(true)
+                .withUnreadEnabled(true)
+                .build();
+//推送
+//        V2NIMMessagePushConfig pushConfig = V2NIMMessagePushConfig.V2NIMMessagePushConfigBuilder.builder()
+//                .withContent()
+//                .withForcePush()
+//                .withForcePushAccountIds()
+//                .withForcePushContent()
+//                .withPayload()
+//                .withPushEnabled()
+//                .withPushNickEnabled()
+//                .build();
+
+
+        V2NIMSendMessageParams sendMessageParams = V2NIMSendMessageParams.V2NIMSendMessageParamsBuilder.builder()
+                .withMessageConfig(messageConfig)
+//                .withPushConfig(pushConfig)
+                .build();
+        v2MessageService.sendMessage(v2Message, conversationId, sendMessageParams,
+                sendMessageResultV2NIMSuccessCallback,
+                failCallback,
+                progressCallback);
+    }
+
 
     /**
      * 发送图片消息
@@ -109,7 +155,10 @@ public class ChatMsgHandler {
      */
     public void loadMessage(V2NIMMessage anchorMessage, String conversationId, V2NIMSuccessCallback<V2NIMMessageListResult> listener, V2NIMFailureCallback failureCallback) {
         V2NIMMessageService v2MessageService = NIMClient.getService(V2NIMMessageService.class);
-        V2NIMMessageListOption.V2NIMMessageListOptionBuilder listOption = V2NIMMessageListOption.V2NIMMessageListOptionBuilder.builder(conversationId).withLimit(50);
+        V2NIMMessageListOption.V2NIMMessageListOptionBuilder listOption = V2NIMMessageListOption
+                .V2NIMMessageListOptionBuilder
+                .builder(conversationId)
+                .withLimit(ONE_QUERY_LIMIT);
         if (anchorMessage != null) {
             listOption.withAnchorMessage(anchorMessage);
         }

@@ -21,28 +21,28 @@ import com.scheartmed.lib_im.utils.GlideUtils
 class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
 
-    private val MSG_TEXT_L = 0x20000
-    private val MSG_IMG_L = 0x20001
-    private val MSG_AUDIO_L = 0x20002
-    private val MSG_FILE_L = 0x20004
-    private val MSG_NOTIFICATION_L = 0x20005
-    private val MSG_TIPS_L = 0x20006
-    private val MSG_CUSTOM_1_L = 0x20007
-    private val MSG_CUSTOM_2_L = 0x20008
+    private val MSG_TEXT_L = 100
+    private val MSG_IMG_L = 101
+    private val MSG_AUDIO_L = 102
+    private val MSG_FILE_L = 103
+    private val MSG_NOTIFICATION_L = 104
+    private val MSG_TIPS_L = 105
+    private val MSG_CUSTOM_1_L = 106
+    private val MSG_CUSTOM_2_L = 107
 
 
-    private val MSG_EMPTY = 0x40000
-    private val MSG_TIME = 0x50000
+    private val MSG_EMPTY = 300
+    private val MSG_TIME = 400
 
 
-    private val MSG_TEXT_R = 0x30000
-    private val MSG_IMG_R = 0x30001
-    private val MSG_AUDIO_R = 0x30002
-    private val MSG_FILE_R = 0x30004
-    private val MSG_NOTIFICATION_R = 0x30005
-    private val MSG_TIPS_R = 0x30006
-    private val MSG_CUSTOM_1_R = 0x30007
-    private val MSG_CUSTOM_2_R = 0x30008
+    private val MSG_TEXT_R = 200
+    private val MSG_IMG_R = 201
+    private val MSG_AUDIO_R = 202
+    private val MSG_FILE_R = 203
+    private val MSG_NOTIFICATION_R = 204
+    private val MSG_TIPS_R = 205
+    private val MSG_CUSTOM_1_R = 206
+    private val MSG_CUSTOM_2_R = 207
 
     init {
         setMultiTypeDelegate(object : BaseMultiTypeDelegate<MessageItem>() {
@@ -58,21 +58,21 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             }
         })
 
-        getMultiTypeDelegate()?.addItemType(MSG_TEXT_L, R.layout.item_text_send)
-            ?.addItemType(MSG_IMG_L, R.layout.item_image_send)
-            ?.addItemType(MSG_AUDIO_L, R.layout.item_audio_send)
-            ?.addItemType(MSG_FILE_L, R.layout.item_file_send)
-            ?.addItemType(MSG_NOTIFICATION_L, R.layout.item_notication)
-            ?.addItemType(MSG_TIPS_L, R.layout.item_tips)
-            ?.addItemType(MSG_CUSTOM_1_L, R.layout.item_notication)
-
-
-            ?.addItemType(MSG_IMG_R, R.layout.item_image_receive)
-            ?.addItemType(MSG_AUDIO_R, R.layout.item_audio_receive)
-            ?.addItemType(MSG_FILE_R, R.layout.item_file_receive)
+        getMultiTypeDelegate()?.addItemType(MSG_TEXT_R, R.layout.item_text_send)
+            ?.addItemType(MSG_IMG_R, R.layout.item_image_send)
+            ?.addItemType(MSG_AUDIO_R, R.layout.item_audio_send)
+            ?.addItemType(MSG_FILE_R, R.layout.item_file_send)
             ?.addItemType(MSG_NOTIFICATION_R, R.layout.item_notication)
             ?.addItemType(MSG_TIPS_R, R.layout.item_tips)
             ?.addItemType(MSG_CUSTOM_1_R, R.layout.item_notication)
+
+            ?.addItemType(MSG_TEXT_L, R.layout.item_text_receive)
+            ?.addItemType(MSG_IMG_L, R.layout.item_image_receive)
+            ?.addItemType(MSG_AUDIO_L, R.layout.item_audio_receive)
+            ?.addItemType(MSG_FILE_L, R.layout.item_file_receive)
+            ?.addItemType(MSG_NOTIFICATION_L, R.layout.item_notication)
+            ?.addItemType(MSG_TIPS_L, R.layout.item_tips)
+            ?.addItemType(MSG_CUSTOM_1_L, R.layout.item_notication)
             ?.addItemType(MSG_EMPTY, R.layout.item_empty)
 
             ?.addItemType(MSG_TIME, R.layout.item_time)
@@ -248,8 +248,8 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
         imageAttachment?.let {
             // 本地 url
-            val thumbUrl = it.path
-            if (thumbUrl.isNotEmpty()) {
+            val thumbUrl = it?.path
+            if (thumbUrl?.isNotEmpty() == true) {
                 GlideUtils.loadChatImageRadius(
                     context, thumbUrl, 15, helper.getView(R.id.bivPic)
                 )

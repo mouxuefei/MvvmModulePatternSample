@@ -24,7 +24,7 @@ public class DateTimeUtil {
      * @return format text
      */
     public static String getTimeFormatText(long formTime) {
-        long newDate = formTime * 1000;
+        long newDate = formTime;
         String pattern = "yyyy年";
         String monthPattern = "MM月dd日";
         String dayPattern = "yyyy-MM-dd";

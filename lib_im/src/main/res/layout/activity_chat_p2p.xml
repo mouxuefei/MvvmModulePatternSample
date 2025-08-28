@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -26,7 +27,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.scheartmed.lib_im.widget.MsgRecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvChatList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
