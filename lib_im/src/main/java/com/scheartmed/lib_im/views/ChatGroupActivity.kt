@@ -16,8 +16,6 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
     override val binding: ActivityChatGroupBinding by lazy {
         ActivityChatGroupBinding.inflate(layoutInflater)
     }
-
-
     override fun providerVMClass(): Class<ChatGroupViewModel>? {
         return ChatGroupViewModel::class.java
     }

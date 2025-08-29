@@ -19,7 +19,6 @@ public class MoreAdapter extends BaseQuickAdapter<MoreLayoutItemBean, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, MoreLayoutItemBean item) {
         helper.setImageResource(R.id.item_more_icon, item.resId);
-        helper.setText(R.id.item_more_title, item.title);
     }
 
 

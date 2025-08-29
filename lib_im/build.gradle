@@ -47,7 +47,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
     implementation project(':lib_common')
-
     api "com.netease.nimlib:basesdk:10.9.10"
     api "com.netease.nimlib:push:10.9.10"
 

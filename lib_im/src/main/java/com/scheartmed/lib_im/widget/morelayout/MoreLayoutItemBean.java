@@ -11,11 +11,11 @@ import androidx.annotation.DrawableRes;
  */
 public class MoreLayoutItemBean {
 
-    public MoreLayoutItemBean(String title, int resId) {
-        this.title = title;
+    public MoreLayoutItemBean(String key, int resId) {
+        this.key = key;
         this.resId = resId;
     }
-    public String title;
+    public String key;
     @DrawableRes
     public int resId;
 }
