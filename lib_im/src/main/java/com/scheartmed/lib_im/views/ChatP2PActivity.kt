@@ -1,30 +1,28 @@
 package com.scheartmed.lib_im.views
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fortunes.commonsdk.base.BaseActivity
+import com.luck.picture.lib.basic.PictureSelector
+import com.luck.picture.lib.config.SelectMimeType
+import com.luck.picture.lib.engine.CompressFileEngine
+import com.luck.picture.lib.entity.LocalMedia
+import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
-import com.netease.nimlib.sdk.v2.message.V2NIMClearHistoryNotification
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
-import com.netease.nimlib.sdk.v2.message.V2NIMMessageDeletedNotification
-import com.netease.nimlib.sdk.v2.message.V2NIMMessageListener
-import com.netease.nimlib.sdk.v2.message.V2NIMMessagePinNotification
-import com.netease.nimlib.sdk.v2.message.V2NIMMessageQuickCommentNotification
-import com.netease.nimlib.sdk.v2.message.V2NIMMessageRevokeNotification
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
-import com.netease.nimlib.sdk.v2.message.V2NIMP2PMessageReadReceipt
-import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceipt
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult
 import com.netease.nimlib.sdk.v2.user.V2NIMUserService
@@ -34,9 +32,13 @@ import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.data.model.ChatSession
 import com.scheartmed.lib_im.databinding.ActivityChatP2pBinding
+import com.scheartmed.lib_im.ext.retrySendMessageDialog
 import com.scheartmed.lib_im.listener.CustomMessageListener
+import com.scheartmed.lib_im.photoviewerlibrary.PhotoViewer
 import com.scheartmed.lib_im.utils.ChatMsgHandler
 import com.scheartmed.lib_im.utils.ChatMsgHandler.TEN_MINUTE
+import com.scheartmed.lib_im.utils.FilePickerAndSender
+import com.scheartmed.lib_im.utils.ImageFileCompressEngine
 import com.scheartmed.lib_im.viewmodels.ChatP2PViewModel
 import com.scheartmed.lib_im.views.adapter.ChatAdapter
 import com.scheartmed.lib_im.widget.ChatUiHelper
@@ -64,7 +66,11 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     private lateinit var mMsgList: ArrayList<MessageItem>
     private var isLoadingMessageList = false
     private var hasMore = true // 是否还有更多历史消息
+    private val filePickerSender: FilePickerAndSender by lazy {
+        FilePickerAndSender(this@ChatP2PActivity, this@ChatP2PActivity)
+    }
 
+    private val mHandler by lazy { Handler(Looper.getMainLooper()) }
 
     private var messageListener: CustomMessageListener = object : CustomMessageListener() {
 
@@ -95,7 +101,16 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
          * 本端发送消息状态回调 来源： 发送消息， 插入消息
          */
         override fun onSendMessage(message: V2NIMMessage) {
-
+            Logger.e("监听-" + message.sendingState)
+            mHandler.post {
+                val index = mMsgList.indexOfFirst {
+                    it is MessageItem.SdkMessage && it.message.messageId == message.messageId
+                }
+                if (index >= 0) {
+                    mMsgList[index] = MessageItem.SdkMessage(message)
+                    mAdapter?.notifyItemChanged(index)
+                }
+            }
         }
 
         override fun onReceiveMessagesModified(messages: MutableList<V2NIMMessage>) {
@@ -203,7 +218,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
         data.add(MoreLayoutItemBean("im_camera", R.mipmap.edy_im_xiazhenduan))
         data.add(MoreLayoutItemBean("im_video", R.mipmap.edy_im_shipinwenzhen))
-        data.add(MoreLayoutItemBean("im_dianhua", R.mipmap.edy_im_dianhua))
+        data.add(MoreLayoutItemBean("im_file", R.mipmap.edy_im_wenzhang))
         data.add(MoreLayoutItemBean("im_chufang", R.mipmap.edy_im_chufang))
         mChatUiHelper?.bindContentLayout(binding.llContent)
             ?.bindToSendButton(binding.chatInputContainer.btnSend)
@@ -219,17 +234,63 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 val item = adapter.getItem(position) as MoreLayoutItemBean
                 when (item.key) {
                     "im_photo" -> {
+                        PictureSelector.create(this).openSystemGallery(SelectMimeType.ofImage())
+                            .setCompressEngine(ImageFileCompressEngine())
+                            .forSystemResult(object : OnResultCallbackListener<LocalMedia> {
+                                override fun onResult(result: ArrayList<LocalMedia>) {
+                                    if (result.size > 9) {
+                                        return
+                                    }
+                                    if (result.isNotEmpty()) {
+                                        result.forEach {
+                                            Logger.e("compressPath=" + it.compressPath)
+                                            Logger.e("path=" + it.path)
+                                            val path = when {
+                                                it.isCompressed -> it.compressPath
+                                                else -> it.path
+                                            }
+                                            val newMessage = mChatHandler.createImageMessage(
+                                                path, it.width, it.height
+                                            )
+                                            mChatHandler.sendMsg(
+                                                newMessage,
+                                                mChatSession.conversationId,
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                            sendMessageSuccess(newMessage)
+                                        }
 
+                                    }
+                                }
+
+                                override fun onCancel() {}
+                            })
                     }
+
                     "im_camera" -> {
-
+                        PictureSelector.create(this).openSystemGallery(SelectMimeType.ofVideo())
+                            .forSystemResult(object : OnResultCallbackListener<LocalMedia?> {
+                                override fun onResult(result: ArrayList<LocalMedia?>) {}
+                                override fun onCancel() {}
+                            })
                     }
+
                     "im_video" -> {
-
+                        PictureSelector.create(this).openCamera(SelectMimeType.ofImage())
+                            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                                override fun onResult(result: ArrayList<LocalMedia?>) {}
+                                override fun onCancel() {}
+                            })
                     }
 
-                    "im_dianhua" -> {
-
+                    "im_file" -> {
+                        filePickerSender.pickOfficeOrPdfFile { picked ->
+                            // 可选：显示文件信息
+                            Log.d("villavilla", "选中文件: ${picked.name}, size: ${picked.size}")
+                            // 发送逻辑在 pickFileAndSend 内部已经调用
+                        }
                     }
 
                     "im_chufang" -> {
@@ -271,13 +332,8 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             mChatUiHelper?.hideSoftInput()
             val newMessage =
                 mChatHandler.createTextMessage(binding.chatInputContainer.etContent.text.toString())
-            mChatHandler.sendMsg(newMessage, mChatSession.conversationId, {
-                sendMessageSuccess(newMessage)
-            }, {
-
-            }, {
-
-            })
+            mChatHandler.sendMsg(newMessage, mChatSession.conversationId, null, null, null)
+            sendMessageSuccess(newMessage)
             binding.chatInputContainer.etContent.setText("")
         }
         NIMClient.getService(V2NIMMessageService::class.java).addMessageListener(messageListener)
@@ -313,6 +369,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             )
         }
         binding.rvChatList.adapter = mAdapter
+//        binding.rvChatList.setItemViewCacheSize(30)
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as MessageItem
             dealAdapterChildItemClick(view, item, position)
@@ -358,78 +415,96 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     private fun dealAdapterChildItemClick(
         view: View, item: MessageItem, position: Int
     ) {
-        when (view.id) {
-            //头像
-            R.id.chat_item_header -> {
+        if (item is MessageItem.SdkMessage) {
+            when (view.id) {
+                //头像
+                R.id.chat_item_header -> {
+                    //TODO:
+                }
+                //失败按钮
+                R.id.chat_item_fail -> {
+                    retrySendMessageDialog {
+                        when (item.message.messageType) {
+                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT -> {
 
-            }
-            //失败按钮
-            R.id.chat_item_fail -> {
-//                retrySendMessageDialog {
-//                    when (item.msgType) {
-//                        MessageCustomType.TEXT -> {
-//                            mConversationId?.let { id ->
-//                                mPresenter.sendTextMsg(
-//                                    item.payLoad?.data?.get(0)?.msgContent?.Text ?: "",
-//                                    id,
-//                                    item
-//                                )
-//                            }
-//                        }
-//                        MessageCustomType.IMAGE -> {
-//                            mConversationId?.let { id ->
-//                                val imageItem =
-//                                    item.payLoad?.data?.get(0)?.msgContent?.ImageInfoArray?.get(1)
-//                                val url = imageItem?.URL
-//                                mPresenter.sendImageMessage(
-//                                    url ?: "",
-//                                    id,
-//                                    item
-//                                )
-//                            }
-//                        }
-//                        MessageCustomType.SOUND -> {
-//                            mConversationId?.let { id ->
-//                                val second = item.payLoad?.data?.get(0)?.msgContent?.Second
-//                                val url = item.payLoad?.data?.get(0)?.msgContent?.Url
-//                                mPresenter.sendAudioMessage(
-//                                    url ?: "",
-//                                    second ?: 0,
-//                                    id,
-//                                    item
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-            }
-            //内容
-            R.id.chat_item_layout_content -> {
-//                when (item.messageType) {
-//                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
-////                        onPressAudio(item, view, position)
-//                    }
-//
-//                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
-////                        onPressImage(view, item)
-//                    }
-//
-//                    else -> {
-////                        clickMessageItem(mConversationId, mConfigData, item)
-//                    }
-//                }
-            }
+                            }
 
-            R.id.item_phone_tip_call -> {
+                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
 
+                            }
+
+                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
+
+                            }
+
+                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE -> {
+
+                            }
+
+                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO -> {
+
+                            }
+
+                            else -> {
+
+                            }
+                        }
+                    }
+                }
+                //内容
+                R.id.chat_item_layout_content -> {
+                    when (item.message.messageType) {
+                        V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
+//                        onPressAudio(item, view, position)
+                        }
+
+                        V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
+                            onPressImage(view, item,position)
+                        }
+
+                        else -> {
+//                        clickMessageItem(mConversationId, mConfigData, item)
+                        }
+                    }
+                }
+
+                R.id.item_phone_tip_call -> {
+
+
+                }
+            }
+        }
+
+    }
+
+    private fun onPressImage(view: View, msg: MessageItem.SdkMessage,position:Int) {
+        val pathList = ArrayList<String>()
+        var position = 0
+        mMsgList.forEach {
+            if (it is MessageItem.SdkMessage) {
+                if (it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE) {
+                    val imageAttachment = it.message.attachment as? V2NIMMessageImageAttachment
+                    val imageUrl =
+                        imageAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: imageAttachment?.url
+                    imageUrl?.let { it1 -> pathList.add(it1) }
+                }
+                if (it.message.messageId == msg.message.messageId) {
+                    position = pathList.size - 1
+                }
 
             }
         }
+        val intent = Intent(this, PhotoViewerActivity::class.java)
+        intent.putStringArrayListExtra(PhotoViewerActivity.EXTRA_IMAGE_URLS, pathList)
+        intent.putExtra(PhotoViewerActivity.EXTRA_POSITION, position)
+        startActivity(intent)
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
         NIMClient.getService(V2NIMMessageService::class.java).removeMessageListener(messageListener)
     }
+
 
 }

@@ -52,12 +52,8 @@ dependencies {
     api "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar"
     api "com.gyf.immersionbar:immersionbar:2.3.1"
     api "com.contrarywind:Android-PickerView:4.1.6"
-    api ("com.github.LuckSiege.PictureSelector:picture_library:v2.6.1") {
-        exclude module: 'glide'
-    }
-    api("com.airbnb.android:lottie:2.7.0") {
-        exclude module: 'support'
-    }
+
+    api("com.airbnb.android:lottie:6.3.0")
 
     kapt "androidx.lifecycle:lifecycle-compiler:2.9.2"
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
@@ -69,4 +65,7 @@ dependencies {
     api 'com.github.getActivity:DeviceCompat:1.0'
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     api 'com.github.getActivity:XXPermissions:26.5'
+
+    api 'io.github.lucksiege:pictureselector:v3.11.2'
+    api 'io.github.lucksiege:compress:v3.11.2'
 }

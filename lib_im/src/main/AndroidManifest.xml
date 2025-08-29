@@ -29,25 +29,27 @@
             android:name=".receiver.XiaoMiMiPushMessageReceiver"
             android:exported="true">
             <intent-filter android:priority="0x7fffffff">
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
-                <action android:name="com.xiaomi.mipush.ERROR"/>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+                <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
 
 
         <activity
             android:name=".views.ChatGroupActivity"
-            android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi" />
         <activity
             android:name=".views.ConversationListActivity"
-            android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi" />
         <activity
             android:name=".views.ChatP2PActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi" />
+        <activity
+            android:name=".views.PhotoViewerActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi" />

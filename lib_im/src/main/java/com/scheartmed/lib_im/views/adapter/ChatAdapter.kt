@@ -4,6 +4,7 @@ package com.scheartmed.lib_im.views.adapter
 import android.content.Context
 import android.view.View
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -15,8 +16,8 @@ import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.orhanobut.logger.Logger
 import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem
+import com.scheartmed.lib_im.utils.ChatImageLoader
 import com.scheartmed.lib_im.utils.DateTimeUtil
-import com.scheartmed.lib_im.utils.GlideUtils
 
 class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
@@ -24,11 +25,12 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     private val MSG_TEXT_L = 100
     private val MSG_IMG_L = 101
     private val MSG_AUDIO_L = 102
-    private val MSG_FILE_L = 103
-    private val MSG_NOTIFICATION_L = 104
-    private val MSG_TIPS_L = 105
-    private val MSG_CUSTOM_1_L = 106
-    private val MSG_CUSTOM_2_L = 107
+    private val MSG_VIDEO_L = 103
+    private val MSG_FILE_L = 104
+    private val MSG_NOTIFICATION_L = 105
+    private val MSG_TIPS_L = 106
+    private val MSG_CUSTOM_1_L = 107
+    private val MSG_CUSTOM_2_L = 108
 
 
     private val MSG_EMPTY = 300
@@ -38,11 +40,12 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     private val MSG_TEXT_R = 200
     private val MSG_IMG_R = 201
     private val MSG_AUDIO_R = 202
-    private val MSG_FILE_R = 203
-    private val MSG_NOTIFICATION_R = 204
-    private val MSG_TIPS_R = 205
-    private val MSG_CUSTOM_1_R = 206
-    private val MSG_CUSTOM_2_R = 207
+    private val MSG_VIDEO_R = 203
+    private val MSG_FILE_R = 204
+    private val MSG_NOTIFICATION_R = 205
+    private val MSG_TIPS_R = 206
+    private val MSG_CUSTOM_1_R = 207
+    private val MSG_CUSTOM_2_R = 208
 
     init {
         setMultiTypeDelegate(object : BaseMultiTypeDelegate<MessageItem>() {
@@ -61,6 +64,7 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         getMultiTypeDelegate()?.addItemType(MSG_TEXT_R, R.layout.item_text_send)
             ?.addItemType(MSG_IMG_R, R.layout.item_image_send)
             ?.addItemType(MSG_AUDIO_R, R.layout.item_audio_send)
+            ?.addItemType(MSG_VIDEO_R, R.layout.item_video_send)
             ?.addItemType(MSG_FILE_R, R.layout.item_file_send)
             ?.addItemType(MSG_NOTIFICATION_R, R.layout.item_notication)
             ?.addItemType(MSG_TIPS_R, R.layout.item_tips)
@@ -68,6 +72,7 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
 
             ?.addItemType(MSG_TEXT_L, R.layout.item_text_receive)
             ?.addItemType(MSG_IMG_L, R.layout.item_image_receive)
+            ?.addItemType(MSG_VIDEO_L, R.layout.item_video_receive)
             ?.addItemType(MSG_AUDIO_L, R.layout.item_audio_receive)
             ?.addItemType(MSG_FILE_L, R.layout.item_file_receive)
             ?.addItemType(MSG_NOTIFICATION_L, R.layout.item_notication)
@@ -91,6 +96,10 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
 
             V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
                 return if (isSend) MSG_AUDIO_R else MSG_AUDIO_L
+            }
+
+            V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO -> {
+                return if (isSend) MSG_VIDEO_R else MSG_VIDEO_L
             }
 
             V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE -> {
@@ -191,38 +200,31 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
      */
     private fun setContent(helper: BaseViewHolder, item: V2NIMMessage) {
         when (helper.itemViewType) {
-            MSG_TEXT_R,
-            MSG_TEXT_L -> {
+            MSG_TEXT_R, MSG_TEXT_L -> {
                 setTextType(item, helper)
             }
 
-            MSG_IMG_L,
-            MSG_IMG_R -> {
+            MSG_IMG_L, MSG_IMG_R -> {
                 setImageType(item, helper)
             }
 
-            MSG_AUDIO_L,
-            MSG_AUDIO_R -> {
+            MSG_AUDIO_L, MSG_AUDIO_R -> {
                 setSoundType(item, helper)
             }
 
-            MSG_FILE_L,
-            MSG_FILE_R -> {
+            MSG_FILE_L, MSG_FILE_R -> {
                 //TODO:
             }
 
-            MSG_NOTIFICATION_L,
-            MSG_NOTIFICATION_R -> {
+            MSG_NOTIFICATION_L, MSG_NOTIFICATION_R -> {
                 //TODO:
             }
 
-            MSG_TIPS_L,
-            MSG_TIPS_R -> {
+            MSG_TIPS_L, MSG_TIPS_R -> {
                 //TODO:
             }
 
-            MSG_CUSTOM_1_L,
-            MSG_CUSTOM_1_R -> {
+            MSG_CUSTOM_1_L, MSG_CUSTOM_1_R -> {
                 //TODO:
             }
 
@@ -246,19 +248,26 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         item: V2NIMMessage, helper: BaseViewHolder
     ) {
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
-        imageAttachment?.let {
-            // 本地 url
-            val thumbUrl = it.path
-            if (thumbUrl?.isNotEmpty() == true) {
-                GlideUtils.loadChatImageRadius(
-                    context, thumbUrl, 15, helper.getView(R.id.bivPic)
+        imageAttachment?.let { it ->
+            Logger.e("image type thumbUrl:${it.path} , url:${it.url}, name ${it.name}")
+            if (it.name?.contains(".gif", true) == true || it.name?.contains(
+                    ".GIF", true
+                ) == true
+            ) {
+                val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
+                val maxWidth =
+                    helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
+                ChatImageLoader.loadGif(
+                    context, imageUrl, helper.getView(R.id.bivPic), maxWidth
                 )
                 return
             }
-            // 网络 url
-            val url = it.url
-            GlideUtils.loadChatImageRadius(
-                context, url, 15, helper.getView(R.id.bivPic)
+            // 本地 url
+            val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
+            val maxWidth =
+                helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
+            ChatImageLoader.loadImage(
+                context, imageUrl, helper.getView(R.id.bivPic), maxWidth,8
             )
         }
     }

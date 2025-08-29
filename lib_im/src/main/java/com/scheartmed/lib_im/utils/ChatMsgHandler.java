@@ -1,8 +1,11 @@
 package com.scheartmed.lib_im.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 
 import com.netease.nimlib.sdk.NIMClient;
@@ -14,6 +17,7 @@ import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageCreator;
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService;
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment;
 import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageAntispamConfig;
 import com.netease.nimlib.sdk.v2.message.config.V2NIMMessageConfig;
 import com.netease.nimlib.sdk.v2.message.config.V2NIMMessagePushConfig;
@@ -28,6 +32,9 @@ import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil;
 import com.scheartmed.lib_im.data.MessageItem;
 import com.scheartmed.lib_im.data.model.ChatSession;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +42,7 @@ public class ChatMsgHandler {
 
     private static final String TAG = ChatMsgHandler.class.getSimpleName();
 
-    public static final int ONE_QUERY_LIMIT = 15;
+    public static final int ONE_QUERY_LIMIT = 30;
     public static final long TEN_MINUTE = 1000 * 60 * 10;
 
     private Context mContext;
@@ -55,19 +62,11 @@ public class ChatMsgHandler {
         return V2NIMMessageCreator.createTextMessage(text);
     }
 
-    public void sendMsg(V2NIMMessage v2Message, String conversationId,
-                        V2NIMSuccessCallback<V2NIMSendMessageResult> sendMessageResultV2NIMSuccessCallback, V2NIMFailureCallback failCallback, V2NIMProgressCallback progressCallback) {
+    public void sendMsg(V2NIMMessage v2Message, String conversationId, V2NIMSuccessCallback<V2NIMSendMessageResult> sendMessageResultV2NIMSuccessCallback, V2NIMFailureCallback failCallback, V2NIMProgressCallback progressCallback) {
         V2NIMMessageService v2MessageService = NIMClient.getService(V2NIMMessageService.class);
 
 
-        V2NIMMessageConfig messageConfig = V2NIMMessageConfig.V2NIMMessageConfigBuilder.builder()
-                .withLastMessageUpdateEnabled(true)
-                .withHistoryEnabled(true)
-                .withOfflineEnabled(true)
-                .withOnlineSyncEnabled(true)
-                .withReadReceiptEnabled(true)
-                .withUnreadEnabled(true)
-                .build();
+        V2NIMMessageConfig messageConfig = V2NIMMessageConfig.V2NIMMessageConfigBuilder.builder().withLastMessageUpdateEnabled(true).withHistoryEnabled(true).withOfflineEnabled(true).withOnlineSyncEnabled(true).withReadReceiptEnabled(true).withUnreadEnabled(true).build();
 //推送
 //        V2NIMMessagePushConfig pushConfig = V2NIMMessagePushConfig.V2NIMMessagePushConfigBuilder.builder()
 //                .withContent()
@@ -80,14 +79,10 @@ public class ChatMsgHandler {
 //                .build();
 
 
-        V2NIMSendMessageParams sendMessageParams = V2NIMSendMessageParams.V2NIMSendMessageParamsBuilder.builder()
-                .withMessageConfig(messageConfig)
+        V2NIMSendMessageParams sendMessageParams = V2NIMSendMessageParams.V2NIMSendMessageParamsBuilder.builder().withMessageConfig(messageConfig)
 //                .withPushConfig(pushConfig)
                 .build();
-        v2MessageService.sendMessage(v2Message, conversationId, sendMessageParams,
-                sendMessageResultV2NIMSuccessCallback,
-                failCallback,
-                progressCallback);
+        v2MessageService.sendMessage(v2Message, conversationId, sendMessageParams, sendMessageResultV2NIMSuccessCallback, failCallback, progressCallback);
     }
 
 
@@ -102,10 +97,53 @@ public class ChatMsgHandler {
      * Returns:
      * V2NIMMessage
      */
-    public V2NIMMessage createImageMessage(String path, Integer width, Integer height) {
-        return V2NIMMessageCreator.createImageMessage(path, null, null, width, height);
+    public V2NIMMessage createImageMessage(String path, int width, int height) {
+        String newPath = path;
+        if (newPath.contains("content://")) {
+            newPath = uriToFile(path).getAbsolutePath();
+        }
+        return V2NIMMessageCreator.createImageMessage(newPath, null, null, width, height);
 
     }
+
+    // 1. 把 content:// URI 转成缓存目录临时文件
+    public File uriToFile(String path) {
+        try {
+            ContentResolver resolver = mContext.getContentResolver();
+            InputStream inputStream = resolver.openInputStream(Uri.parse(path));
+            String fileName = queryFileName(Uri.parse(path));
+            File tempFile = new File(FileUtils.INSTANCE.getImageCachePath(), fileName);
+            FileOutputStream outputStream = new FileOutputStream(tempFile);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
+            }
+            inputStream.close();
+            outputStream.close();
+            return tempFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 2. 查询文件名
+    private String queryFileName(Uri uri) {
+        String name = "temp_file";
+        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (index != -1) {
+                    name = cursor.getString(index);
+                }
+            }
+            cursor.close();
+        }
+        return name;
+    }
+
 
     /**
      * 发送语音消息
@@ -150,10 +188,7 @@ public class ChatMsgHandler {
      */
     public void loadMessage(V2NIMMessage anchorMessage, String conversationId, V2NIMSuccessCallback<V2NIMMessageListResult> listener, V2NIMFailureCallback failureCallback) {
         V2NIMMessageService v2MessageService = NIMClient.getService(V2NIMMessageService.class);
-        V2NIMMessageListOption.V2NIMMessageListOptionBuilder listOption = V2NIMMessageListOption
-                .V2NIMMessageListOptionBuilder
-                .builder(conversationId)
-                .withLimit(ONE_QUERY_LIMIT);
+        V2NIMMessageListOption.V2NIMMessageListOptionBuilder listOption = V2NIMMessageListOption.V2NIMMessageListOptionBuilder.builder(conversationId).withLimit(ONE_QUERY_LIMIT);
         if (anchorMessage != null) {
             listOption.withAnchorMessage(anchorMessage);
         }
