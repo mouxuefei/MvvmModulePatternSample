@@ -56,3 +56,14 @@
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
+
+# Gson 反射使用
+-keep class com.yourpackage.model.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** { *; }
+-keep class jp.wasabeef.glide.transformations.** { *; }
+
