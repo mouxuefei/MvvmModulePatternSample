@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rootEmoji"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/home_emoji"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_page"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="15dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/emojiRv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/btn_emo_cancel"
+    <com.scheartmed.lib_im.widget.emoji.IndicatorView
+        android:id="@+id/indicator_view"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="取消"
-        android:textColor="#03081A"
-        android:textSize="18sp" />
-
-</LinearLayout>
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
+</RelativeLayout>

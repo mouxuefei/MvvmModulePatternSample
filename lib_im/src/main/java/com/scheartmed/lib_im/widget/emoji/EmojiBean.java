@@ -1,42 +1,26 @@
 package com.scheartmed.lib_im.widget.emoji;
 
-/**
- * Describe: 表情的实体类
-  */
+import java.io.Serializable;
 
-public class EmojiBean {
-    private int id;
-    private int unicodeInt;
 
-    public String getEmojiString() {
-        return  getEmojiStringByUnicode(unicodeInt);
+public class EmojiBean implements Serializable {
+
+    private int mResIndex;
+    private String mEmojiName;
+
+    public int getResIndex() {
+        return mResIndex;
     }
 
-    public int getId() {
-        return id;
+    public void setResIndex(int resIndex) {
+        mResIndex = resIndex;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getEmojiName() {
+        return mEmojiName;
     }
 
-    public String getUnicodeInt() {
-        return getEmojiStringByUnicode(unicodeInt);
-    }
-
-    public void setUnicodeInt(int unicodeInt) {
-        this.unicodeInt = unicodeInt;
-    }
-
-    public static String getEmojiStringByUnicode(int unicode){
-        return new String(Character.toChars(unicode));
-    }
-
-    @Override
-    public String toString() {
-        return "EmojiBean{" +
-                "id=" + id +
-                ", unicodeInt=" + unicodeInt +
-                '}';
+    public void setEmojiName(String emojiName) {
+        mEmojiName = emojiName;
     }
 }

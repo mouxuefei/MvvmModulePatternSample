@@ -31,11 +31,6 @@ import com.scheartmed.lib_im.data.model.ChatSession;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 聊天工具类
- * Created by wudeng on 2017/9/13.
- */
-
 public class ChatMsgHandler {
 
     private static final String TAG = ChatMsgHandler.class.getSimpleName();

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fortunes.commonsdk.base.BaseActivity
@@ -32,6 +33,7 @@ import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.data.model.ChatSession
 import com.scheartmed.lib_im.databinding.ActivityChatP2pBinding
+import com.scheartmed.lib_im.listener.CustomMessageListener
 import com.scheartmed.lib_im.utils.ChatMsgHandler
 import com.scheartmed.lib_im.utils.ChatMsgHandler.TEN_MINUTE
 import com.scheartmed.lib_im.viewmodels.ChatP2PViewModel
@@ -53,12 +55,8 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         ActivityChatP2pBinding.inflate(layoutInflater)
     }
 
-    override fun providerVMClass(): Class<ChatP2PViewModel> {
-        return ChatP2PViewModel::class.java
-    }
-
+    override fun providerVMClass(): Class<ChatP2PViewModel> = ChatP2PViewModel::class.java
     private var mAdapter: ChatAdapter? = null
-    private var mNormalToolsAdapter: BaseQuickAdapter<String, BaseViewHolder>? = null
     private var mChatUiHelper: ChatUiHelper? = null
     private lateinit var mChatHandler: ChatMsgHandler
     private lateinit var mChatSession: ChatSession
@@ -75,67 +73,42 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     )
 
 
-    private var messageListener: V2NIMMessageListener = object : V2NIMMessageListener {
-        override fun onReceiveMessages(messages: List<V2NIMMessage>) {
-            // 通过判断，决定是否添加收到消息的时间
-            val imMessage: V2NIMMessage = messages[0]
-            if (mMsgList.isEmpty()) {
-                if (imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && imMessage.senderId == mChatSession.chatInfo?.accountId) {
-                    mMsgList.add(mChatHandler.createTimeMessage(imMessage))
-                }
-            } else {
-                val lastMsg: MessageItem = mMsgList[mMsgList.size - 1]
-                if (lastMsg is MessageItem.SdkMessage) {
-                    if (imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && imMessage.senderId == mChatSession.chatInfo?.accountId && imMessage.createTime - lastMsg.message.createTime > TEN_MINUTE) {
-                        mMsgList.add(mChatHandler.createTimeMessage(imMessage))
-                    }
-                }
-            }
+    private var messageListener: CustomMessageListener = object : CustomMessageListener() {
 
+        // 判断是否需要添加时间消息
+        private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
+            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P &&
+                    imMessage.senderId == mChatSession.chatInfo?.accountId &&
+                    (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > TEN_MINUTE))
+        }
 
-            // 将收到的消息添加到列表中
-            var receiveCount = 0
-            for (message in messages) {
-                if (message.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && message.senderId == mChatSession.chatInfo?.accountId) {
-                    mMsgList.add(MessageItem.SdkMessage(message))
-                    receiveCount++
-                }
+        override fun onReceiveMessages(messages: MutableList<V2NIMMessage>) {
+            val lastMsg = mMsgList.lastOrNull()
+            if (shouldAddTimeMessage(messages[0], lastMsg)) {
+                mMsgList.add(mChatHandler.createTimeMessage(messages[0]))
             }
-            if (receiveCount > 0) {
+            val newMessages = messages.filter {
+                it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P &&
+                        it.senderId == mChatSession.chatInfo?.accountId
+            }
+            newMessages.forEach {
+                mMsgList.add(MessageItem.SdkMessage(it))
+            }
+            if (newMessages.isNotEmpty()) {
                 mAdapter?.notifyDataSetChanged()
                 binding.rvChatList.layoutManager?.scrollToPosition(mMsgList.size - 1)
             }
         }
 
-        override fun onReceiveP2PMessageReadReceipts(readReceipts: MutableList<V2NIMP2PMessageReadReceipt>?) {
-
-        }
-
-        override fun onReceiveTeamMessageReadReceipts(readReceipts: MutableList<V2NIMTeamMessageReadReceipt>?) {
-        }
-
-        override fun onMessageRevokeNotifications(revokeNotifications: MutableList<V2NIMMessageRevokeNotification>?) {
-        }
-
-        override fun onMessagePinNotification(pinNotification: V2NIMMessagePinNotification?) {
-        }
-
-        override fun onMessageQuickCommentNotification(quickCommentNotification: V2NIMMessageQuickCommentNotification?) {
-        }
-
-        override fun onMessageDeletedNotifications(messageDeletedNotifications: MutableList<V2NIMMessageDeletedNotification>?) {
-        }
-
-        override fun onClearHistoryNotifications(clearHistoryNotifications: MutableList<V2NIMClearHistoryNotification>?) {
-        }
 
         /**
          * 本端发送消息状态回调 来源： 发送消息， 插入消息
          */
-        override fun onSendMessage(message: V2NIMMessage?) {
+        override fun onSendMessage(message: V2NIMMessage) {
+
         }
 
-        override fun onReceiveMessagesModified(messages: MutableList<V2NIMMessage>?) {
+        override fun onReceiveMessagesModified(messages: MutableList<V2NIMMessage>) {
         }
 
 
@@ -149,39 +122,27 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         initChatUi()
     }
 
-    private fun initTitleBar() {
-        binding.titleBar.setTitle("test002")
-    }
-
-
     override fun initData() {
         createChatSession()
         loadMessage()
     }
 
-    private fun loadMessage() {
-        //第一次查询
-        if (mMsgList.isEmpty()) {
-            mChatHandler.loadMessage(null, mChatSession.conversationId, {
-                handleMsg(it)
-            }, {
-                Logger.e("villa" + it.desc)
-            })
-        } else {
-            // 否则，以最上一条消息为锚点
-            var firstMsg: MessageItem = mMsgList[0]
-            if (firstMsg is MessageItem.TimeDivider) {
-                firstMsg = mMsgList[1]
-            }
-            if (firstMsg is MessageItem.SdkMessage) {
-                mChatHandler?.loadMessage(firstMsg.message, mChatSession.conversationId, {
-                    handleMsg(it)
-                }, {
-                    Logger.e("villa" + it.desc)
-                })
-            }
+    private fun initTitleBar() {
+        binding.titleBar.setTitle("test002")
+    }
 
+
+    private fun loadMessage() {
+        val anchorMessage = when {
+            mMsgList.isEmpty() -> null
+            mMsgList[0] is MessageItem.TimeDivider -> (mMsgList.getOrNull(1) as? MessageItem.SdkMessage)?.message
+            else -> (mMsgList[0] as? MessageItem.SdkMessage)?.message
         }
+        mChatHandler.loadMessage(anchorMessage, mChatSession.conversationId, {
+            handleMsg(it)
+        }, {
+            Logger.e("villa" + it.desc)
+        })
     }
 
     private fun handleMsg(it: V2NIMMessageListResult) {
@@ -190,7 +151,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         val anchorMessage = it.anchorMessage
         //                    binding.rvChatList.hideHeadView()
         var scroll = false
-        // 如果原本没有，为第一次加载，需要在加载完成后移动到最后一项
         // 如果原本没有，为第一次加载，需要在加载完成后移动到最后一项
         if (mMsgList.isEmpty()) {
             scroll = true
@@ -232,12 +192,14 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         mChatUiHelper?.bindContentLayout(binding.llContent)
             ?.bindToSendButton(binding.chatInputContainer.btnSend)
             ?.bindEditText(binding.chatInputContainer.etContent)
-            ?.bindBottomLayout(binding.bottomLayout)?.bindEmojiLayout(binding.rlEmotion.rootEmoji)
+            ?.bindBottomLayout(binding.bottomLayout)
+            ?.bindEmojiLayout(binding.layoutExpress)
             ?.bindAddLayout(binding.llAdd.rootAddPanel)
             ?.bindToAddButton(binding.chatInputContainer.ivAdd)
             ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
             ?.bindAudioBtn(binding.chatInputContainer.btnAudio)
-            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)?.bindMoreLayoutData(data, null)
+            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)
+            ?.bindMoreLayoutData(data, null)
 //            .bindEmojiData()
         //底部布局弹出,聊天列表上滑到最后一位
         binding.rvChatList.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
@@ -251,7 +213,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 })
             }
         })
-
         //点击空白区域关闭键盘
         binding.rvChatList.setOnTouchListener(View.OnTouchListener { _, _ ->
             mChatUiHelper?.hideBottomLayout(false)
@@ -259,7 +220,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             binding.chatInputContainer.etContent.clearFocus()
             false
         })
-
         //录音结束回调
         binding.chatInputContainer.btnAudio.setOnFinishedRecordListener { audioPath, time ->
             val file = File(audioPath)
@@ -268,7 +228,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 //            }
         }
     }
-
 
     private fun initListener() {
         //发送文本
@@ -285,13 +244,10 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             })
             binding.chatInputContainer.etContent.setText("")
         }
-
         val v2MessageService = NIMClient.getService(
             V2NIMMessageService::class.java
         )
-
         v2MessageService.addMessageListener(messageListener)
-
     }
 
     /**
@@ -314,37 +270,38 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
 
     private fun initRv() {
-        mMsgList = ArrayList<MessageItem>()
-        mAdapter = ChatAdapter(this, mMsgList)
+        mMsgList = arrayListOf()
+        mAdapter = ChatAdapter(this, mMsgList).apply {
+            addChildClickViewIds(
+                R.id.chat_item_header,
+                R.id.chat_item_layout_content,
+                R.id.chat_item_fail,
+                R.id.item_phone_tip_call
+            )
+        }
         binding.rvChatList.adapter = mAdapter
-        mAdapter?.addChildClickViewIds(
-            R.id.chat_item_header,
-            R.id.chat_item_layout_content,
-            R.id.chat_item_fail,
-            R.id.item_phone_tip_call,
-        )
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as V2NIMMessage
+            val item = adapter.getItem(position) as MessageItem
             dealAdapterChildItemClick(view, item, position)
         }
 
-        binding.rlEmotion.emojiRv.adapter = object : BaseQuickAdapter<String, BaseViewHolder>(
-            R.layout.item_emoji, mutableListOf<String>(
-                "目前在服用哪些药物呢？",
-                "感谢您的配合，祝您和家人健康！",
-                "请坚持服药，每1-3个月复诊一次",
-                "请不要自行减药、停药。",
-                "请遵医嘱结合药品说明书用药。"
-            )
-        ) {
-            override fun convert(holder: BaseViewHolder, item: String) {
-                holder.setText(R.id.tv_title, item)
-            }
-        }.also { mNormalToolsAdapter = it }
-        mNormalToolsAdapter?.setOnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as String
-            binding.chatInputContainer.etContent.setText(item)
-        }
+//        binding.rlEmotion.emojiRv.adapter = object : BaseQuickAdapter<String, BaseViewHolder>(
+//            R.layout.item_emoji, mutableListOf<String>(
+//                "目前在服用哪些药物呢？",
+//                "感谢您的配合，祝您和家人健康！",
+//                "请坚持服药，每1-3个月复诊一次",
+//                "请不要自行减药、停药。",
+//                "请遵医嘱结合药品说明书用药。"
+//            )
+//        ) {
+//            override fun convert(holder: BaseViewHolder, item: String) {
+//                holder.setText(R.id.tv_title, item)
+//            }
+//        }.also { mNormalToolsAdapter = it }
+//        mNormalToolsAdapter?.setOnItemClickListener { adapter, view, position ->
+//            val item = adapter.getItem(position) as String
+//            binding.chatInputContainer.etContent.setText(item)
+//        }
         //🌟解决加载数据没法滚动到底部的问题
         binding.rvChatList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -376,7 +333,17 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                     loadMessage()
                 }
             }
+
+            override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
+                //快速滑动时暂停加载，滑动停下再恢复
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(this@ChatP2PActivity).resumeRequests()
+                } else {
+                    Glide.with(this@ChatP2PActivity).pauseRequests()
+                }
+            }
         })
+
     }
 
 
@@ -384,7 +351,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
      * 处理点击item事件
      */
     private fun dealAdapterChildItemClick(
-        view: View, item: V2NIMMessage, position: Int
+        view: View, item: MessageItem, position: Int
     ) {
         when (view.id) {
             //头像
@@ -433,19 +400,19 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             }
             //内容
             R.id.chat_item_layout_content -> {
-                when (item.messageType) {
-                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
-//                        onPressAudio(item, view, position)
-                    }
-
-                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
-//                        onPressImage(view, item)
-                    }
-
-                    else -> {
-//                        clickMessageItem(mConversationId, mConfigData, item)
-                    }
-                }
+//                when (item.messageType) {
+//                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
+////                        onPressAudio(item, view, position)
+//                    }
+//
+//                    V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
+////                        onPressImage(view, item)
+//                    }
+//
+//                    else -> {
+////                        clickMessageItem(mConversationId, mConfigData, item)
+//                    }
+//                }
             }
 
             R.id.item_phone_tip_call -> {
@@ -459,6 +426,5 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         super.onDestroy()
         NIMClient.getService(V2NIMMessageService::class.java).removeMessageListener(messageListener)
     }
-
 
 }

@@ -8,8 +8,10 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,9 @@ import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.scheartmed.lib_im.R;
+import com.scheartmed.lib_im.widget.emoji.EmojiBean;
+import com.scheartmed.lib_im.widget.emoji.EmojiUtils;
+import com.scheartmed.lib_im.widget.emoji.ExpressLayout;
 import com.scheartmed.lib_im.widget.morelayout.MoreAdapter;
 import com.scheartmed.lib_im.widget.morelayout.MoreLayoutItemBean;
 
@@ -41,7 +46,7 @@ public class ChatUiHelper {
     private Activity mActivity;
     private LinearLayout mContentLayout;//整体界面布局
     private RelativeLayout mBottomLayout;//底部布局
-    private LinearLayout mEmojiLayout;//表情布局
+    private ExpressLayout mEmojiLayout;//表情布局
     private LinearLayout mAddLayout;//添加布局
     private Button mSendBtn;//发送按钮
     private View mAddButton;//加号按钮
@@ -207,13 +212,27 @@ public class ChatUiHelper {
 
 
     //绑定表情布局
-    public ChatUiHelper bindEmojiLayout(LinearLayout emojiLayout) {
+    public ChatUiHelper bindEmojiLayout(ExpressLayout emojiLayout) {
         mEmojiLayout = emojiLayout;
-        mEmojiLayout.findViewById(R.id.btn_emo_cancel).setOnClickListener(new View.OnClickListener() {
+        mEmojiLayout.setOnExpressSelListener(new ExpressLayout.OnExpressSelListener() {
             @Override
-            public void onClick(View view) {
-                hideBottomLayout(false);//隐藏表情布局，显示软件盘
-                unlockContentHeightDelayed();
+            public void onEmojiSelect(EmojiBean emojiBean) {
+                // 如果点击了表情,则添加到输入框中
+                // 获取当前光标位置,在指定位置上添加表情图片文本
+                int curPosition = mEditText.getSelectionStart();
+                StringBuilder sb = new StringBuilder(mEditText.getText().toString());
+                sb.insert(curPosition, emojiBean.getEmojiName());
+                // 特殊文字处理,将表情等转换一下
+                SpannableString spannableString = EmojiUtils.text2Emoji(mEmojiLayout.getContext(), sb.toString(), mEditText.getTextSize());
+                mEditText.setText(spannableString);
+                // 将光标设置到新增完表情的右侧
+                mEditText.setSelection(curPosition + emojiBean.getEmojiName().length());
+            }
+
+            @Override
+            public void onEmojiDelete() {
+                // 调用系统的删除操作
+                mEditText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
             }
         });
         return this;
@@ -252,7 +271,7 @@ public class ChatUiHelper {
             } else {
                 entranceAdapter = new MoreAdapter(list.subList(index * MORE_PAGE_SIZE, (index + 1) * MORE_PAGE_SIZE), index, MORE_PAGE_SIZE);
             }
-            if(listener!=null){
+            if (listener != null) {
                 entranceAdapter.setOnItemClickListener(listener);
             }
             recyclerView.setAdapter(entranceAdapter);
@@ -571,8 +590,7 @@ public class ChatUiHelper {
         if (vp != null) {
             for (int i = 0; i < vp.getChildCount(); i++) {
                 vp.getChildAt(i).getContext().getPackageName();
-                if (vp.getChildAt(i).getId() != View.NO_ID &&
-                        NAVIGATION.equals(activity.getResources().getResourceEntryName(vp.getChildAt(i).getId()))) {
+                if (vp.getChildAt(i).getId() != View.NO_ID && NAVIGATION.equals(activity.getResources().getResourceEntryName(vp.getChildAt(i).getId()))) {
                     return true;
                 }
             }
@@ -586,8 +604,7 @@ public class ChatUiHelper {
             return 0;
         }
         Resources resources = activity.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height",
-                "dimen", "android");
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         int height = 0;
         if (resourceId > 0) {
             //获取NavigationBar的高度

@@ -248,7 +248,7 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
         imageAttachment?.let {
             // 本地 url
-            val thumbUrl = it?.path
+            val thumbUrl = it.path
             if (thumbUrl?.isNotEmpty() == true) {
                 GlideUtils.loadChatImageRadius(
                     context, thumbUrl, 15, helper.getView(R.id.bivPic)
