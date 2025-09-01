@@ -44,9 +44,9 @@
 
 
             <ImageView
-                android:id="@+id/bivPic"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:id="@+id/ivVideoCover"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:adjustViewBounds="true"
                 android:background="@drawable/shape_send_item_bg"
                 android:scaleType="centerCrop"

@@ -106,6 +106,10 @@ public class ChatMsgHandler {
 
     }
 
+    public V2NIMMessage createVideoMessage(String path, int duration) {
+        return V2NIMMessageCreator.createVideoMessage(path, null, null, duration, null,null);
+    }
+
     // 1. 把 content:// URI 转成缓存目录临时文件
     public File uriToFile(String path) {
         try {

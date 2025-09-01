@@ -1,9 +1,14 @@
 package com.scheartmed.lib_im.utils
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.provider.MediaStore
 import com.mou.basemvvm.BaseApplication
+import com.orhanobut.logger.Logger
 import java.io.File
-
-
+import java.io.FileOutputStream
 
 
 /**
@@ -35,6 +40,47 @@ object FileUtils {
             file.mkdirs()
         }
         return file.absolutePath
+    }
+
+    fun copyVideoToCache(context: Context, uri: Uri): File? {
+        return try {
+            val fileName = queryDisplayName(context, uri) ?: "${System.currentTimeMillis()}.mp4"
+            val file = File(context.cacheDir, fileName)
+
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(file).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun queryDisplayName(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
+        context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+            if (cursor.moveToFirst()) {
+                return cursor.getString(index)
+            }
+        }
+        return null
+    }
+
+    fun createVideoThumb(context: Context, file: File): File {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(file.absolutePath)
+        val bitmap = retriever.getFrameAtTime(0)
+        retriever.release()
+
+        val thumbFile = File(context.cacheDir, "${System.currentTimeMillis()}_thumb.jpg")
+        FileOutputStream(thumbFile).use { fos ->
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, fos)
+        }
+        return thumbFile
     }
 
 }

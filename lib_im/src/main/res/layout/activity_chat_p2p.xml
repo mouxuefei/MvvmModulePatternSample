@@ -61,39 +61,5 @@
         </LinearLayout>
 
 
-        <com.scheartmed.lib_im.widget.EvaFloatView
-            android:id="@+id/act_chat_float_form"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="100dp"
-            android:background="@drawable/shape_eva"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginLeft="9dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/ic_pen" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="8dp"
-                    android:text="查看评估表"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-        </com.scheartmed.lib_im.widget.EvaFloatView>
     </RelativeLayout>
 </LinearLayout>

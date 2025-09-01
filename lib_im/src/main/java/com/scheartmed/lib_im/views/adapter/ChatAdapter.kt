@@ -3,21 +3,29 @@ package com.scheartmed.lib_im.views.adapter
 
 import android.content.Context
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
+import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageSendingState
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.orhanobut.logger.Logger
 import com.scheartmed.lib_im.R
+import com.scheartmed.lib_im.R.id.chat_item_content_text
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.utils.ChatImageLoader
 import com.scheartmed.lib_im.utils.DateTimeUtil
+import com.scheartmed.lib_im.widget.emoji.EmojiUtils
+import com.scheartmed.lib_im.widget.emoji.EmojiUtils.*
+
 
 class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
@@ -132,10 +140,22 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             setSendStatus(holder, item.message)
             setContent(holder, item.message)
             setUserIcon(holder, item.message)
+            setReadStatus(holder, item.message)
         } else if (item is MessageItem.TimeDivider) {
             setTimeVisible(holder, item)
         }
 
+    }
+
+    private fun setReadStatus(holder: BaseViewHolder, message: V2NIMMessage) {
+        val tvRead = holder.getViewOrNull<TextView>(R.id.chat_item_tv_read)
+        tvRead?.let {
+            val isPeerRead: Boolean =
+                NIMClient.getService(V2NIMMessageService::class.java).isPeerRead(message)
+
+            Logger.e("isPeerRead" + isPeerRead)
+            it.text = if (isPeerRead) "已读" else "未读"
+        }
     }
 
     /**
@@ -208,6 +228,10 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
                 setImageType(item, helper)
             }
 
+            MSG_VIDEO_L, MSG_VIDEO_R -> {
+                setVideoType(item, helper)
+            }
+
             MSG_AUDIO_L, MSG_AUDIO_R -> {
                 setSoundType(item, helper)
             }
@@ -230,6 +254,19 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
 
             else -> {
             }
+        }
+    }
+
+    private fun setVideoType(item: V2NIMMessage, helper: BaseViewHolder) {
+        val ivVideo = helper.getViewOrNull<ImageView>(R.id.ivVideoCover)
+        ivVideo?.let {
+            val attachment = item.attachment as V2NIMMessageVideoAttachment
+            Glide.with(context)
+                .asBitmap()
+                .load(attachment.url) // http/https 视频地址
+                .centerCrop()
+                .frame(1000 * 1000) // 指定取 1 秒处的帧 (单位微秒)
+                .into(ivVideo)
         }
     }
 
@@ -267,7 +304,7 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             val maxWidth =
                 helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
             ChatImageLoader.loadImage(
-                context, imageUrl, helper.getView(R.id.bivPic), maxWidth,8
+                context, imageUrl, helper.getView(R.id.bivPic), maxWidth, 8
             )
         }
     }
@@ -275,8 +312,12 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     private fun setTextType(
         item: V2NIMMessage, helper: BaseViewHolder
     ) {
-        val text = item.text
-        helper.setText(R.id.chat_item_content_text, text)
+        val view = helper.getView<TextView>(chat_item_content_text)
+        val text2Emoji = text2Emoji(
+            context, item.text,
+            view.textSize
+        )
+        helper.setText(chat_item_content_text, text2Emoji)
     }
 
 }

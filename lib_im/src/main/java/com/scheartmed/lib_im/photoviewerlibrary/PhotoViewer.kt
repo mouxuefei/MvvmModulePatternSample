@@ -224,7 +224,7 @@ object PhotoViewer {
         val frameLayout = FrameLayout(activity)
 
         val photoViewLayout =
-            LayoutInflater.from(activity).inflate(R.layout.activity_photoviewer, null)
+            LayoutInflater.from(activity).inflate(R.layout.activity_photoviewer2, null)
         val viewPager =
             photoViewLayout.findViewById<androidx.viewpager.widget.ViewPager>(R.id.mLookPicVP)
 

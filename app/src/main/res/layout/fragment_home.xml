@@ -21,7 +21,13 @@
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/btnMine"
-        android:text="去个人中心"
+        android:text="登录1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnMine2"
+        android:text="登录2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

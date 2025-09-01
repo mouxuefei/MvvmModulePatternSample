@@ -4,16 +4,25 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.database.Cursor
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 
 data class PickedFile(
     val uri: Uri,
     val name: String?,
-    val size: Long
+    val size: Long,
+    var file: File? = null,
 )
 
 class FilePickerAndSender(caller: ActivityResultCaller, private val context: Context) {
@@ -24,7 +33,13 @@ class FilePickerAndSender(caller: ActivityResultCaller, private val context: Con
         caller.registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let {
                 val picked = uriToPickedFile(it)
-                callback?.invoke(picked)
+                CoroutineScope(Dispatchers.Main).launch { // 主线程
+                    val result = withContext(Dispatchers.IO) { // 切换到 IO
+                        getFileFromUri(context, picked.uri)
+                    }
+                    picked.file = result
+                    callback?.invoke(picked)
+                }
             }
         }
 
@@ -59,29 +74,46 @@ class FilePickerAndSender(caller: ActivityResultCaller, private val context: Con
         return PickedFile(uri, name, size)
     }
 
-//    /**
-//     * 发送文件消息
-//     * sessionId: 对方账号或群ID
-//     * sessionType: 单聊 or 群聊
-//     */
-//    fun sendFileMessage(
-//        picked: PickedFile,
-//        sessionId: String,
-//        sessionType: V2NIMSessionType = V2NIMSessionType.P2P
-//    ) {
-//        val attachment = V2NIMFileAttachment(context, picked.uri)
-//        attachment.displayName = picked.name ?: "file"
-//
-//        val message = V2NIMMessage.createFileMessage(sessionId, sessionType, attachment)
-//
-//        NIMClient.getService(V2NIMMessageService::class.java)
-//            .sendMessage(message)
-//            .observe { result ->
-//                if (result.isSuccess()) {
-//                    Toast.makeText(context, "发送成功", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(context, "发送失败: ${result.error}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
+    /**
+     * 获取文件路径，如果无法获取返回null
+     * targetSdk 34 适配，兼容各类 content:// uri
+     */
+    private fun getFileFromUri(context: Context, uri: Uri): File? {
+        return try {
+            if ("file" == uri.scheme) {
+                return File(uri.path ?: return null)
+            }
+            val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+            val fileName = queryFileName(context, uri) ?: "temp_file"
+            val cacheFile = File(context.cacheDir, fileName)
+            copyInputStreamToFile(inputStream, cacheFile)
+            cacheFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun copyInputStreamToFile(inputStream: InputStream, file: File) {
+        inputStream.use { input ->
+            FileOutputStream(file).use { output ->
+                input.copyTo(output)
+            }
+        }
+    }
+
+    private fun queryFileName(context: Context, uri: Uri): String? {
+        var name: String? = null
+        val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                if (index != -1) {
+                    name = it.getString(index)
+                }
+            }
+        }
+        return name
+    }
+
 }

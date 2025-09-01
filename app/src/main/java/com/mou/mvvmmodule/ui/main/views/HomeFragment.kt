@@ -1,5 +1,6 @@
 package com.mou.mvvmmodule.ui.main.views
 
+import android.os.Bundle
 import com.fortunes.commonsdk.base.BaseFragment
 import com.fortunes.commonsdk.utils.ActRouter
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
@@ -51,8 +52,27 @@ class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
                 {
                     // TODO
                     Logger.e("success==")
+                    val bundle = Bundle()
+                    bundle.putString("account", "test002")
+                    ActRouter.startActivity(mContext, ChatP2PActivity::class.java, bundle)
+                }
+            ) { error ->
+                val code = error.code
+                val desc = error.desc
+                // TODO
+                Logger.e("error==" + desc)
+            }
 
-                    ActRouter.startActivity(mContext, ChatP2PActivity::class.java)
+        }
+
+        binding.btnMine2.setOnClickListener {
+            NIMClient.getService(V2NIMLoginService::class.java).login("test002", "123456", null,
+                {
+                    // TODO
+                    Logger.e("success==")
+                    val bundle = Bundle()
+                    bundle.putString("account", "test001")
+                    ActRouter.startActivity(mContext, ChatP2PActivity::class.java, bundle)
                 }
             ) { error ->
                 val code = error.code

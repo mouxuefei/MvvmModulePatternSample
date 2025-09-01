@@ -196,6 +196,7 @@ public class RecordButton extends AppCompatButton {
                 recordDialog.dismiss();
             }, 500);
             File file = new File(mFile);
+
             file.delete();
         /*    stopRecording();
             recordDialog.dismiss();*/

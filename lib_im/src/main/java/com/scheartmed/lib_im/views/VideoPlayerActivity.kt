@@ -1,0 +1,93 @@
+package com.scheartmed.lib_im.views
+
+import android.content.pm.ActivityInfo
+import android.media.browse.MediaBrowser
+import android.net.Uri
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import com.scheartmed.lib_im.databinding.ActivityVideoPlayerBinding
+
+class VideoPlayerActivity : AppCompatActivity() {
+
+    private var player: ExoPlayer? = null
+    private lateinit var binding: ActivityVideoPlayerBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // 默认横屏
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+
+        val videoUrl = intent.getStringExtra("videoUrl")
+        videoUrl?.let { initializePlayer(it) }
+
+        // 点击 PlayerView 切换播放/暂停
+        binding.playerView.setOnClickListener {
+            player?.let {
+                if (it.isPlaying) it.pause() else it.play()
+            }
+        }
+    }
+
+    private fun initializePlayer(videoUrl: String) {
+        player = ExoPlayer.Builder(this).build()
+        binding.playerView.player = player
+
+        val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
+        player?.setMediaItem(mediaItem)
+        player?.prepare()
+        player?.play()
+
+        // 播放状态监听
+        player?.addListener(object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                // 可根据 isPlaying 显示自定义控件状态
+            }
+        })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        player?.playWhenReady = true
+        hideSystemUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        player?.playWhenReady = true
+        hideSystemUI()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        player?.playWhenReady = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        releasePlayer()
+    }
+
+    private fun releasePlayer() {
+        player?.release()
+        player = null
+    }
+
+    // 隐藏状态栏/导航栏，沉浸式全屏
+    private fun hideSystemUI() {
+        binding.playerView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                )
+    }
+}

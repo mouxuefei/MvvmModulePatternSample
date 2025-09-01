@@ -241,13 +241,13 @@ public class ChatUiHelper {
     //绑定添加布局
     public ChatUiHelper bindAddLayout(LinearLayout addLayout) {
         mAddLayout = addLayout;
-        mAddLayout.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideBottomLayout(false);//隐藏表情布局，显示软件盘
-                unlockContentHeightDelayed();
-            }
-        });
+//        mAddLayout.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                hideBottomLayout(false);//隐藏表情布局，显示软件盘
+//                unlockContentHeightDelayed();
+//            }
+//        });
         return this;
     }
 

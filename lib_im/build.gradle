@@ -49,5 +49,7 @@ dependencies {
     implementation project(':lib_common')
     api "com.netease.nimlib:basesdk:10.9.10"
     api "com.netease.nimlib:push:10.9.10"
+    api "androidx.media3:media3-exoplayer:1.4.1"
+    api "androidx.media3:media3-ui:1.4.1"
 
 }
