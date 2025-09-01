@@ -175,7 +175,7 @@ object PhotoViewer {
     }
 
     fun start(fragment: Fragment) {
-        val activity = fragment.activity!!
+        val activity = fragment.requireActivity()
         start(activity as AppCompatActivity)
     }
 

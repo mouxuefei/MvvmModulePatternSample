@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.scheartmed.lib_im.photoviewerlibrary.ViewPagerFixed
+<com.scheartmed.lib_im.widget.photoviewerlibrary.ViewPagerFixed
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mLookPicVP"
     android:layout_width="match_parent"
