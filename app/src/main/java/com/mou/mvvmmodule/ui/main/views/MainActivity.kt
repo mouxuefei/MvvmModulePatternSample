@@ -1,14 +1,10 @@
 package com.mou.mvvmmodule.ui.main.views
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.fortunes.commonsdk.base.BaseActivity
-import com.fortunes.commonsdk.network.dealResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.mou.basemvvm.helper.extens.bindDialogOrLifeCycle
-import com.mou.basemvvm.helper.extens.toast
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel

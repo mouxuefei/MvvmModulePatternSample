@@ -1,4 +1,4 @@
-package com.fortunes.commonsdk.network
+package com.fortunes.commonsdk.api
 
 /**
  * @auther:MR-Cheng

@@ -4,8 +4,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.mou.basemvvm.helper.annotation.PageStateType
 import com.mou.basemvvm.helper.annotation.RefreshType
-import com.fortunes.commonsdk.network.bean.NoMoreDataException
-import com.fortunes.commonsdk.network.bean.EmptyException
+import com.fortunes.commonsdk.api.bean.NoMoreDataException
+import com.fortunes.commonsdk.api.bean.EmptyException
 import com.mou.basemvvm.mvvm.BaseViewModel
 import com.mou.basemvvm.mvvm.IView
 import com.orhanobut.logger.Logger

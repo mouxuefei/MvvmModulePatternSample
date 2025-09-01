@@ -1,6 +1,6 @@
-package com.fortunes.commonsdk.network
+package com.fortunes.commonsdk.api
 
-import com.fortunes.commonsdk.network.api.NetProvider
+import com.fortunes.commonsdk.api.api.NetProvider
 import com.google.gson.GsonBuilder
 import com.orhanobut.logger.Logger
 import okhttp3.Interceptor

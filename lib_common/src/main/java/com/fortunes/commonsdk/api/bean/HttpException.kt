@@ -1,6 +1,6 @@
-package com.fortunes.commonsdk.network.bean
+package com.fortunes.commonsdk.api.bean
 
-import com.fortunes.commonsdk.network.ApiException
+import com.fortunes.commonsdk.api.ApiException
 
 /**
  * @auther:MR-Cheng

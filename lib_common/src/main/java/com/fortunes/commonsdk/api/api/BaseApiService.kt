@@ -1,9 +1,18 @@
-package com.fortunes.commonsdk.network.api
+package com.fortunes.commonsdk.api.api
 
-import okhttp3.CookieJar
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import com.fortunes.commonsdk.bean.UserInfoBean
+import com.fortunes.commonsdk.api.bean.BaseBean
+import io.reactivex.Single
+import retrofit2.http.POST
 
+/***
+ * You may think you know what the following code does.
+ * But you dont. Trust me.
+ * Fiddle with it, and youll spend many a sleepless
+ * night cursing the moment you thought youd be clever
+ * enough to "optimize" the code below.
+ * Now close this file and go play with something else.
+ */
 /***
  *
  *   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗
@@ -16,49 +25,10 @@ import okhttp3.OkHttpClient
  *  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░
  *           ░     ░ ░      ░  ░
  *
- * Created by mou on 2018/8/20.
-
-
+ * Created by mou on 2018/12/17.
+ * 项目通用的接口
  */
-
-interface NetProvider {
-    /**
-     * 添加网络请求拦截器
-     */
-    fun configInterceptors(): Array<Interceptor>?
-
-    /**
-     * 添加https请求拦截器
-     */
-    fun configHttps(builder: OkHttpClient.Builder)
-
-    /**
-     * 添加cookie持久化拦截器
-     */
-    fun configCookie(): CookieJar?
-
-    /**
-     * 添加拦截器
-     */
-    fun configHandler(): RequestHandler
-
-    /**
-     * 链接超时时间
-     */
-    fun configConnectTimeoutSecs(): Long
-
-    /**
-     * 读取超时时间
-     */
-    fun configReadTimeoutSecs(): Long
-
-    /**
-     * 写入超时时间
-     */
-    fun configWriteTimeoutSecs(): Long
-
-    /**
-     * 是否开启log打印日志
-     */
-    fun configLogEnable(): Boolean
+interface BaseApiService {
+    @POST("common/userInfo/queryUserInfo")
+    fun queryUserInfo(): Single<BaseBean<UserInfoBean>>
 }

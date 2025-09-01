@@ -1,12 +1,12 @@
-package com.fortunes.commonsdk.network.provider
+package com.fortunes.commonsdk.api.provider
 
 import android.content.Context
 import com.fortunes.commonsdk.BuildConfig
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.fortunes.commonsdk.network.api.NetProvider
-import com.fortunes.commonsdk.network.api.RequestHandler
+import com.fortunes.commonsdk.api.api.NetProvider
+import com.fortunes.commonsdk.api.api.RequestHandler
 import okhttp3.*
 
 /***

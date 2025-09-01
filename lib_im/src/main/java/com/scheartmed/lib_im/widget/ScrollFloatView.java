@@ -11,17 +11,7 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-/**
- * @ProjectName: yqf-android
- * @Package: com.jao.pointsystem.weight
- * @ClassName: ScrollFloatinigButton
- * @Description: java类作用描述
- * @Author: OlderJiao
- * @CreateDate: 2020/3/24 10:47
- * @UpdateUser: 更新者：
- * @UpdateDate: 2020/3/24 10:47
- * @Version: 1.0
- */
+
 public class ScrollFloatView extends FrameLayout {
     private static final String TAG = "ScrollFloatinigButton";
     private float mX;

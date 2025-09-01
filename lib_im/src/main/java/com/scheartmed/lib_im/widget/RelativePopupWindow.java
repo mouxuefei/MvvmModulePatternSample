@@ -17,10 +17,7 @@ import androidx.core.widget.PopupWindowCompat;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * @author kakajika
- * @since 2016/07/01
- */
+
 public class RelativePopupWindow extends PopupWindow {
 
     @IntDef({

@@ -19,12 +19,6 @@ import com.scheartmed.lib_im.R;
 import androidx.annotation.NonNull;
 
 
-/**
- * Created by chengz
- *
- * @date 2017/7/31.
- */
-
 public class ChatContextMenu extends RelativePopupWindow {
 
     private Context mContext;

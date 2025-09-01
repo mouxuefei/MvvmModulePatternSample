@@ -1,4 +1,4 @@
-package com.fortunes.commonsdk.network.bean
+package com.fortunes.commonsdk.api.bean
 
 /***
  * You may think you know what the following code does.

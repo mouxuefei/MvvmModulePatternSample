@@ -1,6 +1,6 @@
 package com.mou.mvvmmodule.data.api
 
-import com.fortunes.commonsdk.network.bean.BaseBean
+import com.fortunes.commonsdk.api.bean.BaseBean
 import com.mou.mvvmmodule.data.model.ArticleBean
 import retrofit2.http.GET
 

@@ -1,5 +1,9 @@
 package com.mou.mvvmmodule.ui.login.views
 
+import androidx.viewbinding.ViewBinding
+import com.fortunes.commonsdk.base.BaseActivity
+import com.mou.mvvmmodule.ui.login.viewmodel.LoginViewModel
+
 /**
  * @FileName: LoginActivity.java
  * @author: villa_mou
@@ -7,5 +11,18 @@ package com.mou.mvvmmodule.ui.login.views
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class LoginActivity {
+class LoginActivity:BaseActivity<LoginViewModel>() {
+    override val binding: ViewBinding
+        get() = TODO("Not yet implemented")
+
+    override fun providerVMClass(): Class<LoginViewModel>? = LoginViewModel::class.java
+
+    override fun initView() {
+
+    }
+
+    override fun initData() {
+    }
+
+
 }

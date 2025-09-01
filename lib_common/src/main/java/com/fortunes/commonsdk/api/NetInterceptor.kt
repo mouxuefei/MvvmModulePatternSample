@@ -1,6 +1,6 @@
-package com.fortunes.commonsdk.network
+package com.fortunes.commonsdk.api
 
-import com.fortunes.commonsdk.network.api.RequestHandler
+import com.fortunes.commonsdk.api.api.RequestHandler
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

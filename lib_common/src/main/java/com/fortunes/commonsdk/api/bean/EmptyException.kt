@@ -1,4 +1,4 @@
-package com.fortunes.commonsdk.network.bean
+package com.fortunes.commonsdk.api.bean
 
 import java.io.IOException
 

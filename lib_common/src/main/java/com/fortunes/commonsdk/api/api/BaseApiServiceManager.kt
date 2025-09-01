@@ -1,6 +1,18 @@
-package com.fortunes.commonsdk.network
+package com.fortunes.commonsdk.api.api
 
+import com.fortunes.commonsdk.api.BaseUrlConstants
+import com.fortunes.commonsdk.api.provider.BaseNetProvider
+import com.mou.basemvvm.BaseApplication
+import com.fortunes.commonsdk.api.NetMgr
 
+/***
+ * You may think you know what the following code does.
+ * But you dont. Trust me.
+ * Fiddle with it, and youll spend many a sleepless
+ * night cursing the moment you thought youd be clever
+ * enough to "optimize" the code below.
+ * Now close this file and go play with something else.
+ */
 /***
  *
  *   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗
@@ -13,22 +25,14 @@ package com.fortunes.commonsdk.network
  *  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░
  *           ░     ░ ░      ░  ░
  *
- * Created by mou on 2018/8/22.
+ * Created by mou on 2018/12/17.
+ * 项目通用的接口请求类
  */
-
-object BaseUrlConstants {
-    //开发环境
-    private const val DEV_BASE_URL = "https://wanandroid.com/"
-    //测试环境
-    private const val TEST_BASE_URL = "https://wanandroid.com/"
-    //正式环境
-    private const val RELIASE_BASE_URL = "https://wanandroid.com/"
-
-    /**
-     * 根据不同的打包命令自动查找对应的base_url
-     * 1,开发环境打包  gradlew clean assembleVersionDevDebug或者gradlew clean assembleVersionDevRealease
-     * 2,测试环境打包  gradlew clean assembleVersionTestDebug或者gradlew clean assembleVersionTestRealease
-     * 3,正式环境打包 gradlew clean assembleVersionOnlineRelease
-     */
-    fun getBaseUrl(): String = DEV_BASE_URL
+object BaseApiServiceManager {
+     val apiService by lazy {
+        NetMgr.getRetrofit(
+            BaseUrlConstants.getBaseUrl(),
+            BaseNetProvider(BaseApplication.instance())
+        ).create(BaseApiService::class.java)
+    }
 }

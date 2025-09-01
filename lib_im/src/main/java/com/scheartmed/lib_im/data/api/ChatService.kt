@@ -1,6 +1,6 @@
 package com.scheartmed.lib_im.data.api
 
-import com.fortunes.commonsdk.network.bean.BaseBean
+import com.fortunes.commonsdk.api.bean.BaseBean
 import com.scheartmed.lib_im.data.model.ChatBean
 import retrofit2.http.GET
 

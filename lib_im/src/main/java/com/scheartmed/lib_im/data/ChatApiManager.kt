@@ -1,9 +1,9 @@
 package com.scheartmed.lib_im.data
 
-import com.fortunes.commonsdk.network.BaseUrlConstants
-import com.fortunes.commonsdk.network.provider.BaseNetProvider
+import com.fortunes.commonsdk.api.BaseUrlConstants
+import com.fortunes.commonsdk.api.provider.BaseNetProvider
 import com.mou.basemvvm.BaseApplication
-import com.fortunes.commonsdk.network.NetMgr
+import com.fortunes.commonsdk.api.NetMgr
 import com.scheartmed.lib_im.data.api.ChatService
 
 /**

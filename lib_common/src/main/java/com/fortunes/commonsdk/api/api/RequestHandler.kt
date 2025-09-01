@@ -1,4 +1,4 @@
-package com.fortunes.commonsdk.network.api
+package com.fortunes.commonsdk.api.api
 
 import okhttp3.Interceptor
 import okhttp3.Request
