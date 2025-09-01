@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.uinfo.UserService
+import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
@@ -28,7 +29,11 @@ import com.scheartmed.lib_im.utils.FileUtils
 import com.scheartmed.lib_im.widget.emoji.EmojiUtils.*
 
 
-class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
+class ChatAdapter(
+    context: Context,
+    data: MutableList<MessageItem>,
+    val type: V2NIMConversationType
+) :
     BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
 
     private val MSG_TEXT_L = 100
@@ -154,6 +159,8 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             val isPeerRead: Boolean =
                 NIMClient.getService(V2NIMMessageService::class.java).isPeerRead(message)
             it.text = if (isPeerRead) "已读" else "未读"
+            it.visibility =
+                if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P) View.VISIBLE else View.GONE
         }
     }
 
@@ -169,6 +176,8 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         val tvAvatar = holder.getViewOrNull<ImageView>(R.id.chat_item_header)
         tvName?.let {
             it.text = userInfo.name
+            it.visibility =
+                if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P) View.GONE else View.VISIBLE
         }
         tvAvatar?.let {
             ChatImageLoader.loadCircleImage(
@@ -179,8 +188,6 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
 
     /**
      * 时间是否显示
-     * @param helper
-     * @param item
      */
     private fun setTimeVisible(helper: BaseViewHolder, item: MessageItem.TimeDivider) {
         helper.setText(R.id.item_tv_time, item.time.let { DateTimeUtil.getTimeFormatText(it) })

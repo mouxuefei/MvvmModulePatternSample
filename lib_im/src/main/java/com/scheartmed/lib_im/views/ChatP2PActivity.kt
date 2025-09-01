@@ -432,14 +432,15 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     private fun initRecyclerView() {
         mMsgList = arrayListOf()
-        mAdapter = ChatAdapter(this, mMsgList).apply {
-            addChildClickViewIds(
-                R.id.chat_item_header,
-                R.id.chat_item_layout_content,
-                R.id.chat_item_fail,
-            )
-            addChildLongClickViewIds(R.id.chat_item_layout_content)
-        }
+        mAdapter =
+            ChatAdapter(this, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P).apply {
+                addChildClickViewIds(
+                    R.id.chat_item_header,
+                    R.id.chat_item_layout_content,
+                    R.id.chat_item_fail,
+                )
+                addChildLongClickViewIds(R.id.chat_item_layout_content)
+            }
         binding.rvChatList.adapter = mAdapter
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as MessageItem

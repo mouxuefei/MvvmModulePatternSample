@@ -320,14 +320,15 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
 
     private fun initRecyclerView() {
         mMsgList = arrayListOf()
-        mAdapter = ChatAdapter(this, mMsgList).apply {
-            addChildClickViewIds(
-                R.id.chat_item_header,
-                R.id.chat_item_layout_content,
-                R.id.chat_item_fail,
-            )
-            addChildLongClickViewIds(R.id.chat_item_layout_content)
-        }
+        mAdapter =
+            ChatAdapter(this, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM).apply {
+                addChildClickViewIds(
+                    R.id.chat_item_header,
+                    R.id.chat_item_layout_content,
+                    R.id.chat_item_fail,
+                )
+                addChildLongClickViewIds(R.id.chat_item_layout_content)
+            }
         binding.rvChatList.adapter = mAdapter
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as MessageItem
@@ -467,13 +468,12 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
     }
 
     private fun dealAdapterChildItemLoongClick(
-        view: View,
-        item: MessageItem.SdkMessage,
-        position: Int
+        view: View, item: MessageItem.SdkMessage, position: Int
     ) {
         val chatContextMenu = ChatContextMenu(view.context)
         chatContextMenu.showOnAnchor(
-            view, RelativePopupWindow.VerticalPosition.ABOVE,
+            view,
+            RelativePopupWindow.VerticalPosition.ABOVE,
             RelativePopupWindow.HorizontalPosition.CENTER
         )
     }
@@ -595,7 +595,6 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
     }
 
 
-
     private fun initTitleBar() {
         binding.titleBar.setTitle("群组")
     }
@@ -623,8 +622,5 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
         }
         startActivity(intent)
     }
-
-
-
 
 }
