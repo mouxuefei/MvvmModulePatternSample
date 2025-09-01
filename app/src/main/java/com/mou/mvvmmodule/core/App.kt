@@ -10,6 +10,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationFilter
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.util.NIMUtil
+import com.scheartmed.lib_im.widget.WebViewPool
 
 
 class App : BaseApplication() {
@@ -33,6 +34,8 @@ class App : BaseApplication() {
 
         initStatusBarNotificationConfig(options)
         NIMClient.initV2(this, options)
+
+        WebViewPool.getInstance(this).preCreateWebView()
     }
 
     private fun initStatusBarNotificationConfig(options: SDKOptions) {

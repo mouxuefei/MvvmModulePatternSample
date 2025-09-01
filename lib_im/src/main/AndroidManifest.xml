@@ -53,6 +53,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi" />
+        <activity
+            android:name=".views.WebViewActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi" />
 
         <activity
             android:name=".views.VideoPlayerActivity"

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -27,7 +28,9 @@ import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
+import com.netease.nimlib.sdk.v2.message.V2NIMP2PMessageReadReceipt
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
@@ -109,6 +112,14 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                     NIMClient.getService(V2NIMMessageService::class.java)
                         .sendP2PMessageReceipt(it, { }) { }
                 }
+            }
+        }
+
+        override fun onReceiveP2PMessageReadReceipts(readReceipts: MutableList<V2NIMP2PMessageReadReceipt>) {
+            super.onReceiveP2PMessageReadReceipts(readReceipts)
+            if (readReceipts.isNotEmpty()) {
+                //TODO:
+                mAdapter?.notifyDataSetChanged()
             }
         }
 
@@ -513,7 +524,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 //内容
                 R.id.chat_item_layout_content -> {
                     when (item.message.messageType) {
-
                         V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
                             onPressShowImage(view, item, position)
                         }
@@ -527,17 +537,33 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                         }
 
                         V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE -> {
-                            //TODO
+                            onPressShowFile(item)
                         }
 
                         else -> {
-//                        clickMessageItem(mConversationId, mConfigData, item)
                         }
                     }
                 }
             }
         }
 
+    }
+
+    private fun onPressShowFile(item: MessageItem.SdkMessage) {
+        val v2NIMMessageFileAttachment = item.message.attachment as V2NIMMessageFileAttachment
+        Logger.e("file url " + v2NIMMessageFileAttachment.url)
+        val intent = Intent(this, WebViewActivity::class.java)
+        intent.putExtra("url", v2NIMMessageFileAttachment.url)
+        startActivity(intent)
+//        try {
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(v2NIMMessageFileAttachment.url))
+//            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//            startActivity(intent)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "未找到可用的浏览器", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {
