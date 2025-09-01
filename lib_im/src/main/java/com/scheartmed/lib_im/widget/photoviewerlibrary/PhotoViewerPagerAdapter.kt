@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.photoviewerlibrary
+package com.scheartmed.lib_im.widget.photoviewerlibrary
 
 class PhotoViewerPagerAdapter(private var mData: MutableList<PhotoViewerFragment>, fragmentManager: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentStatePagerAdapter(fragmentManager) {
     override fun getItem(position: Int): androidx.fragment.app.Fragment {

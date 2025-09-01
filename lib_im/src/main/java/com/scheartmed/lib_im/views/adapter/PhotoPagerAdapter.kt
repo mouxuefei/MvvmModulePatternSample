@@ -23,8 +23,6 @@ class PhotoPagerAdapter(
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val url = imageUrls[position]
         val photoView: PhotoView = holder.binding.photoView
-
-        // Glide 加载图片
         Glide.with(context)
             .load(url)
             .placeholder(android.R.color.darker_gray)

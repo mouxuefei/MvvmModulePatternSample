@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.photoviewerlibrary.photoview;
+package com.scheartmed.lib_im.widget.photoviewerlibrary.photoview;
 
 import android.view.MotionEvent;
 import android.widget.ImageView;

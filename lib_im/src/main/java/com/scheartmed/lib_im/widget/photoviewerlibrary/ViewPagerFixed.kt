@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.photoviewerlibrary
+package com.scheartmed.lib_im.widget.photoviewerlibrary
 
 import android.content.Context
 import android.util.AttributeSet

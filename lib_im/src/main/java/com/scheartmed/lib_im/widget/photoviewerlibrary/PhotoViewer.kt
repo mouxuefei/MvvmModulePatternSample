@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.photoviewerlibrary
+package com.scheartmed.lib_im.widget.photoviewerlibrary
 
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
@@ -118,12 +118,12 @@ object PhotoViewer {
 
 
     fun setImgContainer(container: AbsListView): PhotoViewer {
-        this.container = WeakReference(container)
+        PhotoViewer.container = WeakReference(container)
         return this
     }
 
     fun setImgContainer(container: androidx.recyclerview.widget.RecyclerView): PhotoViewer {
-        this.container = WeakReference(container)
+        PhotoViewer.container = WeakReference(container)
         return this
     }
 
@@ -195,7 +195,7 @@ object PhotoViewer {
 
 
     fun setOnLongClickListener(longClickListener: OnLongClickListener): PhotoViewer {
-        this.longClickListener = longClickListener
+        PhotoViewer.longClickListener = longClickListener
         return this
     }
 
@@ -204,7 +204,7 @@ object PhotoViewer {
      * 设置指示器的样式，但是如果图片大于9张，则默认设置为文字样式
      */
     fun setIndicatorType(type: String): PhotoViewer {
-        this.indicatorType = type
+        indicatorType = type
         return this
     }
 

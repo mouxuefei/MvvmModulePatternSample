@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.photoviewerlibrary
+package com.scheartmed.lib_im.widget.photoviewerlibrary
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
