@@ -7,8 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.scheartmed.lib_im.R;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class GridViewAdapter extends BaseAdapter {
     private Context mContext;
     private List<EmojiBean> mData;
 
-    public GridViewAdapter(Context context,List<EmojiBean> data){
+    public GridViewAdapter(Context context, List<EmojiBean> data) {
         mContext = context;
         mData = data;
     }
@@ -48,25 +51,25 @@ public class GridViewAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_emoji_face, null);
-            holder.iv = (ImageView) convertView.findViewById(R.id.face_image);
+            holder.iv = (TextView) convertView.findViewById(R.id.face_image);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         if (mData.get(position) != null) {
-            int width = EmojiUtils.dip2px(mContext, 32);
-            int height = EmojiUtils.dip2px(mContext, 32);
-            Bitmap bitmap = EmojiUtils.decodeBitmapFromRes(mContext.getResources(),
-                    mData.get(position).getResIndex(), width, height);
-            if (bitmap != null){
-                holder.iv.setImageBitmap(bitmap);
-            }
+//            int width = EmojiUtils.dip2px(mContext, 32);
+//            int height = EmojiUtils.dip2px(mContext, 32);
+//            Bitmap bitmap = EmojiUtils.decodeBitmapFromRes(mContext.getResources(),
+//                    mData.get(position).getResIndex(), width, height);
+//            if (bitmap != null){
+            holder.iv.setText(mData.get(position).getEmojiName());
+//            }
         }
         return convertView;
     }
 
     class ViewHolder {
-        ImageView iv;
+        TextView iv;
     }
 }

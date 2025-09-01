@@ -24,8 +24,8 @@ public class EmojiLayout extends RelativeLayout {
     private IndicatorView mIndicatorView;
     private List<EmojiBean> mEmojiBeans;
     private List<View> mViewPageItems;
-    private static final int COLUMNS = 7;
-    private static final int ROWS = 3;
+    private static final int COLUMNS = 6;
+    private static final int ROWS = 4;
     private OnEmojiSelectListener mSelectListener;
 
     public EmojiLayout(Context context) {
