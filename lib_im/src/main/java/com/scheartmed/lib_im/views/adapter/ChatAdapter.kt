@@ -69,25 +69,25 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             }
         })
 
-        getMultiTypeDelegate()?.addItemType(MSG_TEXT_R, R.layout.item_text_send)
-            ?.addItemType(MSG_IMG_R, R.layout.item_image_send)
-            ?.addItemType(MSG_AUDIO_R, R.layout.item_audio_send)
-            ?.addItemType(MSG_VIDEO_R, R.layout.item_video_send)
-            ?.addItemType(MSG_FILE_R, R.layout.item_file_send)
+        getMultiTypeDelegate()?.addItemType(MSG_TEXT_R, R.layout.item_send_text)
+            ?.addItemType(MSG_IMG_R, R.layout.item_send_image)
+            ?.addItemType(MSG_AUDIO_R, R.layout.item_send_audio)
+            ?.addItemType(MSG_VIDEO_R, R.layout.item_send_video)
+            ?.addItemType(MSG_FILE_R, R.layout.item_send_file)
             ?.addItemType(MSG_NOTIFICATION_R, R.layout.item_notication)
             ?.addItemType(MSG_TIPS_R, R.layout.item_tips)
             ?.addItemType(MSG_CUSTOM_1_R, R.layout.item_notication)
 
-            ?.addItemType(MSG_TEXT_L, R.layout.item_text_receive)
-            ?.addItemType(MSG_IMG_L, R.layout.item_image_receive)
-            ?.addItemType(MSG_VIDEO_L, R.layout.item_video_receive)
-            ?.addItemType(MSG_AUDIO_L, R.layout.item_audio_receive)
-            ?.addItemType(MSG_FILE_L, R.layout.item_file_receive)
+            ?.addItemType(MSG_TEXT_L, R.layout.item_receive_text)
+            ?.addItemType(MSG_IMG_L, R.layout.item_receive_image)
+            ?.addItemType(MSG_VIDEO_L, R.layout.item_receive_video)
+            ?.addItemType(MSG_AUDIO_L, R.layout.item_receive_audio)
+            ?.addItemType(MSG_FILE_L, R.layout.item_receive_file)
             ?.addItemType(MSG_NOTIFICATION_L, R.layout.item_notication)
             ?.addItemType(MSG_TIPS_L, R.layout.item_tips)
             ?.addItemType(MSG_CUSTOM_1_L, R.layout.item_notication)
-            ?.addItemType(MSG_EMPTY, R.layout.item_empty)
 
+            ?.addItemType(MSG_EMPTY, R.layout.item_empty)
             ?.addItemType(MSG_TIME, R.layout.item_time)
     }
 

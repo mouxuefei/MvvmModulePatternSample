@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -146,7 +145,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     override fun initView() {
         initTitleBar()
-        initRv()
+        initRecyclerView()
         initListener()
         initChatUi()
     }
@@ -228,7 +227,6 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     private fun createChatSession() {
         val chatId = intent.extras?.getString("account")
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
-        Logger.e("myAccountId=a${myAccountId}")
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
         val chatUserInfo = userService.getUserInfo(chatId).data
@@ -432,14 +430,13 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     }
 
 
-    private fun initRv() {
+    private fun initRecyclerView() {
         mMsgList = arrayListOf()
         mAdapter = ChatAdapter(this, mMsgList).apply {
             addChildClickViewIds(
                 R.id.chat_item_header,
                 R.id.chat_item_layout_content,
                 R.id.chat_item_fail,
-                R.id.item_phone_tip_call
             )
             addChildLongClickViewIds(R.id.chat_item_layout_content)
         }
