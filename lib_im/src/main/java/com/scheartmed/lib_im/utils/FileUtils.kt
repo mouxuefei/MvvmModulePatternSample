@@ -6,7 +6,6 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import com.mou.basemvvm.BaseApplication
-import com.orhanobut.logger.Logger
 import java.io.File
 import java.io.FileOutputStream
 
@@ -83,4 +82,14 @@ object FileUtils {
         return thumbFile
     }
 
+
+    fun getExtensionName(filePath: String): String {
+        val file = File(filePath)
+        return getExtensionName(file)
+    }
+
+    private fun getExtensionName(file: File): String {
+        val fileName = file.getName()
+        return fileName.substring(fileName.lastIndexOf(".") + 1)
+    }
 }

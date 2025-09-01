@@ -37,7 +37,7 @@
 
 
         <LinearLayout
-            android:id="@+id/rc_message"
+            android:id="@+id/chat_item_layout_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"

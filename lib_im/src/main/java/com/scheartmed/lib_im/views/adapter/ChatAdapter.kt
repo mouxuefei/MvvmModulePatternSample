@@ -13,17 +13,17 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageSendingState
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.orhanobut.logger.Logger
 import com.scheartmed.lib_im.R
-import com.scheartmed.lib_im.R.id.chat_item_content_text
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.utils.ChatImageLoader
 import com.scheartmed.lib_im.utils.DateTimeUtil
-import com.scheartmed.lib_im.widget.emoji.EmojiUtils
+import com.scheartmed.lib_im.utils.FileUtils
 import com.scheartmed.lib_im.widget.emoji.EmojiUtils.*
 
 
@@ -237,7 +237,7 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
             }
 
             MSG_FILE_L, MSG_FILE_R -> {
-                //TODO:
+                setFileType(item, helper)
             }
 
             MSG_NOTIFICATION_L, MSG_NOTIFICATION_R -> {
@@ -254,6 +254,18 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
 
             else -> {
             }
+        }
+    }
+
+    private fun setFileType(item: V2NIMMessage, helper: BaseViewHolder) {
+        val ivFileType = helper.getViewOrNull<ImageView>(R.id.rc_msg_iv_file_type_image)
+        val v2NIMMessageFileAttachment = item.attachment as V2NIMMessageFileAttachment
+        when (FileUtils.getExtensionName(v2NIMMessageFileAttachment.name)) {
+            "doc", "docx" -> ivFileType?.setImageResource(R.drawable.icon_file_word)
+            "ppt", "pptx" -> ivFileType?.setImageResource(R.drawable.icon_file_ppt)
+            "xls", "xlsx" -> ivFileType?.setImageResource(R.drawable.icon_file_excel)
+            "pdf" -> ivFileType?.setImageResource(R.drawable.icon_file_pdf)
+            else -> ivFileType?.setImageResource(R.drawable.icon_file_other)
         }
     }
 
@@ -312,12 +324,12 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     private fun setTextType(
         item: V2NIMMessage, helper: BaseViewHolder
     ) {
-        val view = helper.getView<TextView>(chat_item_content_text)
+        val view = helper.getView<TextView>(R.id.chat_item_content_text)
         val text2Emoji = text2Emoji(
             context, item.text,
             view.textSize
         )
-        helper.setText(chat_item_content_text, text2Emoji)
+        helper.setText(R.id.chat_item_content_text, text2Emoji)
     }
 
 }

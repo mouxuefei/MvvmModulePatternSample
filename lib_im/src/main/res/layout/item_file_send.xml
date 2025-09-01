@@ -33,7 +33,7 @@
 
 
         <LinearLayout
-            android:id="@+id/rc_message"
+            android:id="@+id/chat_item_layout_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
@@ -103,7 +103,7 @@
             android:layout_height="18dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/rc_message"
+            android:layout_toLeftOf="@id/chat_item_layout_content"
             android:focusable="false"
             android:src="@mipmap/msg_state_fail_resend"
             android:visibility="visible" />
@@ -117,7 +117,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="2dp"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/rc_message"
+            android:layout_toLeftOf="@id/chat_item_layout_content"
             android:visibility="invisible" />
     </RelativeLayout>
 

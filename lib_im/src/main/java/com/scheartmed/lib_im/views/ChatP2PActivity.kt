@@ -28,7 +28,6 @@ import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
-import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
@@ -51,7 +50,9 @@ import com.scheartmed.lib_im.utils.ImageFileCompressEngine
 import com.scheartmed.lib_im.utils.MediaManager
 import com.scheartmed.lib_im.viewmodels.ChatP2PViewModel
 import com.scheartmed.lib_im.views.adapter.ChatAdapter
+import com.scheartmed.lib_im.widget.ChatContextMenu
 import com.scheartmed.lib_im.widget.ChatUiHelper
+import com.scheartmed.lib_im.widget.RelativePopupWindow
 import com.scheartmed.lib_im.widget.morelayout.MoreLayoutItemBean
 import java.io.File
 
@@ -253,16 +254,21 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 val item = adapter.getItem(position) as MoreLayoutItemBean
                 when (item.key) {
                     "im_photo" -> {
-                        PictureSelector.create(this)
-                            .openGallery(SelectMimeType.ofImage())
+                        PictureSelector.create(this).openGallery(SelectMimeType.ofImage())
                             .setCompressEngine(ImageFileCompressEngine())
-                            .setImageEngine(GlideEngine.createGlideEngine())
-                            .setMaxSelectNum(9)
+                            .setImageEngine(GlideEngine.createGlideEngine()).setMaxSelectNum(9)
                             .forResult(object : OnResultCallbackListener<LocalMedia?> {
                                 override fun onResult(result: ArrayList<LocalMedia?>) {
                                     if (result.isNotEmpty()) {
                                         result.forEach {
-                                            sendImage(it)
+                                            val path = when {
+                                                it?.isCompressed == true -> it.compressPath
+                                                else -> it?.path ?: ""
+                                            }
+                                            val newMessage = mChatHandler.createImageMessage(
+                                                path, it?.width ?: 0, it?.height ?: 0
+                                            )
+                                            sendMessage(newMessage)
                                         }
 
                                     }
@@ -271,38 +277,23 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                                 override fun onCancel() {}
                             })
                     }
+
                     "im_video" -> {
-                        PictureSelector.create(this)
-                            .openGallery(SelectMimeType.ofVideo())
-                            .setMaxSelectNum(1)
-                            .setImageEngine(GlideEngine.createGlideEngine())
+                        PictureSelector.create(this).openGallery(SelectMimeType.ofVideo())
+                            .setMaxSelectNum(1).setImageEngine(GlideEngine.createGlideEngine())
                             .forResult(object : OnResultCallbackListener<LocalMedia?> {
                                 override fun onResult(result: ArrayList<LocalMedia?>) {
                                     if (result.isNotEmpty()) {
                                         result.forEach {
                                             val videoFile = FileUtils.copyVideoToCache(
-                                                BaseApplication.instance(),
-                                                Uri.parse(it?.path)
+                                                BaseApplication.instance(), Uri.parse(it?.path)
                                             )
                                             videoFile?.let { it1 ->
                                                 val newMessage = mChatHandler.createVideoMessage(
                                                     videoFile.absolutePath,
                                                     it?.duration?.toInt() ?: 0,
                                                 )
-
-                                                mChatHandler.sendMsg(
-                                                    newMessage,
-                                                    mChatSession.conversationId,
-                                                    {
-                                                        val attachment =
-                                                            it.message.attachment as? V2NIMMessageVideoAttachment
-                                                        Logger.e("result==" + attachment?.path)
-                                                        Logger.e("result==" + attachment?.url)
-                                                    },
-                                                    null,
-                                                    null
-                                                )
-                                                sendMessageSuccess(newMessage)
+                                                sendMessage(newMessage)
                                             }
 
                                         }
@@ -316,17 +307,21 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
                     }
 
-
                     "im_camera" -> {
-                        PictureSelector
-                            .create(this)
-                            .openCamera(SelectMimeType.ofImage())
+                        PictureSelector.create(this).openCamera(SelectMimeType.ofImage())
                             .setCompressEngine(ImageFileCompressEngine())
                             .forResult(object : OnResultCallbackListener<LocalMedia?> {
                                 override fun onResult(result: ArrayList<LocalMedia?>) {
                                     if (result.isNotEmpty()) {
                                         val localMedia = result[0]
-                                        sendImage(localMedia)
+                                        val path = when {
+                                            localMedia?.isCompressed == true -> localMedia.compressPath
+                                            else -> localMedia?.path ?: ""
+                                        }
+                                        val newMessage = mChatHandler.createImageMessage(
+                                            path, localMedia?.width ?: 0, localMedia?.height ?: 0
+                                        )
+                                        sendMessage(newMessage)
                                     }
 
                                 }
@@ -338,24 +333,14 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
                     "im_file" -> {
                         filePickerSender.pickOfficeOrPdfFile { picked ->
-                            Log.d("villa", "选中文件: ${picked.file?.absolutePath}, size: ${picked.size}")
+                            Log.d(
+                                "villa",
+                                "选中文件: ${picked.file?.absolutePath}, size: ${picked.size}"
+                            )
                             val newMessage = mChatHandler.createFileMessage(
                                 picked.file?.absolutePath,
                             )
-                            mChatHandler.sendMsg(
-                                newMessage,
-                                mChatSession.conversationId,
-                                {
-                                    val attachment =
-                                        it.message.attachment as? V2NIMMessageFileAttachment
-                                    Logger.e("filePath==" + attachment?.path)
-                                    Logger.e("filePath2==" + attachment?.url)
-                                    Logger.e("filePath2==" + attachment?.name)
-                                },
-                                null,
-                                null
-                            )
-                            sendMessageSuccess(newMessage)
+                            sendMessage(newMessage)
                         }
                     }
 
@@ -388,46 +373,30 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             val file = File(audioPath)
             if (file.exists()) {
                 val newMessage = mChatHandler.createAudioMessage(audioPath, time)
-                mChatHandler.sendMsg(
-                    newMessage,
-                    mChatSession.conversationId,
-                    {
-                        file.delete()
-                    },
-                    null,
-                    null
-                )
-                sendMessageSuccess(newMessage)
+                sendMessage(newMessage)
             }
         }
     }
 
-    private fun sendImage(it: LocalMedia?) {
-        val path = when {
-            it?.isCompressed == true -> it.compressPath
-            else -> it?.path ?: ""
+    private fun sendMessage(newMessage: V2NIMMessage, isRetry: Boolean = false) {
+        mChatHandler.sendMsg(newMessage, mChatSession.conversationId, {
+
+        }, {
+
+        }, {
+
+        })
+        if (!isRetry) {
+            sendMessageSuccess(newMessage)
         }
-        val newMessage = mChatHandler.createImageMessage(
-            path, it?.width ?: 0, it?.height ?: 0
-        )
-        mChatHandler.sendMsg(
-            newMessage,
-            mChatSession.conversationId,
-            null,
-            null,
-            null
-        )
-        sendMessageSuccess(newMessage)
     }
 
     private fun initListener() {
-        //发送文本
         binding.chatInputContainer.btnSend.setOnClickListener {
             mChatUiHelper?.hideSoftInput()
             val newMessage =
                 mChatHandler.createTextMessage(binding.chatInputContainer.etContent.text.toString())
-            mChatHandler.sendMsg(newMessage, mChatSession.conversationId, null, null, null)
-            sendMessageSuccess(newMessage)
+            sendMessage(newMessage)
             binding.chatInputContainer.etContent.setText("")
         }
         NIMClient.getService(V2NIMMessageService::class.java).addMessageListener(messageListener)
@@ -461,13 +430,21 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 R.id.chat_item_fail,
                 R.id.item_phone_tip_call
             )
+            addChildLongClickViewIds(R.id.chat_item_layout_content)
         }
         binding.rvChatList.adapter = mAdapter
-//        binding.rvChatList.setItemViewCacheSize(30)
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as MessageItem
             dealAdapterChildItemClick(view, item, position)
         }
+        mAdapter?.setOnItemChildLongClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as MessageItem
+            if (item is MessageItem.SdkMessage) {
+                dealAdapterChildItemLoongClick(view, item, position)
+            }
+            false
+        }
+
         //🌟解决加载数据没法滚动到底部的问题
         binding.rvChatList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -502,6 +479,17 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     }
 
+    private fun dealAdapterChildItemLoongClick(
+        view: View,
+        item: MessageItem.SdkMessage,
+        position: Int
+    ) {
+        val chatContextMenu = ChatContextMenu(view.context)
+        chatContextMenu.showOnAnchor(
+            view, RelativePopupWindow.VerticalPosition.ABOVE,
+            RelativePopupWindow.HorizontalPosition.CENTER
+        )
+    }
 
     /**
      * 处理点击item事件
@@ -519,50 +507,27 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 R.id.chat_item_fail -> {
                     //TODO：
                     retrySendMessageDialog {
-                        when (item.message.messageType) {
-                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT -> {
-
-                            }
-
-                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
-
-                            }
-
-                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
-
-                            }
-
-                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE -> {
-
-                            }
-
-                            V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO -> {
-
-                            }
-
-                            else -> {
-
-                            }
-                        }
+                        sendMessage(item.message, true)
                     }
                 }
                 //内容
                 R.id.chat_item_layout_content -> {
                     when (item.message.messageType) {
-                        V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
-                            onPressAudio(item, view, position)
-                        }
 
                         V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE -> {
-                            onPressImage(view, item, position)
+                            onPressShowImage(view, item, position)
+                        }
+
+                        V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO -> {
+                            onPressShowAudio(item, view, position)
                         }
 
                         V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO -> {
-                            val v2NIMMessageVideoAttachment =
-                                item.message.attachment as V2NIMMessageVideoAttachment
-                            val intent = Intent(this, VideoPlayerActivity::class.java)
-                            intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
-                            startActivity(intent)
+                            onPressShowVideo(item)
+                        }
+
+                        V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE -> {
+                            //TODO
                         }
 
                         else -> {
@@ -575,10 +540,17 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     }
 
+    private fun onPressShowVideo(item: MessageItem.SdkMessage) {
+        val v2NIMMessageVideoAttachment = item.message.attachment as V2NIMMessageVideoAttachment
+        val intent = Intent(this, VideoPlayerActivity::class.java)
+        intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
+        startActivity(intent)
+    }
+
     /**
      * 点击音频，播放
      */
-    private fun onPressAudio(msg: MessageItem.SdkMessage, view: View, position: Int) {
+    private fun onPressShowAudio(msg: MessageItem.SdkMessage, view: View, position: Int) {
         MediaManager.release()
         mNewGifDrawable?.let {
             if (it.isRunning) {
@@ -591,8 +563,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
             }
         }
         mIvItemAudio = view.findViewById<ImageView>(R.id.ivAudio)
-        val options = RequestOptions()
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+        val options = RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
         mIvItemAudio?.let {
             Glide.with(this)
                 .load(if (msg.message.isSelf) R.drawable.voice_white else R.drawable.voice_black)
@@ -624,7 +595,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     }
 
-    private fun onPressImage(view: View, msg: MessageItem.SdkMessage, position: Int) {
+    private fun onPressShowImage(view: View, msg: MessageItem.SdkMessage, position: Int) {
         val pathList = ArrayList<String>()
         var position = 0
         mMsgList.forEach {
