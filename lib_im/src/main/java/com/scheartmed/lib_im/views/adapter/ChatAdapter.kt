@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseDelegateMultiAdapter
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
@@ -152,8 +153,6 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
         tvRead?.let {
             val isPeerRead: Boolean =
                 NIMClient.getService(V2NIMMessageService::class.java).isPeerRead(message)
-
-            Logger.e("isPeerRead" + isPeerRead)
             it.text = if (isPeerRead) "已读" else "未读"
         }
     }
@@ -162,13 +161,20 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
      * 设置用户头像
      */
     private fun setUserIcon(holder: BaseViewHolder, item: V2NIMMessage) {
-        //TODO:
-//        url?.let {
-//            val iv = holder.getViewOrNull<ImageView>(R.id.chat_item_header)
-//            GlideUtils.loadCircleImage(
-//                context, url, iv
-//            )
-//        }
+        val userInfo = NIMClient.getService(UserService::class.java).getUserInfo(item.senderId)
+        Logger.e("userIcon=${userInfo.name}")
+        Logger.e("userIcon=${userInfo.avatar}")
+
+        val tvName = holder.getViewOrNull<TextView>(R.id.tvName)
+        val tvAvatar = holder.getViewOrNull<ImageView>(R.id.chat_item_header)
+        tvName?.let {
+            it.text = userInfo.name
+        }
+        tvAvatar?.let {
+            ChatImageLoader.loadCircleImage(
+                context, userInfo.avatar, it, item.isSelf
+            )
+        }
     }
 
     /**
@@ -298,7 +304,6 @@ class ChatAdapter(context: Context, data: MutableList<MessageItem>) :
     ) {
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
         imageAttachment?.let { it ->
-            Logger.e("image type thumbUrl:${it.path} , url:${it.url}, name ${it.name}")
             if (it.name?.contains(".gif", true) == true || it.name?.contains(
                     ".GIF", true
                 ) == true

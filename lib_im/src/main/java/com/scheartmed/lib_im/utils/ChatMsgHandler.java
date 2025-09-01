@@ -46,11 +46,9 @@ public class ChatMsgHandler {
     public static final long TEN_MINUTE = 1000 * 60 * 10;
 
     private Context mContext;
-    private ChatSession mChatSession;
 
-    public ChatMsgHandler(Context context, ChatSession session) {
+    public ChatMsgHandler(Context context) {
         mContext = context;
-        mChatSession = session;
     }
 
     /**
@@ -66,7 +64,16 @@ public class ChatMsgHandler {
         V2NIMMessageService v2MessageService = NIMClient.getService(V2NIMMessageService.class);
 
 
-        V2NIMMessageConfig messageConfig = V2NIMMessageConfig.V2NIMMessageConfigBuilder.builder().withLastMessageUpdateEnabled(true).withHistoryEnabled(true).withOfflineEnabled(true).withOnlineSyncEnabled(true).withReadReceiptEnabled(true).withUnreadEnabled(true).build();
+        V2NIMMessageConfig messageConfig = V2NIMMessageConfig
+                .V2NIMMessageConfigBuilder
+                .builder()
+                .withLastMessageUpdateEnabled(true)//设置是否需要更新消息所属的会话信息
+                .withHistoryEnabled(true)//设置是否需要在服务端保存历史消息
+                .withOfflineEnabled(true)
+                .withOnlineSyncEnabled(true)
+                .withReadReceiptEnabled(true)
+                .withUnreadEnabled(true)
+                .build();
 //推送
 //        V2NIMMessagePushConfig pushConfig = V2NIMMessagePushConfig.V2NIMMessagePushConfigBuilder.builder()
 //                .withContent()
@@ -107,7 +114,7 @@ public class ChatMsgHandler {
     }
 
     public V2NIMMessage createVideoMessage(String path, int duration) {
-        return V2NIMMessageCreator.createVideoMessage(path, null, null, duration, null,null);
+        return V2NIMMessageCreator.createVideoMessage(path, null, null, duration, null, null);
     }
 
     // 1. 把 content:// URI 转成缓存目录临时文件

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
@@ -20,6 +21,8 @@ import com.scheartmed.lib_im.R
 object ChatImageLoader {
 
 
+    val DEFAULT_WIDTH = 120f
+
     // 缓存图片宽高比例，避免重复计算
     private val sizeCache: LruCache<String, Pair<Int, Int>> = LruCache(100)
 
@@ -27,11 +30,7 @@ object ChatImageLoader {
      * 加载普通图片（等比例 + 圆角）
      */
     fun loadImage(
-        context: Context,
-        url: String,
-        imageView: ImageView,
-        maxWidth: Int,
-        radiusDp: Int = 8
+        context: Context, url: String, imageView: ImageView, maxWidth: Int, radiusDp: Int = 8
     ) {
         // 清空旧图片，避免 RecyclerView 复用错位
         Glide.with(context).clear(imageView)
@@ -40,30 +39,20 @@ object ChatImageLoader {
         val cachedRatio = sizeCache.get(url)
         if (cachedRatio != null) {
             setImageViewSizeByRatio(imageView, cachedRatio.first, cachedRatio.second)
-            Glide.with(context)
-                .load(url)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.mipmap.ic_launcher)
+            Glide.with(context).load(url).apply(
+                    RequestOptions().placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.default_img_failed)
                         .transform(RoundedCorners(dp2px(context, radiusDp)))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .skipMemoryCache(false)
-                )
-                .into(imageView)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
+                ).into(imageView)
         } else {
             // 未缓存比例，第一次加载
-            Glide.with(context)
-                .load(url)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.mipmap.ic_launcher)
+            Glide.with(context).load(url).apply(
+                    RequestOptions().placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.default_img_failed)
                         .transform(RoundedCorners(dp2px(context, radiusDp)))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .skipMemoryCache(false)
-                )
-                .listener(object : RequestListener<Drawable> {
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
+                ).listener(object : RequestListener<Drawable> {
 
 
                     override fun onLoadFailed(
@@ -85,8 +74,7 @@ object ChatImageLoader {
                             val h = it.intrinsicHeight
                             if (w > 0 && h > 0) {
                                 if (w > h) {
-                                    var scaledH: Int =
-                                        ScreenUtils.dp2px(100f)
+                                    var scaledH: Int = ScreenUtils.dp2px(DEFAULT_WIDTH)
                                     var scaledW = w * scaledH / h
                                     if (scaledW > maxWidth) {
                                         scaledW = maxWidth
@@ -95,8 +83,7 @@ object ChatImageLoader {
                                     sizeCache.put(url, Pair(scaledW, scaledH))
                                     setImageViewSizeByRatio(imageView, scaledW, scaledH)
                                 } else {
-                                    val scaledW: Int =
-                                        ScreenUtils.dp2px(100f)
+                                    val scaledW: Int = ScreenUtils.dp2px(DEFAULT_WIDTH)
                                     val scaledH = h * scaledW / w //计算出按比缩放后的宽度
                                     sizeCache.put(url, Pair(scaledW, scaledH))
                                     setImageViewSizeByRatio(imageView, scaledW, scaledH)
@@ -108,8 +95,7 @@ object ChatImageLoader {
                         }
                         return false // Glide 继续设置图片
                     }
-                })
-                .into(imageView)
+                }).into(imageView)
         }
     }
 
@@ -129,30 +115,18 @@ object ChatImageLoader {
 
         if (cachedRatio != null) {
             setImageViewSizeByRatio(imageView, cachedRatio.first, cachedRatio.second)
-            Glide.with(context)
-                .asGif()
-                .load(url)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.mipmap.ic_launcher)
+            Glide.with(context).asGif().load(url).apply(
+                    RequestOptions().placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.default_img_failed)
 //                        .transform(RoundedCorners(dp2px(context, radiusDp)))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .skipMemoryCache(false)
-                )
-                .into(imageView)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
+                ).into(imageView)
         } else {
-            Glide.with(context)
-                .asGif()
-                .load(url)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.mipmap.ic_launcher)
-                        .error(R.mipmap.default_img_failed)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Glide.with(context).asGif().load(url).apply(
+                    RequestOptions().placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.default_img_failed).diskCacheStrategy(DiskCacheStrategy.ALL)
                         .skipMemoryCache(false)
-                )
-                .listener(object : RequestListener<GifDrawable> {
+                ).listener(object : RequestListener<GifDrawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
@@ -175,8 +149,7 @@ object ChatImageLoader {
                             val h = it.intrinsicHeight
                             if (w > 0 && h > 0) {
                                 if (w > h) {
-                                    var scaledH: Int =
-                                        ScreenUtils.dp2px(120f)
+                                    var scaledH: Int = ScreenUtils.dp2px(DEFAULT_WIDTH)
                                     var scaledW = w * scaledH / h
                                     if (scaledW > maxWidth) {
                                         scaledW = maxWidth
@@ -185,8 +158,7 @@ object ChatImageLoader {
                                     sizeCache.put(url, Pair(scaledW, scaledH))
                                     setImageViewSizeByRatio(imageView, scaledW, scaledH)
                                 } else {
-                                    val scaledW: Int =
-                                        ScreenUtils.dp2px(120f)
+                                    val scaledW: Int = ScreenUtils.dp2px(DEFAULT_WIDTH)
                                     val scaledH = h * scaledW / w //计算出按比缩放后的宽度
                                     sizeCache.put(url, Pair(scaledW, scaledH))
                                     setImageViewSizeByRatio(imageView, scaledW, scaledH)
@@ -195,8 +167,7 @@ object ChatImageLoader {
                         }
                         return false // Glide 继续设置图片
                     }
-                })
-                .into(imageView)
+                }).into(imageView)
         }
 
 
@@ -219,4 +190,23 @@ object ChatImageLoader {
     private fun dp2px(context: Context, dp: Int): Int {
         return (dp * context.resources.displayMetrics.density + 0.5f).toInt()
     }
+
+    fun loadCircleImage(mContext: Context?, imgUrl: String?, imageView: ImageView?,isSelf: Boolean = false) {
+
+        try {
+            val options: RequestOptions = RequestOptions
+                .bitmapTransform(CircleCrop())
+                .error(if(isSelf) R.mipmap.ic_head_default_right else R.mipmap.ic_head_default_left) // 加载失败的图片
+                .placeholder(if(isSelf) R.mipmap.ic_head_default_right else R.mipmap.ic_head_default_left) // 加载失败的图片
+            if (imageView != null) {
+                Glide.with(mContext!!)
+                    .load(imgUrl) // 图片地
+                    .apply(options)
+                    .into(imageView)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
 }
+

@@ -235,7 +235,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         mChatSession.myInfo = myUsrInfo
         mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
         mChatSession.conversationId = V2NIMConversationIdUtil.p2pConversationId(chatId)
-        mChatHandler = ChatMsgHandler(this, mChatSession)
+        mChatHandler = ChatMsgHandler(this)
 
     }
 

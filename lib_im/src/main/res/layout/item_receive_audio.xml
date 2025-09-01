@@ -35,39 +35,52 @@
 
 
         <LinearLayout
-            android:id="@+id/chat_item_layout_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@id/chat_item_header"
-            android:gravity="right|center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/rlAudio"
+            <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_receive_item_bg"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_marginBottom="4dp"
+                android:text="name"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/tvDuration"
+            <LinearLayout
+                android:id="@+id/chat_item_layout_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/rlAudio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0''"
-                    android:textColor="#03081A" />
+                    android:background="@drawable/shape_receive_item_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                <ImageView
-                    android:id="@+id/ivAudio"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@mipmap/ic_audio_animation_left" />
+                    <TextView
+                        android:id="@+id/tvDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0''"
+                        android:textColor="#03081A" />
+
+                    <ImageView
+                        android:id="@+id/ivAudio"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/ic_audio_animation_left" />
+                </LinearLayout>
+
             </LinearLayout>
-
         </LinearLayout>
 
     </RelativeLayout>
