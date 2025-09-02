@@ -5,14 +5,18 @@
     <!--网络权限-->
     <uses-permission android:name="android.permission.INTERNET" />
     <!--写入权限-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <!--读取权限-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_MEDIA_STORAGE"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!--访问有关GSM网络信息-->
@@ -26,8 +30,8 @@
     <!--相机权限-->
     <uses-permission android:name="android.permission.CAMERA" />
     <!--定位权限-->
-<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
-<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
     <!--允许录制音视频-->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!--适配8.0安装app-->
@@ -62,14 +66,24 @@
         tools:replace="android:allowBackup,android:networkSecurityConfig"
         tools:targetApi="m">
         <activity
-            android:name=".ui.main.views.activity.MainActivity"
-            android:exported="true">
+            android:name=".ui.main.views.activity.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.main.views.activity.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.login.views.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
 
 
         <!-- 适配7.0获取uri路径 -->
