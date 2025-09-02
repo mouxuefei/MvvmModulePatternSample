@@ -100,4 +100,6 @@ dependencies {
     implementation project(':core_common')
     implementation project(':core_network')
     implementation project(':feature_im')
+    implementation project(':feature_business')
+    implementation project(':feature_ai')
 }
