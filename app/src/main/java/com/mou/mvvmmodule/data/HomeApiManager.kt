@@ -1,10 +1,10 @@
 package com.mou.mvvmmodule.data
 
-import com.mou.basemvvm.BaseApplication
+import com.core.basemvvm.BaseApplication
 import com.mou.mvvmmodule.data.api.ApiService
-import com.mou.network.BaseUrlConstants
-import com.mou.network.NetMgr
-import com.mou.network.provider.BaseNetProvider
+import com.core.network.BaseUrlConstants
+import com.core.network.NetMgr
+import com.core.network.provider.BaseNetProvider
 
 /**
  * @FileName: HomeApiManager.java

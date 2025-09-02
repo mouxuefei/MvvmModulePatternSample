@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace "com.mou.basemvvm"
+    namespace "com.core.basemvvm"
     compileSdk 34
     defaultConfig {
         minSdkVersion 21

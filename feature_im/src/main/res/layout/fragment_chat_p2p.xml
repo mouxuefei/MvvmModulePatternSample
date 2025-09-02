@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.fortunes.commonsdk.view.toolbar.MyToolBarLayout
+    <com.core.commonsdk.view.toolbar.MyToolBarLayout
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

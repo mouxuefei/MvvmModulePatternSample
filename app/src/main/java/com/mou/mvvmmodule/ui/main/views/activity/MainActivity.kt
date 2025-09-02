@@ -3,7 +3,7 @@ package com.mou.mvvmmodule.ui.main.views.activity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.fortunes.commonsdk.base.BaseActivity
+import com.core.commonsdk.base.BaseActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding

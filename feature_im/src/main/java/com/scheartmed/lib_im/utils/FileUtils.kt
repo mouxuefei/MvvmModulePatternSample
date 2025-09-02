@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
-import com.mou.basemvvm.BaseApplication
+import com.core.basemvvm.BaseApplication
 import java.io.File
 import java.io.FileOutputStream
 

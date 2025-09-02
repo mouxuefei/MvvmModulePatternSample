@@ -1,7 +1,6 @@
 package com.mou.mvvmmodule.ui.login.views
 
-import androidx.viewbinding.ViewBinding
-import com.fortunes.commonsdk.base.BaseActivity
+import com.core.commonsdk.base.BaseActivity
 import com.mou.mvvmmodule.databinding.ActivityLoginBinding
 import com.mou.mvvmmodule.ui.login.viewmodel.LoginViewModel
 

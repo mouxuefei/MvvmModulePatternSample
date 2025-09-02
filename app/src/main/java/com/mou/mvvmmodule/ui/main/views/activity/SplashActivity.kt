@@ -7,8 +7,8 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
-import com.fortunes.commonsdk.base.BaseActivity
-import com.mou.basemvvm.mvvm.EmptyViewModel
+import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.mvvm.EmptyViewModel
 import com.mou.mvvmmodule.databinding.ActivitySplashBinding
 import com.mou.mvvmmodule.ui.login.views.LoginActivity
 import kotlinx.coroutines.launch

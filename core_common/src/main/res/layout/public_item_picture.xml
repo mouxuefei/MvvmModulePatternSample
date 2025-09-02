@@ -6,7 +6,7 @@
              android:background="#000">
 
 
-    <com.fortunes.commonsdk.view.photoviewer.photoview.PhotoView
+    <com.core.commonsdk.view.photoviewer.photoview.PhotoView
         android:id="@+id/mIv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

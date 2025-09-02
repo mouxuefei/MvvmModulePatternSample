@@ -1,9 +1,9 @@
 package com.scheartmed.lib_im.data
 
-import com.mou.basemvvm.BaseApplication
-import com.mou.network.BaseUrlConstants
-import com.mou.network.NetMgr
-import com.mou.network.provider.BaseNetProvider
+import com.core.basemvvm.BaseApplication
+import com.core.network.BaseUrlConstants
+import com.core.network.NetMgr
+import com.core.network.provider.BaseNetProvider
 import com.scheartmed.lib_im.data.api.ChatService
 
 /**

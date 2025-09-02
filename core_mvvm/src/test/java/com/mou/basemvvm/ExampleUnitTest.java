@@ -1,4 +1,4 @@
-package com.mou.basemvvm;
+package com.core.basemvvm;
 
 import org.junit.Test;
 

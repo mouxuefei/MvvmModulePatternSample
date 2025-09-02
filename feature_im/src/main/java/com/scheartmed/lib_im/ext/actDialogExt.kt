@@ -3,9 +3,9 @@ package com.scheartmed.lib_im.ext
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.fortunes.commonsdk.view.dialog.TipDialogEntity
-import com.fortunes.commonsdk.view.dialog.TipDialogType
-import com.fortunes.commonsdk.view.dialog.showTipDialog
+import com.core.commonsdk.view.dialog.TipDialogEntity
+import com.core.commonsdk.view.dialog.TipDialogType
+import com.core.commonsdk.view.dialog.showTipDialog
 import com.scheartmed.lib_im.R
 
 /**

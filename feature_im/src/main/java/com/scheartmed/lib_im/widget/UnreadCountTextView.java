@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 
 
-import com.fortunes.commonsdk.utils.ScreenUtils;
+import com.core.commonsdk.utils.ScreenUtils;
 import com.scheartmed.lib_im.R;
 
 import androidx.appcompat.widget.AppCompatTextView;

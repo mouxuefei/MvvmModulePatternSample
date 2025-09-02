@@ -1,7 +1,7 @@
 package com.mou.mvvmmodule.ui.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.mou.basemvvm.mvvm.BaseViewModel
+import com.core.basemvvm.mvvm.BaseViewModel
 import com.mou.mvvmmodule.data.HomeApiManager
 import com.orhanobut.logger.Logger
 

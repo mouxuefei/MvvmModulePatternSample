@@ -1,7 +1,7 @@
 package com.mou.mvvmmodule.core
 
-import com.fortunes.commonsdk.utils.SpUtil
-import com.mou.basemvvm.BaseApplication
+import com.core.commonsdk.utils.SpUtil
+import com.core.basemvvm.BaseApplication
 import com.mou.mvvmmodule.ui.main.views.activity.MainActivity
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.SDKOptions

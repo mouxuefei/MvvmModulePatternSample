@@ -107,7 +107,7 @@
 
         <!--项目Application运行的初始化文件-->
         <meta-data
-            android:name="com.fortunes.commonsdk.core.GlobalConfiguration"
+            android:name="com.core.commonsdk.core.GlobalConfiguration"
             android:value="ConfigModule" />
 
         <!-- 告知 XXPermissions 当前项目已经适配了分区存储特性 -->

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.mou.network'
+    namespace 'com.core.network'
     compileSdk 34
 
     defaultConfig {

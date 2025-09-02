@@ -3,7 +3,7 @@ package com.scheartmed.lib_im.utils;
 import android.content.Context;
 
 
-import com.mou.basemvvm.BaseApplication;
+import com.core.basemvvm.BaseApplication;
 import com.scheartmed.lib_im.R;
 
 import java.text.ParseException;

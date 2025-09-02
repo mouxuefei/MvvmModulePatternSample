@@ -17,12 +17,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
-import com.fortunes.commonsdk.base.BaseFragment
+import com.core.commonsdk.base.BaseFragment
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
-import com.mou.basemvvm.BaseApplication
+import com.core.basemvvm.BaseApplication
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
@@ -41,7 +41,6 @@ import com.orhanobut.logger.Logger
 import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.data.model.ChatSession
-import com.scheartmed.lib_im.databinding.ActivityChatP2pBinding
 import com.scheartmed.lib_im.databinding.FragmentChatP2pBinding
 import com.scheartmed.lib_im.ext.retrySendMessageDialog
 import com.scheartmed.lib_im.listener.CustomMessageListener

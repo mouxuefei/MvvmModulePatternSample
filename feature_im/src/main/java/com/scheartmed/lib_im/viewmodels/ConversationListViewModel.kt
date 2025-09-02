@@ -1,6 +1,6 @@
 package com.scheartmed.lib_im.viewmodels
 
-import com.mou.basemvvm.mvvm.BaseViewModel
+import com.core.basemvvm.mvvm.BaseViewModel
 
 /**
  * @FileName: ConversationListViewModel.java
@@ -9,5 +9,5 @@ import com.mou.basemvvm.mvvm.BaseViewModel
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class ConversationListViewModel:BaseViewModel() {
+class ConversationListViewModel: BaseViewModel() {
 }

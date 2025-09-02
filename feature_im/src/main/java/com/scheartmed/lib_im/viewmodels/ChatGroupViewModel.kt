@@ -1,6 +1,6 @@
 package com.scheartmed.lib_im.viewmodels
 
-import com.mou.basemvvm.mvvm.BaseViewModel
+import com.core.basemvvm.mvvm.BaseViewModel
 
 /**
  * @FileName: ChatGroupViewModel.java

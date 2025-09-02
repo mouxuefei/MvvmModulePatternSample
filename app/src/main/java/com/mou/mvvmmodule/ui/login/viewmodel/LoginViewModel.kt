@@ -1,6 +1,6 @@
 package com.mou.mvvmmodule.ui.login.viewmodel
 
-import com.mou.basemvvm.mvvm.BaseViewModel
+import com.core.basemvvm.mvvm.BaseViewModel
 
 /**
  * @FileName: LoginViewmodel.java

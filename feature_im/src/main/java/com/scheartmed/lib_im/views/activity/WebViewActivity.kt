@@ -1,7 +1,6 @@
 package com.scheartmed.lib_im.views.activity
 
 import android.content.Context
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
@@ -11,11 +10,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.viewbinding.ViewBinding
-import com.fortunes.commonsdk.base.BaseActivity
-import com.mou.basemvvm.mvvm.BaseViewModel
-import com.mou.basemvvm.mvvm.EmptyViewModel
+import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.mvvm.EmptyViewModel
 import com.scheartmed.lib_im.databinding.ActivityWebviewBinding
 import com.scheartmed.lib_im.widget.WebViewPool
 
@@ -32,7 +28,7 @@ class WebViewActivity : BaseActivity<EmptyViewModel>() {
         ActivityWebviewBinding.inflate(layoutInflater)
     }
 
-    override fun providerVMClass(): Class<EmptyViewModel>? =EmptyViewModel::class.java
+    override fun providerVMClass(): Class<EmptyViewModel>? = EmptyViewModel::class.java
 
     private var webView: WebView? = null
 

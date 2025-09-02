@@ -1,4 +1,4 @@
-package com.mou.network
+package com.core.network
 
 import org.junit.Test
 

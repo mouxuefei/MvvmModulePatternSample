@@ -1,6 +1,6 @@
 package com.scheartmed.lib_im.data.api
 
-import com.mou.network.bean.BaseBean
+import com.core.network.bean.BaseBean
 import com.scheartmed.lib_im.data.model.ChatBean
 import retrofit2.http.GET
 

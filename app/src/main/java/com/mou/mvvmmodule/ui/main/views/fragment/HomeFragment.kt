@@ -1,8 +1,8 @@
 package com.mou.mvvmmodule.ui.main.views.fragment
 
 import android.os.Bundle
-import com.fortunes.commonsdk.base.BaseFragment
-import com.fortunes.commonsdk.utils.ActRouter
+import com.core.commonsdk.base.BaseFragment
+import com.core.commonsdk.utils.ActRouter
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.HomeFragmentViewModel
 import com.netease.nimlib.sdk.NIMClient

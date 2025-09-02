@@ -1,4 +1,4 @@
-package com.fortunes.commonsdk;
+package com.core.commonsdk;
 
 import org.junit.Test;
 
