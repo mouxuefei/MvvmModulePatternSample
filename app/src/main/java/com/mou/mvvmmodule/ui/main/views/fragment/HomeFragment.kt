@@ -14,8 +14,8 @@ import com.netease.nimlib.sdk.v2.auth.enums.V2NIMLoginStatus
 import com.netease.nimlib.sdk.v2.auth.model.V2NIMKickedOfflineDetail
 import com.netease.nimlib.sdk.v2.auth.model.V2NIMLoginClient
 import com.orhanobut.logger.Logger
-import com.scheartmed.lib_im.views.activity.ChatP2PActivity
-import com.scheartmed.lib_im.views.activity.ConversationListActivity
+import com.scheartmed.im.views.activity.ChatP2PActivity
+import com.scheartmed.im.views.activity.ConversationListActivity
 
 
 /**

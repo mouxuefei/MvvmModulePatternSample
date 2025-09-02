@@ -6,7 +6,7 @@
     android:background="#000">
 
 
-    <com.scheartmed.lib_im.widget.photoviewerlibrary.photoview.PhotoView
+    <com.scheartmed.im.widget.photoviewerlibrary.photoview.PhotoView
         android:id="@+id/mIv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

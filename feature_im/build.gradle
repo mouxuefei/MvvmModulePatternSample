@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.scheartmed.lib_im'
+    namespace 'com.scheartmed.im'
     compileSdk 34
 
     defaultConfig {

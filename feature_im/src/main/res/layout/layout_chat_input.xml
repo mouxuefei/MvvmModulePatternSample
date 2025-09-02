@@ -45,7 +45,7 @@
                 android:textCursorDrawable="@drawable/shape_cursor"
                 android:textSize="14sp" />
 
-            <com.scheartmed.lib_im.widget.RecordButton
+            <com.scheartmed.im.widget.RecordButton
                 android:id="@+id/btnAudio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -72,7 +72,7 @@
             android:layout_marginRight="14px"
             android:background="@mipmap/ic_add" />
 
-        <com.scheartmed.lib_im.widget.StateButton
+        <com.scheartmed.im.widget.StateButton
             android:id="@+id/btnSend"
             android:layout_width="50dp"
             android:layout_height="30dp"

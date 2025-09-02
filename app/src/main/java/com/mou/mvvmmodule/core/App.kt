@@ -8,7 +8,7 @@ import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.StatusBarNotificationConfig
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.util.NIMUtil
-import com.scheartmed.lib_im.widget.WebViewPool
+import com.scheartmed.im.widget.WebViewPool
 
 
 class App : BaseApplication() {

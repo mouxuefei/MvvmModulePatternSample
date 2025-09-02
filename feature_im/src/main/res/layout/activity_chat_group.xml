@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
-                <com.scheartmed.lib_im.widget.emoji.ExpressLayout
+                <com.scheartmed.im.widget.emoji.ExpressLayout
                     android:id="@+id/layoutExpress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

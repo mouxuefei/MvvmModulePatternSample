@@ -11,7 +11,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="15dp"/>
 
-    <com.scheartmed.lib_im.widget.emoji.IndicatorView
+    <com.scheartmed.im.widget.emoji.IndicatorView
         android:id="@+id/indicator_view"
         android:layout_width="match_parent"
         android:layout_height="20dp"
