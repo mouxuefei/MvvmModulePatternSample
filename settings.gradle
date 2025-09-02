@@ -23,4 +23,4 @@ dependencyResolutionManagement {
     }
 }
 
-include ':app', ':lib_basemvvm', ':lib_common', ':lib_im'
+include ':app', ':core_mvvm', ':core_common',':core_network', ':feature_im'

@@ -1,10 +1,10 @@
-package com.mou.mvvmmodule.data
+package com.scheartmed.lib_im.data
 
 import com.mou.basemvvm.BaseApplication
-import com.mou.mvvmmodule.data.api.ApiService
 import com.mou.network.BaseUrlConstants
 import com.mou.network.NetMgr
 import com.mou.network.provider.BaseNetProvider
+import com.scheartmed.lib_im.data.api.ChatService
 
 /**
  * @FileName: HomeApiManager.java
@@ -13,11 +13,11 @@ import com.mou.network.provider.BaseNetProvider
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-object HomeApiManager {
+object ChatApiManager {
     val apiService by lazy {
         NetMgr.getRetrofit(
                 BaseUrlConstants.getBaseUrl(),
                 BaseNetProvider(BaseApplication.instance())
-        ).create(ApiService::class.java)
+        ).create(ChatService::class.java)
     }
 }
