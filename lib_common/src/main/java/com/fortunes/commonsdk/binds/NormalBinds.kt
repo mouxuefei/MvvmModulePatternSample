@@ -98,7 +98,6 @@ fun bindRefreshing(smartRefreshLayout: SmartRefreshLayout, @RefreshType refreshT
         RefreshType.NOTMORE -> smartRefreshLayout.finishLoadMoreWithNoMoreData()
         RefreshType.REFRESHFAIL -> smartRefreshLayout.finishRefresh(false)
         RefreshType.LOADMOREFAIL -> smartRefreshLayout.finishLoadMore(false)
-        RefreshType.NORMAL -> {
-        }
+        RefreshType.NORMAL -> {}
     }
 }

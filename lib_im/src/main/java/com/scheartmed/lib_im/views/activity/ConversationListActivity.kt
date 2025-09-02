@@ -1,8 +1,6 @@
-package com.scheartmed.lib_im.views
+package com.scheartmed.lib_im.views.activity
 
-import androidx.viewbinding.ViewBinding
 import com.fortunes.commonsdk.base.BaseActivity
-import com.scheartmed.lib_im.databinding.ActivityChatP2pBinding
 import com.scheartmed.lib_im.databinding.ActivityConversationListBinding
 import com.scheartmed.lib_im.viewmodels.ConversationListViewModel
 

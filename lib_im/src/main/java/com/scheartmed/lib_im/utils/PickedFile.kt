@@ -85,7 +85,7 @@ class FilePickerAndSender(caller: ActivityResultCaller, private val context: Con
             }
             val inputStream = context.contentResolver.openInputStream(uri) ?: return null
             val fileName = queryFileName(context, uri) ?: "temp_file"
-            val cacheFile = File(context.cacheDir, fileName)
+            val cacheFile = File(FileUtils.getFileCachePath(), fileName)
             copyInputStreamToFile(inputStream, cacheFile)
             cacheFile
         } catch (e: Exception) {

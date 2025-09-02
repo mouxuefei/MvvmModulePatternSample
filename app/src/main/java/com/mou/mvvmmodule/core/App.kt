@@ -2,13 +2,11 @@ package com.mou.mvvmmodule.core
 
 import com.fortunes.commonsdk.utils.SpUtil
 import com.mou.basemvvm.BaseApplication
-import com.mou.mvvmmodule.ui.main.views.MainActivity
+import com.mou.mvvmmodule.ui.main.views.activity.MainActivity
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.StatusBarNotificationConfig
-import com.netease.nimlib.sdk.StatusBarNotificationFilter
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
-import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.scheartmed.lib_im.widget.WebViewPool
 

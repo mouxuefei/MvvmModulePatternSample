@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.ui.main.views
+package com.mou.mvvmmodule.ui.main.views.activity
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
+import com.mou.mvvmmodule.ui.main.views.fragment.HomeFragment
 
 class MainActivity : BaseActivity<MainViewModel>() {
     override val binding: ActivityMainBinding by lazy {

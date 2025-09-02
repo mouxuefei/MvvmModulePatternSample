@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.views
+package com.scheartmed.lib_im.views.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,13 +10,14 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
-import com.fortunes.commonsdk.base.BaseActivity
+import com.fortunes.commonsdk.base.BaseFragment
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
@@ -41,16 +42,19 @@ import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem
 import com.scheartmed.lib_im.data.model.ChatSession
 import com.scheartmed.lib_im.databinding.ActivityChatP2pBinding
+import com.scheartmed.lib_im.databinding.FragmentChatP2pBinding
 import com.scheartmed.lib_im.ext.retrySendMessageDialog
 import com.scheartmed.lib_im.listener.CustomMessageListener
 import com.scheartmed.lib_im.utils.ChatMsgHandler
-import com.scheartmed.lib_im.utils.ChatMsgHandler.TEN_MINUTE
 import com.scheartmed.lib_im.utils.FilePickerAndSender
 import com.scheartmed.lib_im.utils.FileUtils
 import com.scheartmed.lib_im.utils.GlideEngine
 import com.scheartmed.lib_im.utils.ImageFileCompressEngine
 import com.scheartmed.lib_im.utils.MediaManager
 import com.scheartmed.lib_im.viewmodels.ChatP2PViewModel
+import com.scheartmed.lib_im.views.activity.PhotoViewerActivity
+import com.scheartmed.lib_im.views.activity.VideoPlayerActivity
+import com.scheartmed.lib_im.views.activity.WebViewActivity
 import com.scheartmed.lib_im.views.adapter.ChatAdapter
 import com.scheartmed.lib_im.widget.ChatContextMenu
 import com.scheartmed.lib_im.widget.ChatUiHelper
@@ -58,20 +62,20 @@ import com.scheartmed.lib_im.widget.RelativePopupWindow
 import com.scheartmed.lib_im.widget.morelayout.MoreLayoutItemBean
 import java.io.File
 
-
 /**
- * @FileName: ChatP2PActivity.java
+ * @FileName: ChatP2PFragment.java
  * @author: villa_mou
- * @date: 08-13:45
+ * @date: 09-09:07
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
-    override val binding: ActivityChatP2pBinding by lazy {
-        ActivityChatP2pBinding.inflate(layoutInflater)
+class ChatP2PFragment : BaseFragment<ChatP2PViewModel>() {
+    override val binding: FragmentChatP2pBinding by lazy {
+        FragmentChatP2pBinding.inflate(layoutInflater)
     }
 
     override fun providerVMClass(): Class<ChatP2PViewModel> = ChatP2PViewModel::class.java
+
     private var mAdapter: ChatAdapter? = null
     private var mChatUiHelper: ChatUiHelper? = null
     private lateinit var mChatHandler: ChatMsgHandler
@@ -88,7 +92,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
         // 判断是否需要添加时间消息
         private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
-            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && imMessage.senderId == mChatSession.chatInfo?.accountId && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > TEN_MINUTE))
+            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && imMessage.senderId == mChatSession.chatInfo?.accountId && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
         }
 
         override fun onReceiveMessages(messages: MutableList<V2NIMMessage>) {
@@ -156,8 +160,29 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     }
 
     private fun initTitleBar() {
-        val chatId = intent.extras?.getString("account")
-        binding.titleBar.setTitle(chatId ?: "")
+        binding.titleBar.setTitle(getChatId())
+    }
+
+    fun onNewIntent(intent: Intent) {
+
+//        anchorMessage =
+//            intent.getSerializableExtra(RouterConstant.KEY_MESSAGE_INFO) as IMMessageInfo?
+//        if (anchorMessage == null) {
+//            val message = intent.getSerializableExtra(RouterConstant.KEY_MESSAGE) as V2NIMMessage?
+//            if (message != null) {
+//                anchorMessage = IMMessageInfo(message)
+//            }
+//        }
+//        loadAnchorMessage()
+    }
+
+    private fun getChatId(): String {
+        val arguments = arguments
+        var chatId = ""
+        arguments?.let {
+            chatId = it.getString("account") ?: ""
+        }
+        return chatId
     }
 
 
@@ -225,7 +250,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     }
 
     private fun createChatSession() {
-        val chatId = intent.extras?.getString("account")
+        val chatId = getChatId()
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
@@ -235,14 +260,14 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         mChatSession.myInfo = myUsrInfo
         mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
         mChatSession.conversationId = V2NIMConversationIdUtil.p2pConversationId(chatId)
-        mChatHandler = ChatMsgHandler(this)
+        mChatHandler = ChatMsgHandler(context)
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initChatUi() {
-        filePickerSender = FilePickerAndSender(this@ChatP2PActivity, this@ChatP2PActivity)
-        mChatUiHelper = ChatUiHelper.with(this)
+        filePickerSender = context?.let { FilePickerAndSender(this@ChatP2PFragment, it) }!!
+        mChatUiHelper = ChatUiHelper.with(activity)
         val data = arrayListOf<MoreLayoutItemBean>()
         data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
         data.add(MoreLayoutItemBean("im_camera", R.mipmap.edy_im_xiazhenduan))
@@ -420,7 +445,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         }
         if (mMsgList.isNotEmpty()) {
             val item = mMsgList[mMsgList.size - 1]
-            if (item is MessageItem.SdkMessage && newMessage.createTime - item.message.createTime > TEN_MINUTE) {
+            if (item is MessageItem.SdkMessage && newMessage.createTime - item.message.createTime > ChatMsgHandler.TEN_MINUTE) {
                 mMsgList.add(mChatHandler.createTimeMessage(newMessage))
             }
         }
@@ -432,8 +457,8 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     private fun initRecyclerView() {
         mMsgList = arrayListOf()
-        mAdapter =
-            ChatAdapter(this, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P).apply {
+        mAdapter = context?.let {
+            ChatAdapter(it, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P).apply {
                 addChildClickViewIds(
                     R.id.chat_item_header,
                     R.id.chat_item_layout_content,
@@ -441,6 +466,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 )
                 addChildLongClickViewIds(R.id.chat_item_layout_content)
             }
+        }
         binding.rvChatList.adapter = mAdapter
         mAdapter?.setOnItemChildClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as MessageItem
@@ -489,13 +515,12 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     }
 
     private fun dealAdapterChildItemLoongClick(
-        view: View,
-        item: MessageItem.SdkMessage,
-        position: Int
+        view: View, item: MessageItem.SdkMessage, position: Int
     ) {
         val chatContextMenu = ChatContextMenu(view.context)
         chatContextMenu.showOnAnchor(
-            view, RelativePopupWindow.VerticalPosition.ABOVE,
+            view,
+            RelativePopupWindow.VerticalPosition.ABOVE,
             RelativePopupWindow.HorizontalPosition.CENTER
         )
     }
@@ -514,8 +539,9 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
                 }
                 //失败按钮
                 R.id.chat_item_fail -> {
+                    val appCompatActivity = activity as AppCompatActivity
                     //TODO：
-                    retrySendMessageDialog {
+                    appCompatActivity.retrySendMessageDialog {
                         sendMessage(item.message, true)
                     }
                 }
@@ -550,7 +576,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
     private fun onPressShowFile(item: MessageItem.SdkMessage) {
         val v2NIMMessageFileAttachment = item.message.attachment as V2NIMMessageFileAttachment
         Logger.e("file url " + v2NIMMessageFileAttachment.url)
-        val intent = Intent(this, WebViewActivity::class.java)
+        val intent = Intent(context, WebViewActivity::class.java)
         intent.putExtra("url", v2NIMMessageFileAttachment.url)
         startActivity(intent)
 //        try {
@@ -566,7 +592,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {
         val v2NIMMessageVideoAttachment = item.message.attachment as V2NIMMessageVideoAttachment
-        val intent = Intent(this, VideoPlayerActivity::class.java)
+        val intent = Intent(context, VideoPlayerActivity::class.java)
         intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
         startActivity(intent)
     }
@@ -599,7 +625,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         }
         mNewGifDrawable?.start()
         val v2NIMMessageAudioAttachment = msg.message.attachment as V2NIMMessageAudioAttachment
-        MediaManager.playSound(this@ChatP2PActivity, v2NIMMessageAudioAttachment.url, {
+        MediaManager.playSound(context, v2NIMMessageAudioAttachment.url, {
             mNewGifDrawable?.stop()
             if (msg.message.isSelf) {
                 mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_right)
@@ -636,7 +662,7 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
 
             }
         }
-        val intent = Intent(this, PhotoViewerActivity::class.java).apply {
+        val intent = Intent(context, PhotoViewerActivity::class.java).apply {
             putStringArrayListExtra(PhotoViewerActivity.EXTRA_IMAGE_URLS, ArrayList(pathList))
             putExtra(PhotoViewerActivity.EXTRA_POSITION, position)
         }
@@ -648,6 +674,4 @@ class ChatP2PActivity : BaseActivity<ChatP2PViewModel>() {
         super.onDestroy()
         NIMClient.getService(V2NIMMessageService::class.java).removeMessageListener(messageListener)
     }
-
-
 }

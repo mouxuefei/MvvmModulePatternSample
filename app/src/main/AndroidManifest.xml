@@ -62,7 +62,7 @@
         tools:replace="android:allowBackup,android:networkSecurityConfig"
         tools:targetApi="m">
         <activity
-            android:name=".ui.main.views.MainActivity"
+            android:name=".ui.main.views.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

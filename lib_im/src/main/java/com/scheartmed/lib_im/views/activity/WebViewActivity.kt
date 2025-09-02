@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.views
+package com.scheartmed.lib_im.views.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,12 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
+import com.fortunes.commonsdk.base.BaseActivity
+import com.mou.basemvvm.mvvm.BaseViewModel
+import com.mou.basemvvm.mvvm.EmptyViewModel
 import com.scheartmed.lib_im.databinding.ActivityWebviewBinding
 import com.scheartmed.lib_im.widget.WebViewPool
 
@@ -23,20 +26,27 @@ import com.scheartmed.lib_im.widget.WebViewPool
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class WebViewActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityWebviewBinding
+class WebViewActivity : BaseActivity<EmptyViewModel>() {
+
+    override val binding: ActivityWebviewBinding by lazy {
+        ActivityWebviewBinding.inflate(layoutInflater)
+    }
+
+    override fun providerVMClass(): Class<EmptyViewModel>? =EmptyViewModel::class.java
+
     private var webView: WebView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityWebviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initView() {
         webView = WebViewPool.getInstance(this).getWebView()
         webView?.clearHistory()
         binding.webViewContainer.addView(webView)
         initWebView()
         val url = intent.getStringExtra("url") ?: ""
         webView?.loadUrl(url)
+    }
+
+    override fun initData() {
+
     }
 
     private fun initWebView() {
@@ -67,6 +77,8 @@ class WebViewActivity : AppCompatActivity() {
             (it.parent as? ViewGroup)?.removeView(it)
         }
     }
+
+
 
     // 原生与 H5互调桥梁
     class JSBridge(private val context: Context) {

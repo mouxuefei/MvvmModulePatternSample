@@ -1,4 +1,4 @@
-package com.scheartmed.lib_im.views
+package com.scheartmed.lib_im.views.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,7 +12,6 @@ import android.view.ViewTreeObserver
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -35,7 +34,6 @@ import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult
 import com.netease.nimlib.sdk.v2.user.V2NIMUserService
-import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil
 import com.orhanobut.logger.Logger
 import com.scheartmed.lib_im.R
 import com.scheartmed.lib_im.data.MessageItem

@@ -20,6 +20,8 @@ import java.io.FileOutputStream
 object FileUtils {
     private const val VOICE_DIR_SUFFIX = "/voice/"
     private const val IMAGE_DIR_SUFFIX = "/image/"
+    private const val VIDEO_DIR_SUFFIX = "/video/"
+    private const val FILE_DIR_SUFFIX = "/file/"
 
     private fun defaultAppDir(): String {
         return BaseApplication.instance().filesDir.absolutePath
@@ -41,10 +43,26 @@ object FileUtils {
         return file.absolutePath
     }
 
+    fun getVideoCachePath(): String {
+        val file = File(defaultAppDir() + VIDEO_DIR_SUFFIX)
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file.absolutePath
+    }
+
+    fun getFileCachePath(): String {
+        val file = File(defaultAppDir() + FILE_DIR_SUFFIX)
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file.absolutePath
+    }
+
     fun copyVideoToCache(context: Context, uri: Uri): File? {
         return try {
             val fileName = queryDisplayName(context, uri) ?: "${System.currentTimeMillis()}.mp4"
-            val file = File(context.cacheDir, fileName)
+            val file = File(getVideoCachePath(), fileName)
 
             context.contentResolver.openInputStream(uri)?.use { input ->
                 FileOutputStream(file).use { output ->
@@ -75,7 +93,7 @@ object FileUtils {
         val bitmap = retriever.getFrameAtTime(0)
         retriever.release()
 
-        val thumbFile = File(context.cacheDir, "${System.currentTimeMillis()}_thumb.jpg")
+        val thumbFile = File(getVideoCachePath(), "${System.currentTimeMillis()}_thumb.jpg")
         FileOutputStream(thumbFile).use { fos ->
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, fos)
         }

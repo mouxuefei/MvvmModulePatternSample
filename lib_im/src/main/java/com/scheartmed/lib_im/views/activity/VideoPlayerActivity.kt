@@ -1,10 +1,8 @@
-package com.scheartmed.lib_im.views
+package com.scheartmed.lib_im.views.activity
 
 import android.content.pm.ActivityInfo
-import android.media.browse.MediaBrowser
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
