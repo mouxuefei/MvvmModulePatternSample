@@ -22,7 +22,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     override fun initView() {
         binding.btnLogin.setOnClickListener {
-            ActRouter.startActivity(this, QRScanActivity::class.java)
+            ActRouter.startActivity(this, MainActivity::class.java)
             // 在 Activity 中
 
         }

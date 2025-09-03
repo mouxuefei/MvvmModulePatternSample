@@ -8,6 +8,7 @@ import com.core.basemvvm.mvvm.BaseViewModel
 import com.core.basemvvm.mvvm.IActivity
 import com.core.basemvvm.mvvm.IView
 import com.core.basemvvm.widget.LoadDialog
+import org.greenrobot.eventbus.EventBus
 
 /***
  *

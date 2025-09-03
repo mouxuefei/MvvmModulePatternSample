@@ -9,5 +9,5 @@ import com.core.basemvvm.mvvm.BaseViewModel
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class ChatP2PViewModel: BaseViewModel() {
+class ChatViewModel: BaseViewModel() {
 }

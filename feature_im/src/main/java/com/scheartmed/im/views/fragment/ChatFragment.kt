@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -28,7 +29,7 @@ import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
-import com.netease.nimlib.sdk.v2.message.V2NIMP2PMessageReadReceipt
+import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceipt
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
@@ -36,12 +37,12 @@ import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult
 import com.netease.nimlib.sdk.v2.user.V2NIMUserService
-import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil
 import com.orhanobut.logger.Logger
 import com.scheartmed.im.R
 import com.scheartmed.im.data.MessageItem
 import com.scheartmed.im.data.model.ChatSession
 import com.scheartmed.im.databinding.FragmentChatBinding
+import com.scheartmed.im.event.BottomBarEvent
 import com.scheartmed.im.ext.retrySendMessageDialog
 import com.scheartmed.im.listener.CustomMessageListener
 import com.scheartmed.im.utils.ChatMsgHandler
@@ -59,16 +60,16 @@ import com.scheartmed.im.widget.ChatContextMenu
 import com.scheartmed.im.widget.ChatUiHelper
 import com.scheartmed.im.widget.RelativePopupWindow
 import com.scheartmed.im.widget.morelayout.MoreLayoutItemBean
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 
 /**
- * @FileName: ChatP2PFragment.java
  * @author: villa_mou
  * @date: 09-09:07
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class ChatP2PFragment : BaseFragment<ChatViewModel>() {
+class ChatFragment : BaseFragment<ChatViewModel>() {
     override val binding: FragmentChatBinding by lazy {
         FragmentChatBinding.inflate(layoutInflater)
     }
@@ -91,7 +92,7 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
 
         // 判断是否需要添加时间消息
         private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
-            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && imMessage.senderId == mChatSession.chatInfo?.accountId && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
+            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
         }
 
         override fun onReceiveMessages(messages: MutableList<V2NIMMessage>) {
@@ -100,7 +101,7 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
                 mMsgList.add(mChatHandler.createTimeMessage(messages[0]))
             }
             val newMessages = messages.filter {
-                it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P && it.senderId == mChatSession.chatInfo?.accountId
+                it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
             }
             newMessages.forEach {
                 mMsgList.add(MessageItem.SdkMessage(it))
@@ -109,16 +110,13 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
                 mAdapter?.notifyDataSetChanged()
                 binding.rvChatList.layoutManager?.scrollToPosition(mMsgList.size - 1)
             }
-            messages.forEach {
-                if (!it.isSelf) {
-                    NIMClient.getService(V2NIMMessageService::class.java)
-                        .sendP2PMessageReceipt(it, { }) { }
-                }
-            }
+
+            //TODO: 发送已读回执
+
         }
 
-        override fun onReceiveP2PMessageReadReceipts(readReceipts: MutableList<V2NIMP2PMessageReadReceipt>) {
-            super.onReceiveP2PMessageReadReceipts(readReceipts)
+        override fun onReceiveTeamMessageReadReceipts(readReceipts: MutableList<V2NIMTeamMessageReadReceipt>) {
+            super.onReceiveTeamMessageReadReceipts(readReceipts)
             if (readReceipts.isNotEmpty()) {
                 //TODO:
                 mAdapter?.notifyDataSetChanged()
@@ -146,6 +144,12 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     }
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //解决崩溃
+        filePickerSender = context?.let { FilePickerAndSender(this@ChatFragment, it) }!!
+    }
+
     override fun initView() {
         initRecyclerView()
         initListener()
@@ -157,8 +161,8 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
         loadMessage()
     }
 
-
     fun onNewIntent(intent: Intent) {
+        //TODO:处理新消息
 
 //        anchorMessage =
 //            intent.getSerializableExtra(RouterConstant.KEY_MESSAGE_INFO) as IMMessageInfo?
@@ -171,13 +175,13 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
 //        loadAnchorMessage()
     }
 
-    private fun getChatId(): String {
+    private fun getConversationId(): String {
         val arguments = arguments
-        var chatId = ""
+        var conversationId = ""
         arguments?.let {
-            chatId = it.getString("account") ?: ""
+            conversationId = it.getString("conversationId") ?: ""
         }
-        return chatId
+        return conversationId
     }
 
 
@@ -200,8 +204,8 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
         val messages = it.messages
         messages.forEach {
             if (!it.isSelf) {
-                NIMClient.getService(V2NIMMessageService::class.java)
-                    .sendP2PMessageReceipt(it, { }) { }
+                //TODO 发送已读回执
+
             }
         }
         messages.reverse()
@@ -245,23 +249,27 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun createChatSession() {
-        val chatId = getChatId()
+        val conversationId = getConversationId()
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
-        val chatUserInfo = userService.getUserInfo(chatId).data
+        val chatUserInfo = userService.getUserInfo(conversationId).data
         mChatSession = ChatSession()
         mChatSession.chatInfo = chatUserInfo
         mChatSession.myInfo = myUsrInfo
-        mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
-        mChatSession.conversationId = V2NIMConversationIdUtil.p2pConversationId(chatId)
+        mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+        mChatSession.conversationId = conversationId
         mChatHandler = ChatMsgHandler(context)
 
     }
 
+    public fun getBottomLayoutIsShow(): Boolean {
+        return binding.bottomLayout.isShown()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initChatUi() {
-        filePickerSender = context?.let { FilePickerAndSender(this@ChatP2PFragment, it) }!!
+
         mChatUiHelper = ChatUiHelper.with(activity)
         val data = arrayListOf<MoreLayoutItemBean>()
         data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
@@ -272,7 +280,8 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
         mChatUiHelper?.bindContentLayout(binding.llContent)
             ?.bindToSendButton(binding.chatInputContainer.btnSend)
             ?.bindEditText(binding.chatInputContainer.etContent)
-            ?.bindBottomLayout(binding.bottomLayout)?.bindEmojiLayout(binding.layoutExpress)
+            ?.bindBottomLayout(binding.bottomLayout)
+            ?.bindEmojiLayout(binding.layoutExpress)
             ?.bindAddLayout(binding.llAdd.rootAddPanel)
             ?.bindToAddButton(binding.chatInputContainer.ivAdd)
             ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
@@ -405,6 +414,9 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
                 sendMessage(newMessage)
             }
         }
+        binding.chatInputContainer.etContent.setOnFocusChangeListener { _, hasFocus ->
+            EventBus.getDefault().post(BottomBarEvent(hasFocus))
+        }
     }
 
     private fun sendMessage(newMessage: V2NIMMessage, isRetry: Boolean = false) {
@@ -453,7 +465,7 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     private fun initRecyclerView() {
         mMsgList = arrayListOf()
         mAdapter = context?.let {
-            ChatAdapter(it, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P).apply {
+            ChatAdapter(it, mMsgList, V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM).apply {
                 addChildClickViewIds(
                     R.id.chat_item_header,
                     R.id.chat_item_layout_content,
@@ -569,20 +581,12 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun onPressShowFile(item: MessageItem.SdkMessage) {
+        //TODO:
         val v2NIMMessageFileAttachment = item.message.attachment as V2NIMMessageFileAttachment
         Logger.e("file url " + v2NIMMessageFileAttachment.url)
         val intent = Intent(context, WebViewActivity::class.java)
         intent.putExtra("url", v2NIMMessageFileAttachment.url)
         startActivity(intent)
-//        try {
-//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(v2NIMMessageFileAttachment.url))
-//            intent.addCategory(Intent.CATEGORY_BROWSABLE)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//            startActivity(intent)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "未找到可用的浏览器", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {

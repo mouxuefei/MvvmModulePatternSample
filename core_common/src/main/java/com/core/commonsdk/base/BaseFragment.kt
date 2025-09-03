@@ -63,6 +63,7 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment(), IView, IActivity {
     protected open fun reLoad() = false
 
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mContext = activity ?: throw Exception("activity is null")

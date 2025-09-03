@@ -1,5 +1,8 @@
 package com.mou.mvvmmodule.ui.main.views
 
+import android.graphics.Rect
+import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -7,11 +10,17 @@ import com.core.commonsdk.base.BaseActivity
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
-import com.mou.mvvmmodule.ui.main.views.doctor.MedicalResearchFragment
 import com.mou.mvvmmodule.ui.main.views.doctor.PatientManageFragment
-import com.mou.mvvmmodule.ui.main.views.doctor.WorkshopFragment
+import com.mou.mvvmmodule.ui.main.views.patient.FitFragment
+import com.mou.mvvmmodule.ui.main.views.patient.MessageFragment
+import com.mou.mvvmmodule.ui.main.views.patient.MineFragment
 import com.mou.mvvmmodule.widget.BottomBar
 import com.mou.mvvmmodule.widget.BottomBarTab
+import com.scheartmed.im.event.BottomBarEvent
+import com.scheartmed.im.views.fragment.ChatFragment
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class MainActivity : BaseActivity<MainViewModel>() {
@@ -21,8 +30,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private val fragmentList = arrayListOf<Fragment>()
     private val mainFragment by lazy { PatientManageFragment() }
-    private val blogFragment by lazy { MedicalResearchFragment() }
-    private val meFragment by lazy { WorkshopFragment() }
+    private val blogFragment by lazy { MessageFragment() }
+    private val meFragment by lazy { MineFragment() }
+    var isKeyboardVisible = false // 当前键盘状态
 
     private val bottomIds =
         arrayListOf<Int>(R.id.home, R.id.blog)
@@ -38,6 +48,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun providerVMClass() = MainViewModel::class.java
 
     override fun initView() {
+        EventBus.getDefault().register(this)
         initViewPager()
         binding.bottomBar.addItem(
             BottomBarTab(
@@ -94,6 +105,34 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 binding.bottomBar.setCurrentItem(position)
             }
         })
+
+        val rootView = findViewById<View>(android.R.id.content)
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+            val visible = keypadHeight > screenHeight * 0.15
+            if (visible != isKeyboardVisible) { // 状态变化才处理
+                isKeyboardVisible = visible
+                com.orhanobut.logger.Logger.d("keypadHeight = $keypadHeight")
+                rootView.post {
+                    if(visible){
+                        View.GONE
+                    }else{
+                        // 假设父 Fragment 的类是 ParentFragment
+                        val parentFragment = supportFragmentManager.findFragmentByTag("MessageFragment") as? MessageFragment
+                        val childFragment = parentFragment?.childFragmentManager?.findFragmentByTag("ChatFragment") as? ChatFragment
+                        childFragment?.let {
+                            com.orhanobut.logger.Logger.d("走了吗 = $keypadHeight")
+                        }
+                    }
+
+                    binding.bottomBar.visibility = if (visible) View.GONE else View.VISIBLE
+                }
+            }
+        }
+
     }
 
     override fun initData() {
@@ -103,6 +142,18 @@ class MainActivity : BaseActivity<MainViewModel>() {
     private fun switchFragment(position: Int, smoothScroll: Boolean): Boolean {
         binding.mainViewpager.setCurrentItem(position, smoothScroll)
         return true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: BottomBarEvent) {
+        if (event.isShow) {
+            binding.bottomBar.visibility = View.GONE
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }
