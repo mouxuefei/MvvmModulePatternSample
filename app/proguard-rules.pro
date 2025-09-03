@@ -67,3 +67,16 @@
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** { *; }
 -keep class jp.wasabeef.glide.transformations.** { *; }
 
+# 保留 ZXing 核心库
+-keep class com.google.zxing.** { *; }
+-dontwarn com.google.zxing.**
+
+# 保留 zxing-android-embedded
+-keep class com.journeyapps.barcodescanner.** { *; }
+-dontwarn com.journeyapps.barcodescanner.**
+
+# 如果使用了反射（一般不会），可以加上：
+-keepclassmembers class * {
+    @com.journeyapps.barcodescanner.* <fields>;
+}
+

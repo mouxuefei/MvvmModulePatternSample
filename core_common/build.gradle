@@ -12,11 +12,10 @@ android {
         viewBinding = true
     }
     defaultConfig {
-        minSdkVersion 24
-        targetSdk 34
-        versionCode 1000
-        versionName "1000"
-
+        minSdkVersion project.properties['MIN_SDK'].toInteger()
+        targetSdk project.properties['TARGET_SDK'].toInteger()
+        versionCode project.properties['APP_VERSION_CODE'].toInteger()
+        versionName project.properties['APP_VERSION_NAME']
     }
     buildTypes {
         release {
