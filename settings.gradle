@@ -25,4 +25,3 @@ dependencyResolutionManagement {
 
 include ':app', ':core_mvvm', ':core_common',':core_network', ':feature_im'
 include ':feature_business'
-include ':feature_ai'

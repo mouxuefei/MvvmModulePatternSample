@@ -9,7 +9,7 @@ android {
     namespace "com.core.basemvvm"
     compileSdk 34
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdk 34
         versionCode 1000
         versionName "1000"

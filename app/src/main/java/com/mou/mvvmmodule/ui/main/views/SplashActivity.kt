@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.ui.main.views.activity
+package com.mou.mvvmmodule.ui.main.views
 
 import android.content.Intent
 import android.view.animation.AccelerateDecelerateInterpolator

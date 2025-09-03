@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/container"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-	<androidx.viewpager2.widget.ViewPager2
-		android:id="@+id/mainViewpager"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1"/>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/mainViewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 
-	<com.google.android.material.bottomnavigation.BottomNavigationView
-		android:id="@+id/navView"
-		style="@style/Widget.Design.BottomNavigationView"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		app:menu="@menu/bottom_bar" />
+    <!--	<B-->
+    <!--		android:id="@+id/navView"-->
+    <!--		style="@style/Widget.Design.BottomNavigationView"-->
+    <!--		android:layout_width="match_parent"-->
+    <!--		android:layout_height="wrap_content"-->
+    <!--		app:menu="@menu/bottom_bar" />-->
+    <com.mou.mvvmmodule.widget.BottomBar
+        android:id="@+id/bottomBar"
+        android:background="@drawable/bg_bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.mou.mvvmmodule.ui.main.views.fragment
+package com.mou.mvvmmodule.ui.main.views.doctor
 
 import android.os.Bundle
 import com.core.commonsdk.base.BaseFragment
@@ -25,7 +25,7 @@ import com.scheartmed.im.views.activity.ConversationListActivity
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class HomeFragment : BaseFragment<HomeFragmentViewModel>() {
+class PatientManageFragment : BaseFragment<HomeFragmentViewModel>() {
     override val binding: FragmentHomeBinding by lazy {
         FragmentHomeBinding.inflate(layoutInflater)
     }

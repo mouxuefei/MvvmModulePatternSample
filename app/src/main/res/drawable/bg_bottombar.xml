@@ -1,0 +1,21 @@
+<!-- res/drawable/bg_with_top_divider.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 底层背景 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white"/>
+        </shape>
+    </item>
+
+    <!-- 上边缘分割线 -->
+    <item
+        android:top="0dp"
+        android:bottom="70dp"> <!-- bottom 写个大值保证线只在顶部 -->
+        <shape android:shape="rectangle">
+            <size android:height="1dp"/>
+            <solid android:color="@android:color/darker_gray"/>
+        </shape>
+    </item>
+
+</layer-list>

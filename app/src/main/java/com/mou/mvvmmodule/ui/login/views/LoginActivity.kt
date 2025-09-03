@@ -1,8 +1,12 @@
 package com.mou.mvvmmodule.ui.login.views
 
 import com.core.commonsdk.base.BaseActivity
+import com.core.commonsdk.utils.ActRouter
+import com.google.zxing.integration.android.IntentIntegrator
 import com.mou.mvvmmodule.databinding.ActivityLoginBinding
 import com.mou.mvvmmodule.ui.login.viewmodel.LoginViewModel
+import com.mou.mvvmmodule.ui.main.views.MainActivity
+import com.mou.mvvmmodule.ui.main.views.QRScanActivity
 
 /**
  * @FileName: LoginActivity.java
@@ -17,7 +21,11 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
     override fun providerVMClass(): Class<LoginViewModel> = LoginViewModel::class.java
 
     override fun initView() {
+        binding.btnLogin.setOnClickListener {
+            ActRouter.startActivity(this, QRScanActivity::class.java)
+            // 在 Activity 中
 
+        }
     }
 
     override fun initData() {

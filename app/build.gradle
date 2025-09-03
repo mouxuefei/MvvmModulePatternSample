@@ -9,7 +9,7 @@ android {
     namespace "com.mou.mvvmmodule" // 新版必须指定
     compileSdk 34
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdk 34
         versionCode 1000
         versionName "1000"
@@ -101,5 +101,5 @@ dependencies {
     implementation project(':core_network')
     implementation project(':feature_im')
     implementation project(':feature_business')
-    implementation project(':feature_ai')
+
 }

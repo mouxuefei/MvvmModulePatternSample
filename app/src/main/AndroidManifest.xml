@@ -66,7 +66,7 @@
         tools:replace="android:allowBackup,android:networkSecurityConfig"
         tools:targetApi="m">
         <activity
-            android:name=".ui.main.views.activity.SplashActivity"
+            android:name=".ui.main.views.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -76,12 +76,17 @@
         </activity>
 
         <activity
-            android:name=".ui.main.views.activity.MainActivity"
+            android:name=".ui.main.views.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.login.views.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.views.QRScanActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 
