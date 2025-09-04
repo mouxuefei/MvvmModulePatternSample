@@ -30,11 +30,8 @@ import com.scheartmed.im.widget.emoji.EmojiUtils.*
 
 
 class ChatAdapter(
-    context: Context,
-    data: MutableList<MessageItem>,
-    val type: V2NIMConversationType
-) :
-    BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
+    context: Context, data: MutableList<MessageItem>, val type: V2NIMConversationType
+) : BaseDelegateMultiAdapter<MessageItem, BaseViewHolder>(data) {
 
     private val MSG_TEXT_L = 100
     private val MSG_IMG_L = 101
@@ -93,8 +90,7 @@ class ChatAdapter(
             ?.addItemType(MSG_TIPS_L, R.layout.item_tips)
             ?.addItemType(MSG_CUSTOM_1_L, R.layout.item_notication)
 
-            ?.addItemType(MSG_EMPTY, R.layout.item_empty)
-            ?.addItemType(MSG_TIME, R.layout.item_time)
+            ?.addItemType(MSG_EMPTY, R.layout.item_empty)?.addItemType(MSG_TIME, R.layout.item_time)
     }
 
     private fun getMsgViewType(isSend: Boolean, msg: V2NIMMessage): Int {
@@ -169,9 +165,6 @@ class ChatAdapter(
      */
     private fun setUserIcon(holder: BaseViewHolder, item: V2NIMMessage) {
         val userInfo = NIMClient.getService(UserService::class.java).getUserInfo(item.senderId)
-        Logger.e("userIcon=${userInfo.name}")
-        Logger.e("userIcon=${userInfo.avatar}")
-
         val tvName = holder.getViewOrNull<TextView>(R.id.tvName)
         val tvAvatar = holder.getViewOrNull<ImageView>(R.id.chat_item_header)
         tvName?.let {
@@ -286,11 +279,9 @@ class ChatAdapter(
         val ivVideo = helper.getViewOrNull<ImageView>(R.id.ivVideoCover)
         ivVideo?.let {
             val attachment = item.attachment as V2NIMMessageVideoAttachment
-            Glide.with(context)
-                .asBitmap()
-                .load(attachment.url) // http/https 视频地址
-                .centerCrop()
-                .frame(1000 * 1000) // 指定取 1 秒处的帧 (单位微秒)
+            Logger.e("attachment.url=" + attachment.url)
+            Glide.with(context).asBitmap().load(attachment.url) // http/https 视频地址
+                .centerCrop().frame(1000 * 1000) // 指定取 1 秒处的帧 (单位微秒)
                 .into(ivVideo)
         }
     }
@@ -311,10 +302,7 @@ class ChatAdapter(
     ) {
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
         imageAttachment?.let { it ->
-            if (it.name?.contains(".gif", true) == true || it.name?.contains(
-                    ".GIF", true
-                ) == true
-            ) {
+            if (it.name?.contains(".gif", true) == true) {
                 val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
                 val maxWidth =
                     helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
@@ -338,8 +326,7 @@ class ChatAdapter(
     ) {
         val view = helper.getView<TextView>(R.id.chat_item_content_text)
         val text2Emoji = text2Emoji(
-            context, item.text,
-            view.textSize
+            context, item.text, view.textSize
         )
         helper.setText(R.id.chat_item_content_text, text2Emoji)
     }

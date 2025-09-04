@@ -1,8 +1,10 @@
 package com.scheartmed.im.views.activity
 
 import com.core.commonsdk.base.BaseActivity
+import com.scheartmed.im.R
 import com.scheartmed.im.databinding.ActivityChatP2pBinding
 import com.scheartmed.im.viewmodels.ChatViewModel
+import com.scheartmed.im.views.fragment.ChatP2PFragment
 
 
 /**
@@ -27,7 +29,10 @@ class ChatP2PActivity : BaseActivity<ChatViewModel>() {
     }
 
     override fun initData() {
-
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragContainer, ChatP2PFragment.newInstance("test002"))
+            .commit()
     }
 
     private fun initTitleBar() {

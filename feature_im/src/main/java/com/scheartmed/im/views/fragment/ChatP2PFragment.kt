@@ -1,9 +1,11 @@
 package com.scheartmed.im.views.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,12 +19,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
+import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.base.BaseFragment
 import com.luck.picture.lib.basic.PictureSelector
+import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
+import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
-import com.core.basemvvm.BaseApplication
+import com.luck.picture.lib.style.PictureSelectorStyle
+import com.luck.picture.lib.style.TitleBarStyle
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
@@ -52,7 +58,6 @@ import com.scheartmed.im.utils.ImageFileCompressEngine
 import com.scheartmed.im.utils.MediaManager
 import com.scheartmed.im.viewmodels.ChatViewModel
 import com.scheartmed.im.views.activity.PhotoViewerActivity
-import com.scheartmed.im.views.activity.VideoPlayerActivity
 import com.scheartmed.im.views.activity.WebViewActivity
 import com.scheartmed.im.views.adapter.ChatAdapter
 import com.scheartmed.im.widget.ChatContextMenu
@@ -60,6 +65,7 @@ import com.scheartmed.im.widget.ChatUiHelper
 import com.scheartmed.im.widget.RelativePopupWindow
 import com.scheartmed.im.widget.morelayout.MoreLayoutItemBean
 import java.io.File
+
 
 /**
  * @FileName: ChatP2PFragment.java
@@ -86,6 +92,16 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     private var mIvItemAudio: ImageView? = null
     private lateinit var filePickerSender: FilePickerAndSender
     private val mHandler by lazy { Handler(Looper.getMainLooper()) }
+
+    companion object {
+        fun newInstance(account: String): ChatP2PFragment {
+            val fragment = ChatP2PFragment()
+            val args = Bundle()
+            args.putString("account", account)
+            fragment.setArguments(args)
+            return fragment
+        }
+    }
 
     private var messageListener: CustomMessageListener = object : CustomMessageListener() {
 
@@ -143,6 +159,12 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
         }
 
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //解决崩溃
+        filePickerSender = context?.let { FilePickerAndSender(this@ChatP2PFragment, it) }!!
     }
 
 
@@ -261,7 +283,6 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initChatUi() {
-        filePickerSender = context?.let { FilePickerAndSender(this@ChatP2PFragment, it) }!!
         mChatUiHelper = ChatUiHelper.with(activity)
         val data = arrayListOf<MoreLayoutItemBean>()
         data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
@@ -586,10 +607,45 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {
-        val v2NIMMessageVideoAttachment = item.message.attachment as V2NIMMessageVideoAttachment
-        val intent = Intent(context, VideoPlayerActivity::class.java)
-        intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
-        startActivity(intent)
+        var position = 0
+        val videoList = ArrayList<LocalMedia>()
+        mMsgList.filterIsInstance<MessageItem.SdkMessage>()
+            .filter { it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO }
+            .mapNotNull {
+                val videoAttachment = it.message.attachment as? V2NIMMessageVideoAttachment
+                val videoUrl =
+                    videoAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: videoAttachment?.url
+                videoUrl?.let { url ->
+                    LocalMedia().apply {
+                        this.path = url
+                        this.mimeType = PictureMimeType.MIME_TYPE_VIDEO
+                        videoList.add(this)
+                    }
+                }
+
+                if (item.message.messageId == it.message.messageId) {
+                    position = videoList.size - 1
+                }
+            }
+
+        val style = PictureSelectorStyle().apply {
+            titleBarStyle = TitleBarStyle().apply {
+                isHideTitleBar = true
+            }
+        }
+
+        PictureSelector.create(this)
+            .openPreview()
+            .setImageEngine(GlideEngine.createGlideEngine())
+            .isVideoPauseResumePlay(true)
+            .setSelectorUIStyle(style)
+            .setExternalPreviewEventListener(object : OnExternalPreviewEventListener {
+                override fun onPreviewDelete(position: Int) {}
+                override fun onLongPressDownload(context: Context?, media: LocalMedia?): Boolean {
+                    return false
+                }
+            })
+            .startActivityPreview(position, false, videoList)
     }
 
     /**

@@ -97,13 +97,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
         )
     }
 
-
-    var isKeyboardVisible = false // 当前键盘状态
-
-
     init {
         fragmentList.run {
-            add(patientManageFragment)
+            add(fitFragment)
             add(messageFragment)
             add(mineFragment)
         }

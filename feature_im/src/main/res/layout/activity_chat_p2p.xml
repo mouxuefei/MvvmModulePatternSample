@@ -10,56 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/llContent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvChatList"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                <include
-                    android:id="@+id/chatInputContainer"
-                    layout="@layout/layout_chat_input" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/bottomLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <com.scheartmed.im.widget.emoji.ExpressLayout
-                    android:id="@+id/layoutExpress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <include
-                    android:id="@+id/llAdd"
-                    layout="@layout/layout_add_panel"
-                    android:visibility="gone" />
-            </RelativeLayout>
-        </LinearLayout>
-
-
-    </RelativeLayout>
+        android:layout_weight="1" />
 </LinearLayout>

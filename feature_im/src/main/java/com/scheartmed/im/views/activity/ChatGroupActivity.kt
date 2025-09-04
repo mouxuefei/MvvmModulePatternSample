@@ -538,10 +538,7 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
     }
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {
-        val v2NIMMessageVideoAttachment = item.message.attachment as V2NIMMessageVideoAttachment
-        val intent = Intent(this, VideoPlayerActivity::class.java)
-        intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
-        startActivity(intent)
+
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.scheartmed.im.views.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -24,6 +25,10 @@ import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.core.basemvvm.BaseApplication
+import com.luck.picture.lib.config.PictureMimeType
+import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener
+import com.luck.picture.lib.style.PictureSelectorStyle
+import com.luck.picture.lib.style.TitleBarStyle
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
@@ -53,7 +58,6 @@ import com.scheartmed.im.utils.ImageFileCompressEngine
 import com.scheartmed.im.utils.MediaManager
 import com.scheartmed.im.viewmodels.ChatViewModel
 import com.scheartmed.im.views.activity.PhotoViewerActivity
-import com.scheartmed.im.views.activity.VideoPlayerActivity
 import com.scheartmed.im.views.activity.WebViewActivity
 import com.scheartmed.im.views.adapter.ChatAdapter
 import com.scheartmed.im.widget.ChatContextMenu
@@ -601,11 +605,47 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun onPressShowVideo(item: MessageItem.SdkMessage) {
-        val v2NIMMessageVideoAttachment = item.message.attachment as V2NIMMessageVideoAttachment
-        val intent = Intent(context, VideoPlayerActivity::class.java)
-        intent.putExtra("videoUrl", v2NIMMessageVideoAttachment.url)
-        startActivity(intent)
+        var position = 0
+        val videoList = ArrayList<LocalMedia>()
+        mMsgList.filterIsInstance<MessageItem.SdkMessage>()
+            .filter { it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO }
+            .mapNotNull {
+                val videoAttachment = it.message.attachment as? V2NIMMessageVideoAttachment
+                val videoUrl =
+                    videoAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: videoAttachment?.url
+                videoUrl?.let { url ->
+                    LocalMedia().apply {
+                        this.path = url
+                        this.mimeType = PictureMimeType.MIME_TYPE_VIDEO
+                        videoList.add(this)
+                    }
+                }
+
+                if (item.message.messageId == it.message.messageId) {
+                    position = videoList.size - 1
+                }
+            }
+
+        val style = PictureSelectorStyle().apply {
+            titleBarStyle = TitleBarStyle().apply {
+                isHideTitleBar = true
+            }
+        }
+
+        PictureSelector.create(this)
+            .openPreview()
+            .setImageEngine(GlideEngine.createGlideEngine())
+            .isVideoPauseResumePlay(true)
+            .setSelectorUIStyle(style)
+            .setExternalPreviewEventListener(object : OnExternalPreviewEventListener {
+                override fun onPreviewDelete(position: Int) {}
+                override fun onLongPressDownload(context: Context?, media: LocalMedia?): Boolean {
+                    return false
+                }
+            })
+            .startActivityPreview(position, false, videoList)
     }
+
 
     /**
      * 点击音频，播放
