@@ -13,11 +13,12 @@ class PhotoViewerActivity : BaseActivity<EmptyViewModel>() {
         const val EXTRA_POSITION = "extra_position"
     }
 
-    override val binding: ActivityPhotoViewerBinding = ActivityPhotoViewerBinding.inflate(layoutInflater)
+    override val binding: ActivityPhotoViewerBinding by lazy {
+        ActivityPhotoViewerBinding.inflate(layoutInflater)
+    }
 
     override fun providerVMClass(): Class<EmptyViewModel>? = EmptyViewModel::class.java
 //    private lateinit var indicatorView: CustomIndicatorView
-
 
 
     override fun initView() {

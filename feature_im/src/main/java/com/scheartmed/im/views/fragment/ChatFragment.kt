@@ -50,6 +50,7 @@ import com.scheartmed.im.databinding.FragmentChatBinding
 import com.scheartmed.im.event.BottomBarEvent
 import com.scheartmed.im.ext.retrySendMessageDialog
 import com.scheartmed.im.listener.CustomMessageListener
+import com.scheartmed.im.utils.AudioPlayer
 import com.scheartmed.im.utils.ChatMsgHandler
 import com.scheartmed.im.utils.FilePickerAndSender
 import com.scheartmed.im.utils.FileUtils
@@ -87,8 +88,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private lateinit var mMsgList: ArrayList<MessageItem>
     private var isLoadingMessageList = false
     private var hasMore = true // 是否还有更多历史消息
-    private var mNewGifDrawable: GifDrawable? = null
-    private var mIvItemAudio: ImageView? = null
     private lateinit var filePickerSender: FilePickerAndSender
     private val mHandler by lazy { Handler(Looper.getMainLooper()) }
 
@@ -651,46 +650,30 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
      * 点击音频，播放
      */
     private fun onPressShowAudio(msg: MessageItem.SdkMessage, view: View, position: Int) {
-        MediaManager.release()
-        mNewGifDrawable?.let {
-            if (it.isRunning) {
-                mNewGifDrawable?.stop()
-                if (msg.message.isSelf) {
-                    mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_right)
-                } else {
-                    mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_left)
-                }
+        AudioPlayer.release()
+        val ivAudioPlay = view.findViewById<ImageView>(R.id.ivAudio)
+        val audioUrl = (msg.message.attachment as V2NIMMessageAudioAttachment).url
+        AudioPlayer.play(audioUrl, onStart = {
+            ivAudioPlay?.let {
+                val drawableRes =
+                    if (msg.message.isSelf) R.drawable.voice_white else R.drawable.voice_black
+                context?.let { it1 ->
+                    Glide.with(it1).asGif().load(drawableRes)
+                        .into(it)
+                };
             }
-        }
-        mIvItemAudio = view.findViewById<ImageView>(R.id.ivAudio)
-        val options = RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-        mIvItemAudio?.let {
-            Glide.with(this)
-                .load(if (msg.message.isSelf) R.drawable.voice_white else R.drawable.voice_black)
-                .apply(options).into(it)
-        }
-        val gifDrawable = mIvItemAudio?.drawable
-        mNewGifDrawable = gifDrawable?.let {
-            gifDrawable as GifDrawable
-        }
-        mNewGifDrawable?.start()
-        val v2NIMMessageAudioAttachment = msg.message.attachment as V2NIMMessageAudioAttachment
-        MediaManager.playSound(context, v2NIMMessageAudioAttachment.url, {
-            mNewGifDrawable?.stop()
-            if (msg.message.isSelf) {
-                mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_right)
-            } else {
-                mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_left)
+        }, onComplete = {
+            context?.let {
+                Glide.with(it)
+                    .load(if (msg.message.isSelf) R.mipmap.ic_audio_animation_right else R.mipmap.ic_audio_animation_left)
+                    .into(ivAudioPlay!!)
             }
-            MediaManager.release()
-        }, MediaPlayer.OnErrorListener { p0, p1, p2 ->
-            if (msg.message.isSelf) {
-                mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_right)
-            } else {
-                mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_left)
+        }, onError = {
+            context?.let {
+                Glide.with(it)
+                    .load(if (msg.message.isSelf) R.mipmap.ic_audio_animation_right else R.mipmap.ic_audio_animation_left)
+                    .into(ivAudioPlay!!)
             }
-            MediaManager.release()
-            return@OnErrorListener false
         })
 
     }

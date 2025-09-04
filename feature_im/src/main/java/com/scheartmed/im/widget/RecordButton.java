@@ -210,13 +210,14 @@ public class RecordButton extends AppCompatButton {
             mediaPlayer.setDataSource(mFile);
             mediaPlayer.prepare();
             mediaPlayer.getDuration();
-            Logger.d("获取到的时长:" + mediaPlayer.getDuration() / 1000);
+            int durationSec = Math.round(mediaPlayer.getDuration() / 1000f);
+            Logger.d("获取到的时长:" + mediaPlayer.getDuration());
         } catch (Exception e) {
 
         }
 
         if (finishedListener != null)
-            finishedListener.onFinishedRecord(mFile, mediaPlayer.getDuration() / 1000);
+            finishedListener.onFinishedRecord(mFile, Math.round(mediaPlayer.getDuration() / 1000f));
 
     }
 

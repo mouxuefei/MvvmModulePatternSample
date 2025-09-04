@@ -21,7 +21,7 @@ public class MediaManager {
     public static boolean isStart = false;
     public static String filepathstrings;
 
-    public static void playSound(Context context, String filePathString,
+    public static void playSound(Context context, String filePathString, MediaPlayer.OnPreparedListener listener,
                                  OnCompletionListener onCompletionListener, OnErrorListener onErrorListener) {//
         if (mPlayer == null) {
             mPlayer = getMediaPlayer(context);
@@ -50,6 +50,9 @@ public class MediaManager {
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
                     isStart = true;
+                    if (listener != null) {
+                        listener.onPrepared(mp);
+                    }
                 }
             });
         } catch (Exception e) {

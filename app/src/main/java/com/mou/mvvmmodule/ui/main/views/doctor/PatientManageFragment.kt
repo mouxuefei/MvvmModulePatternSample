@@ -41,8 +41,6 @@ class PatientManageFragment : BaseFragment<HomeFragmentViewModel>() {
             }
 
         }
-
-
         binding.btnLogin.setOnClickListener {
             ActRouter.startActivity(mContext, ConversationListActivity::class.java)
         }

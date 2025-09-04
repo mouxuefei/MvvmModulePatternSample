@@ -168,7 +168,7 @@ class ChatAdapter(
         val tvName = holder.getViewOrNull<TextView>(R.id.tvName)
         val tvAvatar = holder.getViewOrNull<ImageView>(R.id.chat_item_header)
         tvName?.let {
-            it.text = userInfo.name
+            it.text = userInfo?.name ?: ""
             it.visibility =
                 if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P) View.GONE else View.VISIBLE
         }

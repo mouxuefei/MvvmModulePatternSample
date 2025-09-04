@@ -569,7 +569,7 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
         }
         mNewGifDrawable?.start()
         val v2NIMMessageAudioAttachment = msg.message.attachment as V2NIMMessageAudioAttachment
-        MediaManager.playSound(this@ChatGroupActivity, v2NIMMessageAudioAttachment.url, {
+        MediaManager.playSound(this@ChatGroupActivity, v2NIMMessageAudioAttachment.url,{}, {
             mNewGifDrawable?.stop()
             if (msg.message.isSelf) {
                 mIvItemAudio?.setImageResource(R.mipmap.ic_audio_animation_right)
