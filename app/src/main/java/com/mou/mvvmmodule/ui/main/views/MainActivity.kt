@@ -1,8 +1,6 @@
 package com.mou.mvvmmodule.ui.main.views
 
-import android.graphics.Rect
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -10,14 +8,15 @@ import com.core.commonsdk.base.BaseActivity
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
+import com.mou.mvvmmodule.ui.main.views.doctor.MedicalResearchFragment
 import com.mou.mvvmmodule.ui.main.views.doctor.PatientManageFragment
+import com.mou.mvvmmodule.ui.main.views.doctor.WorkshopFragment
 import com.mou.mvvmmodule.ui.main.views.patient.FitFragment
 import com.mou.mvvmmodule.ui.main.views.patient.MessageFragment
 import com.mou.mvvmmodule.ui.main.views.patient.MineFragment
 import com.mou.mvvmmodule.widget.BottomBar
 import com.mou.mvvmmodule.widget.BottomBarTab
 import com.scheartmed.im.event.BottomBarEvent
-import com.scheartmed.im.views.fragment.ChatFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -27,53 +26,97 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-
+    override fun providerVMClass() = MainViewModel::class.java
+    
     private val fragmentList = arrayListOf<Fragment>()
-    private val mainFragment by lazy { PatientManageFragment() }
-    private val blogFragment by lazy { MessageFragment() }
-    private val meFragment by lazy { MineFragment() }
+
+    //患者端
+    private val fitFragment by lazy { FitFragment() }
+    private val messageFragment by lazy { MessageFragment() }
+    private val mineFragment by lazy { MineFragment() }
+
+    //专家端
+    private val patientManageFragment by lazy { PatientManageFragment() }
+    private val workshopFragment by lazy { WorkshopFragment() }
+    private val medicalResearchFragment by lazy { MedicalResearchFragment() }
+
+    private fun createBottomBarTab(
+        unselectedIcon: Int,
+        selectedIcon: Int,
+        title: String
+    ): BottomBarTab {
+        return BottomBarTab(this, unselectedIcon, selectedIcon, title)
+    }
+
+    private val bottomBarFit by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_home_unselected,
+            R.mipmap.icon_bottombar_home_selected,
+            "管理计划"
+        )
+    }
+
+    private val bottomBarMessage by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_device_unselected,
+            R.mipmap.icon_bottombar_device_selected,
+            "消息"
+        )
+    }
+
+    private val bottomBarMine by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_user_unselected,
+            R.mipmap.icon_bottombar_user_selected,
+            "我的"
+        )
+    }
+
+    private val bottomBarPatientManage by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_home_unselected,
+            R.mipmap.icon_bottombar_home_selected,
+            "患者管理"
+        )
+    }
+
+    private val bottomBarMedicalResearch by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_user_unselected,
+            R.mipmap.icon_bottombar_user_selected,
+            "医学研究"
+        )
+    }
+
+    private val bottomBarWorkShop by lazy {
+        createBottomBarTab(
+            R.mipmap.icon_bottombar_device_unselected,
+            R.mipmap.icon_bottombar_device_selected,
+            "工作室"
+        )
+    }
+
+
     var isKeyboardVisible = false // 当前键盘状态
 
-    private val bottomIds =
-        arrayListOf<Int>(R.id.home, R.id.blog)
 
     init {
         fragmentList.run {
-            add(mainFragment)
-            add(blogFragment)
-            add(meFragment)
+            add(patientManageFragment)
+            add(messageFragment)
+            add(mineFragment)
         }
     }
 
-    override fun providerVMClass() = MainViewModel::class.java
+
 
     override fun initView() {
         EventBus.getDefault().register(this)
         initViewPager()
-        binding.bottomBar.addItem(
-            BottomBarTab(
-                this,
-                R.mipmap.icon_bottombar_home_unselected,
-                R.mipmap.icon_bottombar_home_selected,
-                "首页"
-            )
-        )
-            .addItem(
-                BottomBarTab(
-                    this,
-                    R.mipmap.icon_bottombar_device_unselected,
-                    R.mipmap.icon_bottombar_device_selected,
-                    "鹿客智能"
-                )
-            )
-            .addItem(
-                BottomBarTab(
-                    this,
-                    R.mipmap.icon_bottombar_user_unselected,
-                    R.mipmap.icon_bottombar_user_selected,
-                    "我的"
-                )
-            )
+        binding.bottomBar
+            .addItem(bottomBarFit)
+            .addItem(bottomBarMessage)
+            .addItem(bottomBarMine)
         binding.bottomBar.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
             override fun onTabSelected(position: Int, prePosition: Int) {
                 if (position == prePosition) {
@@ -90,7 +133,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     private fun initViewPager() {
-        binding.mainViewpager.isUserInputEnabled = true
+        binding.mainViewpager.isUserInputEnabled = false  // 禁止用户手势滑动
         binding.mainViewpager.offscreenPageLimit = 2
         val adapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
             override fun createFragment(position: Int) = fragmentList[position]
@@ -105,33 +148,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 binding.bottomBar.setCurrentItem(position)
             }
         })
-
-        val rootView = findViewById<View>(android.R.id.content)
-        rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            rootView.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = rootView.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
-            val visible = keypadHeight > screenHeight * 0.15
-            if (visible != isKeyboardVisible) { // 状态变化才处理
-                isKeyboardVisible = visible
-                com.orhanobut.logger.Logger.d("keypadHeight = $keypadHeight")
-                rootView.post {
-                    if(visible){
-                        View.GONE
-                    }else{
-                        // 假设父 Fragment 的类是 ParentFragment
-                        val parentFragment = supportFragmentManager.findFragmentByTag("MessageFragment") as? MessageFragment
-                        val childFragment = parentFragment?.childFragmentManager?.findFragmentByTag("ChatFragment") as? ChatFragment
-                        childFragment?.let {
-                            com.orhanobut.logger.Logger.d("走了吗 = $keypadHeight")
-                        }
-                    }
-
-                    binding.bottomBar.visibility = if (visible) View.GONE else View.VISIBLE
-                }
-            }
-        }
+//        Keyboard4Utils.registerKeyboardHeightListener(this) {
+//            com.orhanobut.logger.Logger.e("第四种方式：当前的软键盘高度：$it")
+//        }
 
     }
 
@@ -146,9 +165,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: BottomBarEvent) {
-        if (event.isShow) {
-            binding.bottomBar.visibility = View.GONE
-        }
+        com.orhanobut.logger.Logger.d("接收到消息了 = ${event.isShow}")
+//        if (event.isShow) {
+        binding.bottomBar.visibility = if (event.isShow) View.VISIBLE else View.GONE
+//        }
     }
 
     override fun onDestroy() {

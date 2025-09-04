@@ -415,7 +415,18 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             }
         }
         binding.chatInputContainer.etContent.setOnFocusChangeListener { _, hasFocus ->
-            EventBus.getDefault().post(BottomBarEvent(hasFocus))
+            if (hasFocus) {
+                EventBus.getDefault().post(BottomBarEvent(false))
+            } else {
+                Logger.e("isShowBottomLayout==" + mChatUiHelper?.isShowBottomLayout)
+                binding.chatInputContainer.etContent.postDelayed({
+                    if (binding.bottomLayout.visibility == View.VISIBLE) {
+                        return@postDelayed
+                    }
+                    EventBus.getDefault().post(BottomBarEvent(true))
+                }, 100)
+            }
+
         }
     }
 
