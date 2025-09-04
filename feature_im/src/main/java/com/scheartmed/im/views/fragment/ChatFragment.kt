@@ -608,7 +608,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         val videoList = ArrayList<LocalMedia>()
         mMsgList.filterIsInstance<MessageItem.SdkMessage>()
             .filter { it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO }
-            .mapNotNull {
+            .map {
                 val videoAttachment = it.message.attachment as? V2NIMMessageVideoAttachment
                 val videoUrl =
                     videoAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: videoAttachment?.url
@@ -624,25 +624,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     position = videoList.size - 1
                 }
             }
-
-        val style = PictureSelectorStyle().apply {
-            titleBarStyle = TitleBarStyle().apply {
-                isHideTitleBar = true
-            }
-        }
-
-        PictureSelector.create(this)
-            .openPreview()
-            .setImageEngine(GlideEngine.createGlideEngine())
-            .isVideoPauseResumePlay(true)
-            .setSelectorUIStyle(style)
-            .setExternalPreviewEventListener(object : OnExternalPreviewEventListener {
-                override fun onPreviewDelete(position: Int) {}
-                override fun onLongPressDownload(context: Context?, media: LocalMedia?): Boolean {
-                    return false
-                }
-            })
-            .startActivityPreview(position, false, videoList)
+        showVideoOrImage(position, videoList)
     }
 
 
@@ -679,7 +661,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun onPressShowImage(view: View, msg: MessageItem.SdkMessage, position: Int) {
-        val pathList = ArrayList<String>()
+//        val pathList = ArrayList<String>()
+        val photoList = ArrayList<LocalMedia>()
         var position = 0
         mMsgList.forEach {
             if (it is MessageItem.SdkMessage) {
@@ -687,19 +670,44 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     val imageAttachment = it.message.attachment as? V2NIMMessageImageAttachment
                     val imageUrl =
                         imageAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: imageAttachment?.url
-                    imageUrl?.let { it1 -> pathList.add(it1) }
+                    LocalMedia().apply {
+                        this.path = imageUrl
+                        this.mimeType = PictureMimeType.MIME_TYPE_IMAGE
+                        photoList.add(this)
+                    }
                 }
                 if (it.message.messageId == msg.message.messageId) {
-                    position = pathList.size - 1
+                    position = photoList.size - 1
                 }
 
             }
         }
-        val intent = Intent(context, PhotoViewerActivity::class.java).apply {
-            putStringArrayListExtra(PhotoViewerActivity.EXTRA_IMAGE_URLS, ArrayList(pathList))
-            putExtra(PhotoViewerActivity.EXTRA_POSITION, position)
+//        val intent = Intent(context, PhotoViewerActivity::class.java).apply {
+//            putStringArrayListExtra(PhotoViewerActivity.EXTRA_IMAGE_URLS, ArrayList(pathList))
+//            putExtra(PhotoViewerActivity.EXTRA_POSITION, position)
+//        }
+//        startActivity(intent)
+
+        showVideoOrImage(position, photoList)
+    }
+
+    private fun showVideoOrImage(
+        position: Int, photoList: ArrayList<LocalMedia>
+    ) {
+        val style = PictureSelectorStyle().apply {
+            titleBarStyle = TitleBarStyle().apply {
+                isHideTitleBar = true
+            }
         }
-        startActivity(intent)
+
+        PictureSelector.create(this).openPreview().setImageEngine(GlideEngine.createGlideEngine())
+            .isVideoPauseResumePlay(true).setSelectorUIStyle(style)
+            .setExternalPreviewEventListener(object : OnExternalPreviewEventListener {
+                override fun onPreviewDelete(position: Int) {}
+                override fun onLongPressDownload(context: Context?, media: LocalMedia?): Boolean {
+                    return false
+                }
+            }).startActivityPreview(position, false, photoList)
     }
 
 
