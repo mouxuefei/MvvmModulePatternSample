@@ -26,8 +26,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
     override fun providerVMClass() = MainViewModel::class.java
-    
+
     private val fragmentList = arrayListOf<Fragment>()
 
     //患者端
@@ -109,7 +110,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
 
-
     override fun initView() {
         EventBus.getDefault().register(this)
         initViewPager()
@@ -130,6 +130,13 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 switchFragment(position, false)
             }
         })
+
+        setUnread(bottomBarFit,100)
+    }
+
+    private fun setUnread(bottomBarTab: BottomBarTab, count: Int) {
+        bottomBarTab.setUnreadCount(count)
+        bottomBarTab.showDot()
     }
 
     private fun initViewPager() {
