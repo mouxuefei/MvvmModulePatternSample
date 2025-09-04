@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_session_btn_voice"
                 android:stateListAnimator="@null"
-                android:text="按住 说话"
+                android:text="@string/str_press_talk"
                 android:textSize="13dp"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -79,7 +79,7 @@
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:padding="1dp"
-            android:text="发送"
+            android:text="@string/str_send"
             android:textColor="@color/white"
             android:textSize="13dp"
             android:visibility="gone"

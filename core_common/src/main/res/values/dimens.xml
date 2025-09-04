@@ -1,12 +1,59 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="public_toolbar_height">44dp</dimen>
-    <dimen name="public_bottomView_height">50dp</dimen>
-    <dimen name="public_titleBar_size">32sp</dimen>
-    <dimen name="public_important_size">22sp</dimen>
-    <dimen name="public_title_size">18sp</dimen>
-    <dimen name="public_content_size">16sp</dimen>
-    <dimen name="public_contentHint_size">14sp</dimen>
-    <dimen name="public_hint_size">12sp</dimen>
-    <dimen name="public_button_radius">6dp</dimen>
+
+
+
+    <!-- 小号字体 -->
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+
+    <!-- 中号字体 -->
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+
+    <!-- 大号字体 -->
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+
+    <!-- 超大号字体（标题或重点） -->
+    <dimen name="text_size_28">28sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
+
+
+    <!-- ==================== 间距 / 内边距 ==================== -->
+    <!-- 小间距 -->
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+
+    <!-- 中间距 -->
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+
+    <!-- 大间距 -->
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_32">32dp</dimen>
+
+
+    <!-- ==================== 控件尺寸 ==================== -->
+    <!-- 按钮高度 -->
+    <dimen name="button_height_36">36dp</dimen>
+    <dimen name="button_height_44">44dp</dimen>
+    <dimen name="button_height_50">52dp</dimen>
+
+    <!-- 图标 / 图片尺寸 -->
+    <dimen name="icon_size_12">12dp</dimen>
+    <dimen name="icon_size_16">16dp</dimen>
+    <dimen name="icon_size_24">24dp</dimen>
+    <dimen name="icon_size_32">32dp</dimen>
+    <dimen name="icon_size_48">48dp</dimen>
+
+    <!-- 输入框高度 -->
+    <dimen name="et_height_size">48dp</dimen>
+
+    <!-- 卡片 / 容器圆角 -->
+    <dimen name="card_radius_4">4dp</dimen>
+    <dimen name="card_radius_8">8dp</dimen>
+    <dimen name="card_radius_12">12dp</dimen>
 </resources>

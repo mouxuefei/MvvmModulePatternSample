@@ -3,6 +3,4 @@
     <style name="common_progress" parent="@android:style/Widget.ProgressBar.Small.Inverse">
         <item name="android:indeterminateDrawable">@drawable/shape_progress_circle</item>
     </style>
-
-
 </resources>

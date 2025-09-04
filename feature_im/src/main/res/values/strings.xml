@@ -8,4 +8,7 @@
     <string name="date_minute_short">分</string>
     <string name="date_second_short">秒</string>
     <string name="date_yesterday">昨天</string>
+
+    <string name="str_send">发送</string>
+    <string name="str_press_talk">按住 说话</string>
 </resources>

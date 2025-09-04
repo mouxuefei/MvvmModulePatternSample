@@ -31,7 +31,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:text="标题"
             android:textColor="#999999"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -50,7 +49,6 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:singleLine="true"
-            android:text="1"
             android:textColor="@android:color/white"
             android:textSize="10sp"
             android:textStyle="bold" />
