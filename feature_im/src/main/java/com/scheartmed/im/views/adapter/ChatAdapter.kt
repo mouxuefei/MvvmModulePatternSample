@@ -20,6 +20,7 @@ import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceiptDetail
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
+import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageNotificationAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageSendingState
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
@@ -161,11 +162,11 @@ class ChatAdapter(
         if (!message.isSelf || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS) {
             return
         }
-        val memberAccountIds = mutableSetOf<String>()
-        memberAccountIds.add("test002")
-        memberAccountIds.add("test003")
+        if (tvRead != null && tvRead.text == "已读") {
+            return
+        }
         v2MessageService.getTeamMessageReceiptDetail(message,
-            memberAccountIds,
+            null,
             {
                 tvRead?.let { tv ->
                     //TODO:
@@ -266,6 +267,7 @@ class ChatAdapter(
 
             MSG_NOTIFICATION_L, MSG_NOTIFICATION_R -> {
                 //TODO:
+                setNotificationType(item, helper)
             }
 
             MSG_TIPS_L, MSG_TIPS_R -> {
@@ -279,6 +281,14 @@ class ChatAdapter(
             else -> {
             }
         }
+    }
+
+    private fun setNotificationType(item: V2NIMMessage, helper: BaseViewHolder) {
+        val v2NIMMessageNotificationAttachment =
+            item.attachment as V2NIMMessageNotificationAttachment
+
+        val tvNotification = helper.getView<TextView>(R.id.tvNotification)
+        tvNotification.text = "通知"
     }
 
     private fun setFileType(item: V2NIMMessage, helper: BaseViewHolder) {
