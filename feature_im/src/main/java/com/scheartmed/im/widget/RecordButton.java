@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestOptions;
+import com.core.commonsdk.utils.MyLogger;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
 import com.orhanobut.logger.Logger;
@@ -131,7 +132,7 @@ public class RecordButton extends AppCompatButton {
                 setBackgroundResource(R.drawable.shape_session_btn_voice_normal);
                 this.setText("按住 说话");
                 if (y >= 0 && (System.currentTimeMillis() - startTime <= MAX_INTERVAL_TIME)) {
-                    Logger.d("结束录音:");
+                    MyLogger.getLogger().d("结束录音:");
                     finishRecord();
                 } else if (y < 0) {  //当手指向上滑，会cancel
                     cancelRecord();
@@ -204,14 +205,14 @@ public class RecordButton extends AppCompatButton {
             stopRecording();
             recordDialog.dismiss();
         }
-        Logger.d("录音完成的路径:" + mFile);
+        MyLogger.getLogger().d("录音完成的路径:" + mFile);
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(mFile);
             mediaPlayer.prepare();
             mediaPlayer.getDuration();
             int durationSec = Math.round(mediaPlayer.getDuration() / 1000f);
-            Logger.d("获取到的时长:" + mediaPlayer.getDuration());
+            MyLogger.getLogger().d("获取到的时长:" + mediaPlayer.getDuration());
         } catch (Exception e) {
 
         }
@@ -248,15 +249,15 @@ public class RecordButton extends AppCompatButton {
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         File file = new File(mFile);
-        Logger.d("创建文件的路径:" + mFile);
-        Logger.d("文件创建成功:" + file.exists());
+        MyLogger.getLogger().d("创建文件的路径:" + mFile);
+        MyLogger.getLogger().d("文件创建成功:" + file.exists());
         mRecorder.setOutputFile(mFile);
         try {
             mRecorder.prepare();
             mRecorder.start();
             setTimerStart();
         } catch (Exception e) {
-            Logger.d("preparestart异常,重新开始录音:" + e.toString());
+            MyLogger.getLogger().d("preparestart异常,重新开始录音:" + e.toString());
             e.printStackTrace();
             mRecorder.release();
             mRecorder = null;

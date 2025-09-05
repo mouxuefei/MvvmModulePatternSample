@@ -182,7 +182,6 @@ public class ChatUiHelper {
                 if (mEditText.getText().toString().trim().length() > 0) {
                     mSendBtn.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.GONE);
-                    Logger.e("onTextChanged >0");
                 } else {
                     mSendBtn.setVisibility(View.GONE);
                     mAddButton.setVisibility(View.VISIBLE);
@@ -198,7 +197,6 @@ public class ChatUiHelper {
     }
 
     private void clickEt() {
-        Logger.e("clickEt >0");
         lockContentHeight();//显示软件盘时，锁定内容高度，防止跳闪。
         hideBottomLayout(true);//隐藏表情布局，显示软件盘
         //软件盘显示后，释放内容高度
@@ -475,7 +473,6 @@ public class ChatUiHelper {
     private void showBottomLayout() {
         EventBus.getDefault().post(new BottomBarEvent(false));
         int softInputHeight = getSupportSoftInputHeight();
-        Logger.e("softInputHeight :" + softInputHeight);
         if (softInputHeight == 0) {
 //            softInputHeight = dip2Px(270);
             softInputHeight = mSp.getInt(SHARE_PREFERENCE_TAG, dip2Px(270));

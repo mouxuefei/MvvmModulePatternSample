@@ -9,7 +9,7 @@
         android:id="@+id/barCodeView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:zxing_scanner_layout="@layout/custom_barcode_scanner"
+        app:zxing_scanner_layout="@layout/layout_custom_barcode"
         />
 
     <!-- 底部功能按钮 -->

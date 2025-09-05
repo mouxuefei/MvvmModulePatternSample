@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.base.BaseFragment
+import com.core.commonsdk.utils.MyLogger
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.config.SelectMimeType
@@ -143,7 +144,7 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
          * 本端发送消息状态回调 来源： 发送消息， 插入消息
          */
         override fun onSendMessage(message: V2NIMMessage) {
-            Logger.e("监听-" + message.sendingState)
+            MyLogger.getLogger().e("监听-" + message.sendingState)
             mHandler.post {
                 val index = mMsgList.indexOfFirst {
                     it is MessageItem.SdkMessage && it.message.messageId == message.messageId
@@ -519,7 +520,6 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
                 if (!hasMore || isLoadingMessageList || firstVisible != 0) {
                     return
                 }
-                Logger.e("加载更多历史消息")
                 loadMessage()
             }
 
@@ -588,7 +588,7 @@ class ChatP2PFragment : BaseFragment<ChatViewModel>() {
 
     private fun onPressShowFile(item: MessageItem.SdkMessage) {
         val v2NIMMessageFileAttachment = item.message.attachment as V2NIMMessageFileAttachment
-        Logger.e("file url " + v2NIMMessageFileAttachment.url)
+        MyLogger.getLogger().e("file url " + v2NIMMessageFileAttachment.url)
         val intent = Intent(context, WebViewActivity::class.java)
         intent.putExtra("url", v2NIMMessageFileAttachment.url)
         startActivity(intent)

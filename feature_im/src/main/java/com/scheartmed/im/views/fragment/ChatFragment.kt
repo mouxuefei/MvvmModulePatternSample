@@ -25,6 +25,7 @@ import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.core.basemvvm.BaseApplication
+import com.core.commonsdk.utils.MyLogger
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener
 import com.luck.picture.lib.style.PictureSelectorStyle
@@ -87,12 +88,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
     }
 
-    override val binding: FragmentChatBinding by lazy {
-        FragmentChatBinding.inflate(layoutInflater)
-    }
-
     override fun providerVMClass(): Class<ChatViewModel> = ChatViewModel::class.java
-
     private var mAdapter: ChatAdapter? = null
     private var mChatUiHelper: ChatUiHelper? = null
     private lateinit var mChatHandler: ChatMsgHandler
@@ -102,9 +98,11 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private var hasMore = true // 是否还有更多历史消息
     private lateinit var filePickerSender: FilePickerAndSender
     private val mHandler by lazy { Handler(Looper.getMainLooper()) }
+    override val binding: FragmentChatBinding by lazy {
+        FragmentChatBinding.inflate(layoutInflater)
+    }
 
     private var messageListener: CustomMessageListener = object : CustomMessageListener() {
-
         // 判断是否需要添加时间消息
         private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
             return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && V2NIMConversationIdUtil.conversationTargetId(
@@ -168,7 +166,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             }
         }
 
-
     }
 
 
@@ -187,6 +184,113 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     override fun initData() {
         createChatSession()
         loadMessage()
+    }
+
+
+    private fun createChatSession() {
+        val teamId = getTeamId()
+        val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
+        Logger.e("login myAccountId==" + myAccountId)
+        val userService = NIMClient.getService(V2NIMUserService::class.java)
+        val myUsrInfo = userService.getUserInfo(myAccountId).data
+        mChatSession = ChatSession()
+        mChatSession.myInfo = myUsrInfo
+        mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+        mChatSession.conversationId = V2NIMConversationIdUtil.teamConversationId(teamId)
+        mChatHandler = ChatMsgHandler(context)
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initChatUi() {
+        mChatUiHelper = ChatUiHelper.with(activity)
+        val data = arrayListOf<MoreLayoutItemBean>()
+        data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
+        data.add(MoreLayoutItemBean("im_camera", R.mipmap.edy_im_xiazhenduan))
+        data.add(MoreLayoutItemBean("im_video", R.mipmap.edy_im_shipinwenzhen))
+        data.add(MoreLayoutItemBean("im_file", R.mipmap.edy_im_wenzhang))
+        mChatUiHelper?.bindContentLayout(binding.llContent)
+            ?.bindToSendButton(binding.chatInputContainer.btnSend)
+            ?.bindEditText(binding.chatInputContainer.etContent)
+            ?.bindBottomLayout(binding.bottomLayout)?.bindEmojiLayout(binding.layoutExpress)
+            ?.bindAddLayout(binding.llAdd.rootAddPanel)
+            ?.bindToAddButton(binding.chatInputContainer.ivAdd)
+            ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
+            ?.bindAudioBtn(binding.chatInputContainer.btnAudio)
+            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)?.bindMoreLayoutData(
+                data
+            ) { adapter, view, position ->
+                val item = adapter.getItem(position) as MoreLayoutItemBean
+                when (item.key) {
+                    "im_photo" -> {
+                        onPressSelectPhoto()
+                    }
+
+                    "im_video" -> {
+                        onPressSelectVideo()
+                    }
+
+                    "im_camera" -> {
+                        onPressTakePhoto()
+                    }
+
+                    "im_file" -> {
+                        onPressSelectFile()
+                    }
+                }
+            }
+        //底部布局弹出,聊天列表上滑到最后一位
+        binding.rvChatList.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                binding.rvChatList.post(Runnable {
+                    mAdapter?.let {
+                        if (it.itemCount > 0) {
+                            binding.rvChatList.scrollToPosition(it.itemCount - 1)
+                        }
+                    }
+                })
+            }
+        })
+        //点击空白区域关闭键盘
+        binding.rvChatList.setOnTouchListener(View.OnTouchListener { _, _ ->
+            mChatUiHelper?.hideBottomLayout(false)
+            mChatUiHelper?.hideSoftInput()
+            binding.chatInputContainer.etContent.clearFocus()
+            false
+        })
+        //录音结束回调,发送录音
+        binding.chatInputContainer.btnAudio.setOnFinishedRecordListener { audioPath, time ->
+            val file = File(audioPath)
+            if (file.exists()) {
+                val newMessage = mChatHandler.createAudioMessage(audioPath, time)
+                sendMessage(newMessage)
+            }
+        }
+        binding.chatInputContainer.etContent.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                EventBus.getDefault().post(BottomBarEvent(false))
+            } else {
+                Logger.e("isShowBottomLayout==" + mChatUiHelper?.isShowBottomLayout)
+                binding.chatInputContainer.etContent.postDelayed({
+                    if (binding.bottomLayout.visibility == View.VISIBLE) {
+                        return@postDelayed
+                    }
+                    EventBus.getDefault().post(BottomBarEvent(true))
+                }, 100)
+            }
+
+        }
+    }
+
+    private fun initListener() {
+        binding.chatInputContainer.btnSend.setOnClickListener {
+            mChatUiHelper?.hideSoftInput()
+            val newMessage =
+                mChatHandler.createTextMessage(binding.chatInputContainer.etContent.text.toString())
+            sendMessage(newMessage)
+            binding.chatInputContainer.etContent.setText("")
+        }
+        NIMClient.getService(V2NIMMessageService::class.java).addMessageListener(messageListener)
     }
 
     fun onNewIntent(intent: Intent) {
@@ -242,9 +346,9 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         //已读回执
         NIMClient.getService(V2NIMMessageService::class.java)
             .sendTeamMessageReceipts(notMyMessages, {
-                Logger.e("发送已读回执成功")
+                MyLogger.getLogger().e("发送已读回执成功")
             }) {
-                Logger.e("发送已读回执失败" + it.desc)
+                MyLogger.getLogger().e("发送已读回执失败" + it.desc)
             }
         messages.reverse()
         val anchorMessage = it.anchorMessage
@@ -276,9 +380,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     }
 
-    private fun filterReceiptMessages(it: V2NIMMessage) = (!it.isSelf
-            && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION
-            && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS)
+    private fun filterReceiptMessages(it: V2NIMMessage) =
+        (!it.isSelf && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS)
 
     private fun RecyclerView.doAfterNextLayout(action: () -> Unit) {
         viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -290,180 +393,89 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         })
     }
 
-    private fun createChatSession() {
-        val teamId = getTeamId()
-        val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
-        Logger.e("login myAccountId==" + myAccountId)
-        val userService = NIMClient.getService(V2NIMUserService::class.java)
-        val myUsrInfo = userService.getUserInfo(myAccountId).data
-        mChatSession = ChatSession()
-        mChatSession.myInfo = myUsrInfo
-        mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
-        mChatSession.conversationId = V2NIMConversationIdUtil.teamConversationId(teamId)
-        mChatHandler = ChatMsgHandler(context)
 
+    private fun onPressSelectFile() {
+        filePickerSender.pickOfficeOrPdfFile { picked ->
+            val newMessage = mChatHandler.createFileMessage(
+                picked.file?.absolutePath,
+            )
+            sendMessage(newMessage)
+        }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initChatUi() {
-
-        mChatUiHelper = ChatUiHelper.with(activity)
-        val data = arrayListOf<MoreLayoutItemBean>()
-        data.add(MoreLayoutItemBean("im_photo", R.mipmap.edy_im_tupian))
-        data.add(MoreLayoutItemBean("im_camera", R.mipmap.edy_im_xiazhenduan))
-        data.add(MoreLayoutItemBean("im_video", R.mipmap.edy_im_shipinwenzhen))
-        data.add(MoreLayoutItemBean("im_file", R.mipmap.edy_im_wenzhang))
-        data.add(MoreLayoutItemBean("im_chufang", R.mipmap.edy_im_chufang))
-        mChatUiHelper?.bindContentLayout(binding.llContent)
-            ?.bindToSendButton(binding.chatInputContainer.btnSend)
-            ?.bindEditText(binding.chatInputContainer.etContent)
-            ?.bindBottomLayout(binding.bottomLayout)?.bindEmojiLayout(binding.layoutExpress)
-            ?.bindAddLayout(binding.llAdd.rootAddPanel)
-            ?.bindToAddButton(binding.chatInputContainer.ivAdd)
-            ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
-            ?.bindAudioBtn(binding.chatInputContainer.btnAudio)
-            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)?.bindMoreLayoutData(
-                data
-            ) { adapter, view, position ->
-                val item = adapter.getItem(position) as MoreLayoutItemBean
-                when (item.key) {
-                    "im_photo" -> {
-                        PictureSelector.create(this).openGallery(SelectMimeType.ofImage())
-                            .setCompressEngine(ImageFileCompressEngine())
-                            .setImageEngine(GlideEngine.createGlideEngine()).setMaxSelectNum(9)
-                            .forResult(object : OnResultCallbackListener<LocalMedia?> {
-                                override fun onResult(result: ArrayList<LocalMedia?>) {
-                                    if (result.isNotEmpty()) {
-                                        result.forEach {
-                                            val path = when {
-                                                it?.isCompressed == true -> it.compressPath
-                                                else -> it?.path ?: ""
-                                            }
-                                            val newMessage = mChatHandler.createImageMessage(
-                                                path, it?.width ?: 0, it?.height ?: 0
-                                            )
-                                            sendMessage(newMessage)
-                                        }
-
-                                    }
-                                }
-
-                                override fun onCancel() {}
-                            })
+    private fun onPressTakePhoto() {
+        PictureSelector.create(this).openCamera(SelectMimeType.ofImage())
+            .setCompressEngine(ImageFileCompressEngine())
+            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                override fun onResult(result: ArrayList<LocalMedia?>) {
+                    if (result.isNotEmpty()) {
+                        val localMedia = result[0]
+                        val path = when {
+                            localMedia?.isCompressed == true -> localMedia.compressPath
+                            else -> localMedia?.path ?: ""
+                        }
+                        val newMessage = mChatHandler.createImageMessage(
+                            path, localMedia?.width ?: 0, localMedia?.height ?: 0
+                        )
+                        sendMessage(newMessage)
                     }
 
-                    "im_video" -> {
-                        PictureSelector.create(this).openGallery(SelectMimeType.ofVideo())
-                            .setMaxSelectNum(1).setImageEngine(GlideEngine.createGlideEngine())
-                            .forResult(object : OnResultCallbackListener<LocalMedia?> {
-                                override fun onResult(result: ArrayList<LocalMedia?>) {
-                                    if (result.isNotEmpty()) {
-                                        result.forEach {
-                                            val videoFile = FileUtils.copyVideoToCache(
-                                                BaseApplication.instance(), Uri.parse(it?.path)
-                                            )
-                                            videoFile?.let { it1 ->
-                                                val newMessage = mChatHandler.createVideoMessage(
-                                                    videoFile.absolutePath,
-                                                    it?.duration?.toInt() ?: 0,
-                                                )
-                                                sendMessage(newMessage)
-                                            }
+                }
 
-                                        }
-                                    }
-                                }
+                override fun onCancel() {}
+            })
+    }
 
-                                override fun onCancel() {}
-                            })
-
-                        //TODO：发送完需要删除缓存视频
-
-                    }
-
-                    "im_camera" -> {
-                        PictureSelector.create(this).openCamera(SelectMimeType.ofImage())
-                            .setCompressEngine(ImageFileCompressEngine())
-                            .forResult(object : OnResultCallbackListener<LocalMedia?> {
-                                override fun onResult(result: ArrayList<LocalMedia?>) {
-                                    if (result.isNotEmpty()) {
-                                        val localMedia = result[0]
-                                        val path = when {
-                                            localMedia?.isCompressed == true -> localMedia.compressPath
-                                            else -> localMedia?.path ?: ""
-                                        }
-                                        val newMessage = mChatHandler.createImageMessage(
-                                            path, localMedia?.width ?: 0, localMedia?.height ?: 0
-                                        )
-                                        sendMessage(newMessage)
-                                    }
-
-                                }
-
-                                override fun onCancel() {}
-                            })
-                    }
-
-
-                    "im_file" -> {
-                        filePickerSender.pickOfficeOrPdfFile { picked ->
-                            Log.d(
-                                "villa",
-                                "选中文件: ${picked.file?.absolutePath}, size: ${picked.size}"
+    private fun onPressSelectVideo() {
+        //TODO：发送完需要删除缓存视频
+        PictureSelector.create(this).openGallery(SelectMimeType.ofVideo()).setMaxSelectNum(1)
+            .setImageEngine(GlideEngine.createGlideEngine())
+            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                override fun onResult(result: ArrayList<LocalMedia?>) {
+                    if (result.isNotEmpty()) {
+                        result.forEach {
+                            val videoFile = FileUtils.copyVideoToCache(
+                                BaseApplication.instance(), Uri.parse(it?.path)
                             )
-                            val newMessage = mChatHandler.createFileMessage(
-                                picked.file?.absolutePath,
+                            videoFile?.let { it1 ->
+                                val newMessage = mChatHandler.createVideoMessage(
+                                    videoFile.absolutePath,
+                                    it?.duration?.toInt() ?: 0,
+                                )
+                                sendMessage(newMessage)
+                            }
+
+                        }
+                    }
+                }
+
+                override fun onCancel() {}
+            })
+    }
+
+    private fun onPressSelectPhoto() {
+        PictureSelector.create(this).openGallery(SelectMimeType.ofImage())
+            .setCompressEngine(ImageFileCompressEngine())
+            .setImageEngine(GlideEngine.createGlideEngine()).setMaxSelectNum(9)
+            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                override fun onResult(result: ArrayList<LocalMedia?>) {
+                    if (result.isNotEmpty()) {
+                        result.forEach {
+                            val path = when {
+                                it?.isCompressed == true -> it.compressPath
+                                else -> it?.path ?: ""
+                            }
+                            val newMessage = mChatHandler.createImageMessage(
+                                path, it?.width ?: 0, it?.height ?: 0
                             )
                             sendMessage(newMessage)
                         }
-                    }
 
-                    "im_chufang" -> {
-                        // 检验检查
                     }
                 }
-            }
-        //底部布局弹出,聊天列表上滑到最后一位
-        binding.rvChatList.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            if (bottom < oldBottom) {
-                binding.rvChatList.post(Runnable {
-                    mAdapter?.let {
-                        if (it.itemCount > 0) {
-                            binding.rvChatList.scrollToPosition(it.itemCount - 1)
-                        }
-                    }
-                })
-            }
-        })
-        //点击空白区域关闭键盘
-        binding.rvChatList.setOnTouchListener(View.OnTouchListener { _, _ ->
-            mChatUiHelper?.hideBottomLayout(false)
-            mChatUiHelper?.hideSoftInput()
-            binding.chatInputContainer.etContent.clearFocus()
-            false
-        })
-        //录音结束回调,发送录音
-        binding.chatInputContainer.btnAudio.setOnFinishedRecordListener { audioPath, time ->
-            val file = File(audioPath)
-            if (file.exists()) {
-                val newMessage = mChatHandler.createAudioMessage(audioPath, time)
-                sendMessage(newMessage)
-            }
-        }
-        binding.chatInputContainer.etContent.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                EventBus.getDefault().post(BottomBarEvent(false))
-            } else {
-                Logger.e("isShowBottomLayout==" + mChatUiHelper?.isShowBottomLayout)
-                binding.chatInputContainer.etContent.postDelayed({
-                    if (binding.bottomLayout.visibility == View.VISIBLE) {
-                        return@postDelayed
-                    }
-                    EventBus.getDefault().post(BottomBarEvent(true))
-                }, 100)
-            }
 
-        }
+                override fun onCancel() {}
+            })
     }
 
     private fun sendMessage(newMessage: V2NIMMessage, isRetry: Boolean = false) {
@@ -479,16 +491,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
     }
 
-    private fun initListener() {
-        binding.chatInputContainer.btnSend.setOnClickListener {
-            mChatUiHelper?.hideSoftInput()
-            val newMessage =
-                mChatHandler.createTextMessage(binding.chatInputContainer.etContent.text.toString())
-            sendMessage(newMessage)
-            binding.chatInputContainer.etContent.setText("")
-        }
-        NIMClient.getService(V2NIMMessageService::class.java).addMessageListener(messageListener)
-    }
 
     /**
      * 发送消息成功
@@ -560,7 +562,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 if (!hasMore || isLoadingMessageList || firstVisible != 0) {
                     return
                 }
-                Logger.e("加载更多历史消息")
                 loadMessage()
             }
 

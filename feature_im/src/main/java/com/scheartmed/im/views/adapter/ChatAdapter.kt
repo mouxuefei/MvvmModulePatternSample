@@ -9,14 +9,12 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.core.commonsdk.utils.MyLogger
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.uinfo.UserService
-import com.netease.nimlib.sdk.v2.V2NIMFailureCallback
-import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
-import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceiptDetail
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
@@ -24,7 +22,6 @@ import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageNotificationAtta
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageSendingState
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
-import com.orhanobut.logger.Logger
 import com.scheartmed.im.R
 import com.scheartmed.im.data.MessageItem
 import com.scheartmed.im.utils.ChatImageLoader
@@ -131,7 +128,7 @@ class ChatAdapter(
             V2NIMMessageType.V2NIM_MESSAGE_TYPE_CUSTOM -> {
                 val attachment = msg.attachment
                 val raw = attachment.raw
-                Logger.d("IM", "自定义消息内容: $raw")
+                MyLogger.getLogger().d("自定义消息内容: $raw")
                 return if (isSend) MSG_CUSTOM_1_R else MSG_CUSTOM_1_L
             }
 
@@ -162,21 +159,31 @@ class ChatAdapter(
         if (!message.isSelf || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS) {
             return
         }
-        if (tvRead != null && tvRead.text == "已读") {
+        if (tvRead != null && tvRead.text == context.getString(R.string.str_read)) {
             return
         }
-        v2MessageService.getTeamMessageReceiptDetail(message,
-            null,
-            {
+
+        if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM) {
+            v2MessageService.getTeamMessageReceiptDetail(message, null, {
                 tvRead?.let { tv ->
                     //TODO:
-                    Logger.e("readReceipt=" + it.readReceipt.readCount)
-                    tv.text = if (it.readReceipt.readCount > 0) "已读" else "未读"
+                    MyLogger.getLogger().e("readReceipt=" + it.readReceipt.readCount)
+                    tv.text =
+                        if (it.readReceipt.readCount > 0) context.getString(R.string.str_read) else context.getString(
+                            R.string.str_unread
+                        )
                 }
-            },
-            {
-                Logger.e("readReceipt error=" + it.desc)
+            }, {
+                MyLogger.getLogger().e("readReceipt error=" + it.desc)
             })
+        } else {
+            tvRead?.let {
+                val isPeerRead: Boolean =
+                    NIMClient.getService(V2NIMMessageService::class.java).isPeerRead(message)
+                it.text =
+                    if (isPeerRead) context.getString(R.string.str_read) else context.getString(R.string.str_unread)
+            }
+        }
     }
 
     /**
@@ -307,7 +314,6 @@ class ChatAdapter(
         val ivVideo = helper.getViewOrNull<ImageView>(R.id.ivVideoCover)
         ivVideo?.let {
             val attachment = item.attachment as V2NIMMessageVideoAttachment
-            Logger.e("attachment.url=" + attachment.url)
             Glide.with(context).asBitmap().load(attachment.url) // http/https 视频地址
                 .centerCrop().frame(1000 * 1000) // 指定取 1 秒处的帧 (单位微秒)
                 .into(ivVideo)

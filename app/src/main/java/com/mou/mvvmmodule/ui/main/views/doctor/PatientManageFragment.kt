@@ -3,6 +3,7 @@ package com.mou.mvvmmodule.ui.main.views.doctor
 import android.os.Bundle
 import com.core.commonsdk.base.BaseFragment
 import com.core.commonsdk.utils.ActRouter
+import com.core.commonsdk.utils.MyLogger
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.HomeFragmentViewModel
 import com.netease.nimlib.sdk.NIMClient
@@ -48,7 +49,7 @@ class PatientManageFragment : BaseFragment<HomeFragmentViewModel>() {
             NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null,
                 {
                     // TODO
-                    Logger.e("success==")
+                    MyLogger.getLogger().e("success==")
                     val bundle = Bundle()
                     bundle.putString("account", "test002")
                     ActRouter.startActivity(mContext, ChatP2PActivity::class.java, bundle)

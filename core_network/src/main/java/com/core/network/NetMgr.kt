@@ -1,5 +1,6 @@
 package com.core.network
 
+import com.core.commonsdk.utils.MyLogger
 import com.google.gson.GsonBuilder
 import com.core.network.api.NetProvider
 import com.orhanobut.logger.Logger
@@ -32,8 +33,10 @@ import java.util.concurrent.TimeUnit
 object NetMgr {
     //存放网络设置的map
     private val providerMap = HashMap<String, NetProvider>()
+
     //存放retrofit的map
     private val retrofitMap = HashMap<String, Retrofit>()
+
     //存放okhttp的map
     private val clientMap = HashMap<String, OkHttpClient>()
 
@@ -66,15 +69,15 @@ object NetMgr {
         checkProvider(provider)
 
         val gson = GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                .registerTypeAdapterFactory(NullStringToEmptyAdapterFactory())
-                .create()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .registerTypeAdapterFactory(NullStringToEmptyAdapterFactory())
+            .create()
 
         val builder = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(getClient(baseUrl, provider!!))
+            .baseUrl(baseUrl)
+            .client(getClient(baseUrl, provider!!))
 //                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()
         retrofitMap[baseUrl] = retrofit
         providerMap[baseUrl] = provider
@@ -97,20 +100,26 @@ object NetMgr {
 
         val builder = OkHttpClient.Builder()
 
-        builder.connectTimeout(if (provider.configConnectTimeoutSecs() != 0L)
-            provider.configConnectTimeoutSecs()
-        else
-            connectTimeoutMills, TimeUnit.SECONDS)
+        builder.connectTimeout(
+            if (provider.configConnectTimeoutSecs() != 0L)
+                provider.configConnectTimeoutSecs()
+            else
+                connectTimeoutMills, TimeUnit.SECONDS
+        )
 
-        builder.readTimeout(if (provider.configReadTimeoutSecs() != 0L)
-            provider.configReadTimeoutSecs()
-        else
-            readTimeoutMills, TimeUnit.SECONDS)
+        builder.readTimeout(
+            if (provider.configReadTimeoutSecs() != 0L)
+                provider.configReadTimeoutSecs()
+            else
+                readTimeoutMills, TimeUnit.SECONDS
+        )
 
-        builder.writeTimeout(if (provider.configWriteTimeoutSecs() != 0L)
-            provider.configWriteTimeoutSecs()
-        else
-            readTimeoutMills, TimeUnit.SECONDS)
+        builder.writeTimeout(
+            if (provider.configWriteTimeoutSecs() != 0L)
+                provider.configWriteTimeoutSecs()
+            else
+                readTimeoutMills, TimeUnit.SECONDS
+        )
 
         val cookieJar = provider.configCookie()
         if (cookieJar != null) {
@@ -131,7 +140,7 @@ object NetMgr {
 
         if (provider.configLogEnable()) {
             val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-                Logger.d(it)
+                MyLogger.getLogger().d(it)
             })
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(loggingInterceptor)

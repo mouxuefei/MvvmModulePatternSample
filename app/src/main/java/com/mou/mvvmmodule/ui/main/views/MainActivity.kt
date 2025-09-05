@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.core.commonsdk.base.BaseActivity
+import com.core.commonsdk.utils.MyLogger
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MainViewModel
@@ -168,7 +169,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: BottomBarEvent) {
-        com.orhanobut.logger.Logger.d("接收到消息了 = ${event.isShow}")
+        MyLogger.getLogger().d("接收到消息了 = ${event.isShow}")
 //        if (event.isShow) {
         binding.bottomBar.visibility = if (event.isShow) View.VISIBLE else View.GONE
 //        }
