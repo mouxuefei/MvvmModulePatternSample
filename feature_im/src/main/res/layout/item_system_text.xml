@@ -22,7 +22,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="12dp"
-        android:background="@color/read_dot_bg">
+        android:background="@color/c_read_dot_bg">
 
         <TextView
             android:layout_width="wrap_content"

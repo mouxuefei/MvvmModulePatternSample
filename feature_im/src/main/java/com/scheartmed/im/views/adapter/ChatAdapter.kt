@@ -334,24 +334,36 @@ class ChatAdapter(
     private fun setImageType(
         item: V2NIMMessage, helper: BaseViewHolder
     ) {
+//        val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
+//        imageAttachment?.let { it ->
+//            if (it.name?.contains(".gif", true) == true) {
+//                val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
+//                val maxWidth =
+//                    helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2
+//                ChatImageLoader.loadGif(
+//                    context, imageUrl, helper.getView(R.id.bivPic), maxWidth
+//                )
+//                return
+//            }
+//            // 本地 url
+//            val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
+//            val maxWidth =
+//                helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2
+//            ChatImageLoader.loadImage(
+//                context, imageUrl, helper.getView(R.id.bivPic), maxWidth, 8
+//            )
+//        }
+
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
-        imageAttachment?.let { it ->
+        imageAttachment?.let {
+            val imageUrl = it.path.takeIf { it2-> !it2.isNullOrEmpty() } ?: it.url
+            val maxWidth = helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2
+
             if (it.name?.contains(".gif", true) == true) {
-                val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
-                val maxWidth =
-                    helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
-                ChatImageLoader.loadGif(
-                    context, imageUrl, helper.getView(R.id.bivPic), maxWidth
-                )
-                return
+                ChatImageLoader.loadGif(context, imageUrl, helper.getView(R.id.bivPic), maxWidth)
+            } else {
+                ChatImageLoader.loadImage(context, imageUrl, helper.getView(R.id.bivPic), maxWidth, 8)
             }
-            // 本地 url
-            val imageUrl = it.path.takeIf { !it.isNullOrEmpty() } ?: it.url
-            val maxWidth =
-                helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2 // 最大宽度
-            ChatImageLoader.loadImage(
-                context, imageUrl, helper.getView(R.id.bivPic), maxWidth, 8
-            )
         }
     }
 

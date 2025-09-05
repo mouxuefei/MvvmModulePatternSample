@@ -37,7 +37,7 @@ public class UnreadCountTextView extends AppCompatTextView {
 
     private void init() {
         mPaint = new Paint();
-        mPaint.setColor(getResources().getColor(R.color.read_dot_bg));
+        mPaint.setColor(getResources().getColor(R.color.c_read_dot_bg));
         mPaint.setAntiAlias(true);
         setTextColor(Color.WHITE);
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 13.6f);

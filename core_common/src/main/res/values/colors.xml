@@ -13,11 +13,11 @@
     <color name="public_black">#000000</color><!--黑色-->
     <color name="public_enable_text">#fff7f7</color>
 
-    <color name="public_whiteColor">#FFFFFF</color>
-    <color name="public_grayColor">#F8F8F8</color>
-    <color name="public_hintColor">#10000000</color>
-    <color name="public_greenColor">#10C219</color>
-    <color name="public_yellowColor">#FFBD1F</color>
-    <color name="public_grayBut">#EEEEEE</color>
-    <color name="public_333333">#333333</color>
+    <color name="c_whiteColor">#FFFFFF</color>
+    <color name="c_grayColor">#F8F8F8</color>
+    <color name="c_hintColor">#10000000</color>
+    <color name="c_greenColor">#10C219</color>
+    <color name="c_yellowColor">#FFBD1F</color>
+    <color name="c_grayBut">#EEEEEE</color>
+    <color name="c_333333">#333333</color>
 </resources>

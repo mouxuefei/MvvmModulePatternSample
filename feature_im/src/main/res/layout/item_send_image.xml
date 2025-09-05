@@ -50,7 +50,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="0dp"
                 android:adjustViewBounds="true"
-                android:background="@color/transparentColor"
+                android:background="@color/c_transparentColor"
                 android:scaleType="centerCrop" />
 
         </RelativeLayout>
