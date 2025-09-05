@@ -43,7 +43,7 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:2.9.0"
     api "com.squareup.retrofit2:converter-gson:2.9.0"
     api "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
-    api "com.squareup.okhttp3:okhttp:3.10.0"
+    api "com.squareup.okhttp3:okhttp:4.10.0"
     api "com.squareup.okhttp3:logging-interceptor:3.9.0"
 
     api "jp.wasabeef:glide-transformations:2.0.1"
