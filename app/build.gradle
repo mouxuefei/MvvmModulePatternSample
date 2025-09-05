@@ -5,9 +5,10 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+
 android {
     namespace "com.mou.mvvmmodule" // 新版必须指定
-    compileSdk 34
+    compileSdk project.properties['TARGET_SDK'].toInteger()
     defaultConfig {
         minSdkVersion project.properties['MIN_SDK'].toInteger()
         targetSdk project.properties['TARGET_SDK'].toInteger()
@@ -15,7 +16,7 @@ android {
         versionName project.properties['APP_VERSION_NAME']
         multiDexEnabled true
         ndk { //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
 
     }
@@ -27,16 +28,16 @@ android {
 
     signingConfigs {
         debug {
-            keyAlias 'key'
-            keyPassword '123456'
-            storeFile file("./mvvm.jks")
-            storePassword '123456'
+            keyAlias 'heartmed'
+            keyPassword 'hrt2025'
+            storeFile file("./hrt.jks")
+            storePassword 'hrt2025'
         }
         release {
-            keyAlias 'key'
-            keyPassword '123456'
-            storeFile file("./mvvm.jks")
-            storePassword '123456'
+            keyAlias 'heartmed'
+            keyPassword 'hrt2025'
+            storeFile file("./hrt.jks")
+            storePassword 'hrt2025'
         }
     }
 
@@ -53,7 +54,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             //是否开启混淆
-            minifyEnabled false
+            minifyEnabled true
             // 移除无用的resource文件
             shrinkResources false
             // Zipalign优化
@@ -92,8 +93,45 @@ android {
         htmlOutput = file("$buildDir/reports/lint/lint.html")
     }
 
+    flavorDimensions "env"
+    productFlavors {
+        dev {
+            dimension "env"
+            buildConfigField "String", "BASE_URL", "\"https://dev.api.example.com/\""
+            buildConfigField "String", "ENV_TYPE", "\"dev\""
+        }
+
+        qa {   // 用 qa 或 staging 代替 test
+            dimension "env"
+            buildConfigField "String", "BASE_URL", "\"https://qa.api.example.com/\""
+            buildConfigField "String", "ENV_TYPE", "\"qa\""
+        }
+
+        uta {
+            dimension "env"
+            buildConfigField "String", "BASE_URL", "\"https://pre.api.example.com/\""
+            buildConfigField "String", "ENV_TYPE", "\"uta\""
+        }
+
+        prod {
+            dimension "env"
+            buildConfigField "String", "BASE_URL", "\"https://api.example.com/\""
+            buildConfigField "String", "ENV_TYPE", "\"prod\""
+        }
+    }
+
 
 }
+
+android.applicationVariants.configureEach { variant ->
+    variant.outputs.each { output ->
+        def flavor = variant.flavorName
+        def versionName = variant.versionName
+        def time = new Date().format("MMdd_HH:mm")
+        output.outputFileName = "heartmed_v${versionName}_${time}(${flavor}).apk"
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20"
@@ -101,7 +139,5 @@ dependencies {
     implementation project(':core_network')
     implementation project(':feature_im')
     implementation project(':feature_business')
-
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.3.0'
 
 }

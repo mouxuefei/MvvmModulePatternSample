@@ -4,6 +4,8 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url "https://jitpack.io" }
+
     }
 }
 
@@ -14,14 +16,14 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/spring/'}
-        maven { url 'https://maven.aliyun.com/repository/google/'}
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/'}
-        maven { url 'https://maven.aliyun.com/repository/spring-plugin/'}
-        maven { url 'https://maven.aliyun.com/repository/grails-core/'}
-        maven { url 'https://maven.aliyun.com/repository/apache-snapshots/'}
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
+        maven { url 'https://maven.aliyun.com/repository/grails-core/' }
+        maven { url 'https://maven.aliyun.com/repository/apache-snapshots/' }
     }
 }
-
+rootProject.name = "MvvmModulePatternSample"
 include ':app', ':core_mvvm', ':core_common',':core_network', ':feature_im'
 include ':feature_business'

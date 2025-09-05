@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.scheartmed.business'
-    compileSdk 34
+    compileSdk project.properties['TARGET_SDK'].toInteger()
 
     defaultConfig {
         minSdkVersion project.properties['MIN_SDK'].toInteger()

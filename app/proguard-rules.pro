@@ -80,3 +80,58 @@
     @com.journeyapps.barcodescanner.* <fields>;
 }
 
+# 保留 OkHttp 内部平台类，防止 R8 删除
+-keep class okhttp3.internal.platform.** { *; }
+-dontwarn okhttp3.internal.platform.**
+
+# 保留 BouncyCastle 的 TLS 支持
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
+
+-keep class * {
+    public <init>(...);
+}
+-keepclassmembers class * {
+    public <init>(...);
+}
+
+# 保留 Activity 和 Fragment
+-keep class * extends android.app.Activity
+-keep class * extends androidx.fragment.app.Fragment
+
+# 保留所有序列化类
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object readResolve();
+    java.lang.Object writeReplace();
+}
+
+
+# DataBinding
+-keep class androidx.databinding.** { *; }
+
+# 删除 Log.d / Log.v
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}
+
+
+# 保留 DataBinding 自动生成的类
+-keep class **BR { *; }
+-keep class *BindingImpl { *; }
+
+# 保留带有 @Bindable 注解的字段
+-keepclassmembers class * {
+    @androidx.databinding.Bindable <fields>;
+}
+
+# 防止 R8 删除 setVariable 方法
+-keepclassmembers class * extends androidx.databinding.ViewDataBinding {
+    public boolean setVariable(int, java.lang.Object);
+}
+
+-keep class com.core.commonsdk.** { *; }

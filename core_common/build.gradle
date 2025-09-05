@@ -6,7 +6,7 @@ plugins {
 }
 android {
     namespace "com.core.commonsdk"
-    compileSdk 34
+    compileSdk project.properties['TARGET_SDK'].toInteger()
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -23,7 +23,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 
 
     dataBinding {
