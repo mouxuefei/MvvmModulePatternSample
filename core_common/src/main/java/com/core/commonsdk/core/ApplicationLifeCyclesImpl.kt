@@ -52,7 +52,7 @@ class ApplicationLifeCyclesImpl : AppLifeCycles {
             .build()
         Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
             override fun isLoggable(priority: Int, tag: String?): Boolean {
-                return BuildConfig.DEBUG
+                return true
             }
         })
 

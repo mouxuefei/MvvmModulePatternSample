@@ -41,7 +41,6 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20"
     api project(':core_mvvm')
     api "androidx.cardview:cardview:1.0.0"
     api "io.github.scwang90:refresh-layout-kernel:2.0.5"

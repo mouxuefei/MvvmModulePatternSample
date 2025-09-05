@@ -11,9 +11,12 @@ import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.uinfo.UserService
+import com.netease.nimlib.sdk.v2.V2NIMFailureCallback
+import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
+import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceiptDetail
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
@@ -151,13 +154,28 @@ class ChatAdapter(
 
     private fun setReadStatus(holder: BaseViewHolder, message: V2NIMMessage) {
         val tvRead = holder.getViewOrNull<TextView>(R.id.chat_item_tv_read)
-        tvRead?.let {
-            val isPeerRead: Boolean =
-                NIMClient.getService(V2NIMMessageService::class.java).isPeerRead(message)
-            it.text = if (isPeerRead) "已读" else "未读"
-            it.visibility =
-                if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P) View.VISIBLE else View.GONE
+
+        val v2MessageService = NIMClient.getService(
+            V2NIMMessageService::class.java
+        )
+        if (!message.isSelf || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS) {
+            return
         }
+        val memberAccountIds = mutableSetOf<String>()
+        memberAccountIds.add("test002")
+        memberAccountIds.add("test003")
+        v2MessageService.getTeamMessageReceiptDetail(message,
+            memberAccountIds,
+            {
+                tvRead?.let { tv ->
+                    //TODO:
+                    Logger.e("readReceipt=" + it.readReceipt.readCount)
+                    tv.text = if (it.readReceipt.readCount > 0) "已读" else "未读"
+                }
+            },
+            {
+                Logger.e("readReceipt error=" + it.desc)
+            })
     }
 
     /**
@@ -172,10 +190,10 @@ class ChatAdapter(
             it.visibility =
                 if (type == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P) View.GONE else View.VISIBLE
         }
-        tvAvatar?.let {
-            ChatImageLoader.loadCircleImage(
-                context, userInfo.avatar, it, item.isSelf
-            )
+        tvAvatar?.apply {
+            userInfo?.avatar?.let { url ->
+                ChatImageLoader.loadCircleImage(context, url, this, item.isSelf)
+            }
         }
     }
 

@@ -10,10 +10,35 @@
         android:text="sdd " />
 
     <Button
+        android:id="@+id/btnCreateGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="创建群聊" />
+
+    <Button
+        android:id="@+id/btnGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="群聊test001" />
+
+    <Button
+        android:id="@+id/btnGroup2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="群聊test002" />
+
+
+    <Button
+        android:id="@+id/btnGroup3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="群聊test003" />
+
+    <Button
         android:id="@+id/btnChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="设置群聊" />
+        android:text="单聊" />
     <Button
         android:id="@+id/btnVideo"
         android:layout_width="match_parent"

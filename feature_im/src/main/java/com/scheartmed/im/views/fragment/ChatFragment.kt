@@ -42,6 +42,7 @@ import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult
 import com.netease.nimlib.sdk.v2.user.V2NIMUserService
+import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil
 import com.orhanobut.logger.Logger
 import com.scheartmed.im.R
 import com.scheartmed.im.data.MessageItem
@@ -75,6 +76,17 @@ import java.io.File
  * @desc
  */
 class ChatFragment : BaseFragment<ChatViewModel>() {
+
+    companion object {
+        fun newInstance(teamId: String): ChatFragment {
+            val fragment = ChatFragment()
+            val args = Bundle()
+            args.putString("teamId", teamId)
+            fragment.setArguments(args)
+            return fragment
+        }
+    }
+
     override val binding: FragmentChatBinding by lazy {
         FragmentChatBinding.inflate(layoutInflater)
     }
@@ -95,16 +107,21 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
         // 判断是否需要添加时间消息
         private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
-            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
+            return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && V2NIMConversationIdUtil.conversationTargetId(
+                imMessage.conversationId
+            ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession.conversationId) && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
         }
 
         override fun onReceiveMessages(messages: MutableList<V2NIMMessage>) {
+            Logger.e("onReceiveMessages==" + messages.size)
             val lastMsg = mMsgList.lastOrNull()
             if (shouldAddTimeMessage(messages[0], lastMsg)) {
                 mMsgList.add(mChatHandler.createTimeMessage(messages[0]))
             }
             val newMessages = messages.filter {
-                it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+                it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && V2NIMConversationIdUtil.conversationTargetId(
+                    it.conversationId
+                ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession.conversationId)
             }
             newMessages.forEach {
                 mMsgList.add(MessageItem.SdkMessage(it))
@@ -114,8 +131,16 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 binding.rvChatList.layoutManager?.scrollToPosition(mMsgList.size - 1)
             }
 
-            //TODO: 发送已读回执
-
+            val notMyMessages = messages.filter {
+                Logger.e("senderId==" + it.senderId + ",isSelf=" + it.isSelf)
+                filterReceiptMessages(it)
+            }
+            NIMClient.getService(V2NIMMessageService::class.java)
+                .sendTeamMessageReceipts(notMyMessages, {
+                    Logger.e("发送已读回执成功1")
+                }) {
+                    Logger.e("发送已读回执失败1" + it.desc)
+                }
         }
 
         override fun onReceiveTeamMessageReadReceipts(readReceipts: MutableList<V2NIMTeamMessageReadReceipt>) {
@@ -178,13 +203,13 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 //        loadAnchorMessage()
     }
 
-    private fun getConversationId(): String {
+    private fun getTeamId(): String {
         val arguments = arguments
-        var conversationId = ""
+        var teamId = ""
         arguments?.let {
-            conversationId = it.getString("conversationId") ?: ""
+            teamId = it.getString("teamId") ?: ""
         }
-        return conversationId
+        return teamId
     }
 
 
@@ -195,22 +220,32 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             else -> (mMsgList[0] as? MessageItem.SdkMessage)?.message
         }
         isLoadingMessageList = true
+        Logger.e(
+            "loadMessage anchorMessage==" + (anchorMessage?.messageId
+                ?: "null") + ",mChatSession.conversationId=" + mChatSession.conversationId
+        )
         mChatHandler.loadMessage(anchorMessage, mChatSession.conversationId, {
             handleMsg(it)
             isLoadingMessageList = false
         }, {
+            Logger.e("loadMessage error==" + it.desc)
             isLoadingMessageList = false
         })
     }
 
     private fun handleMsg(it: V2NIMMessageListResult) {
         val messages = it.messages
-        messages.forEach {
-            if (!it.isSelf) {
-                //TODO 发送已读回执
-
-            }
+        val notMyMessages = messages.filter {
+            filterReceiptMessages(it)
         }
+        Logger.e("notMyMessages ==" + notMyMessages.size)
+        //已读回执
+        NIMClient.getService(V2NIMMessageService::class.java)
+            .sendTeamMessageReceipts(notMyMessages, {
+                Logger.e("发送已读回执成功")
+            }) {
+                Logger.e("发送已读回执失败" + it.desc)
+            }
         messages.reverse()
         val anchorMessage = it.anchorMessage
         if (messages.isEmpty() || messages.size < ChatMsgHandler.ONE_QUERY_LIMIT) {
@@ -241,6 +276,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     }
 
+    private fun filterReceiptMessages(it: V2NIMMessage) = (!it.isSelf
+            && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION
+            && it.messageType != V2NIMMessageType.V2NIM_MESSAGE_TYPE_TIPS)
+
     private fun RecyclerView.doAfterNextLayout(action: () -> Unit) {
         viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
@@ -252,22 +291,17 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun createChatSession() {
-        val conversationId = getConversationId()
+        val teamId = getTeamId()
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
+        Logger.e("login myAccountId==" + myAccountId)
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
-        val chatUserInfo = userService.getUserInfo(conversationId).data
         mChatSession = ChatSession()
-        mChatSession.chatInfo = chatUserInfo
         mChatSession.myInfo = myUsrInfo
         mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
-        mChatSession.conversationId = conversationId
+        mChatSession.conversationId = V2NIMConversationIdUtil.teamConversationId(teamId)
         mChatHandler = ChatMsgHandler(context)
 
-    }
-
-    public fun getBottomLayoutIsShow(): Boolean {
-        return binding.bottomLayout.isShown()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -283,8 +317,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         mChatUiHelper?.bindContentLayout(binding.llContent)
             ?.bindToSendButton(binding.chatInputContainer.btnSend)
             ?.bindEditText(binding.chatInputContainer.etContent)
-            ?.bindBottomLayout(binding.bottomLayout)
-            ?.bindEmojiLayout(binding.layoutExpress)
+            ?.bindBottomLayout(binding.bottomLayout)?.bindEmojiLayout(binding.layoutExpress)
             ?.bindAddLayout(binding.llAdd.rootAddPanel)
             ?.bindToAddButton(binding.chatInputContainer.ivAdd)
             ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
@@ -607,8 +640,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         var position = 0
         val videoList = ArrayList<LocalMedia>()
         mMsgList.filterIsInstance<MessageItem.SdkMessage>()
-            .filter { it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO }
-            .map {
+            .filter { it.message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO }.map {
                 val videoAttachment = it.message.attachment as? V2NIMMessageVideoAttachment
                 val videoUrl =
                     videoAttachment?.path.takeIf { !it.isNullOrEmpty() } ?: videoAttachment?.url
@@ -640,8 +672,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 val drawableRes =
                     if (msg.message.isSelf) R.drawable.voice_white else R.drawable.voice_black
                 context?.let { it1 ->
-                    Glide.with(it1).asGif().load(drawableRes)
-                        .into(it)
+                    Glide.with(it1).asGif().load(drawableRes).into(it)
                 };
             }
         }, onComplete = {

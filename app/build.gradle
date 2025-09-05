@@ -54,7 +54,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             //是否开启混淆
-            minifyEnabled true
+            minifyEnabled false
             // 移除无用的resource文件
             shrinkResources false
             // Zipalign优化
@@ -134,7 +134,6 @@ android.applicationVariants.configureEach { variant ->
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20"
     implementation project(':core_common')
     implementation project(':core_network')
     implementation project(':feature_im')
