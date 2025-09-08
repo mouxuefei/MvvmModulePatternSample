@@ -5,56 +5,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:id="@+id/llContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChatList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <LinearLayout
-                android:id="@+id/llContent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+        <include
+            android:id="@+id/chatInputContainer"
+            layout="@layout/layout_chat_input" />
+    </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvChatList"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <RelativeLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
-                <include
-                    android:id="@+id/chatInputContainer"
-                    layout="@layout/layout_chat_input" />
-            </LinearLayout>
+        <com.scheartmed.im.widget.emoji.ExpressLayout
+            android:id="@+id/layoutExpress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
-            <RelativeLayout
-                android:id="@+id/bottomLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <com.scheartmed.im.widget.emoji.ExpressLayout
-                    android:id="@+id/layoutExpress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <include
-                    android:id="@+id/llAdd"
-                    layout="@layout/layout_add_panel"
-                    android:visibility="gone" />
-            </RelativeLayout>
-        </LinearLayout>
-
-
+        <include
+            android:id="@+id/llAdd"
+            layout="@layout/layout_add_panel"
+            android:visibility="gone" />
     </RelativeLayout>
+
+
 </LinearLayout>
