@@ -16,7 +16,7 @@
         android:text="创建群聊" />
 
     <Button
-        android:id="@+id/btnGroup"
+        android:id="@+id/btnGroupLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="群聊test001" />

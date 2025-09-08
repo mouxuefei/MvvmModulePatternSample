@@ -178,6 +178,12 @@ public class ChatMsgHandler {
         return v2CustomMessage;
     }
 
+    public V2NIMMessage createTipsMessage(String text) {
+        V2NIMMessage v2CustomMessage = V2NIMMessageCreator.createTipsMessage(text);
+        return v2CustomMessage;
+    }
+
+
 
     /**
      * 加载历史消息记录

@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">lib_im</string>
+    <string name="app_name">im</string>
 
-    <string name="date_year_short">年</string>
-    <string name="date_month_short">月</string>
-    <string name="date_day_short">天</string>
-    <string name="date_hour_short">时</string>
-    <string name="date_minute_short">分</string>
-    <string name="date_second_short">秒</string>
-    <string name="date_yesterday">昨天</string>
+    <string name="str_date_year_short">年</string>
+    <string name="str_date_month_short">月</string>
+    <string name="str_date_day_short">天</string>
+    <string name="str_date_hour_short">时</string>
+    <string name="str_date_minute_short">分</string>
+    <string name="str_date_second_short">秒</string>
+    <string name="str_date_yesterday">昨天</string>
 
     <string name="str_send">发送</string>
     <string name="str_press_talk">按住 说话</string>
     <string name="str_read">已读</string>
     <string name="str_unread">未读</string>
+    <string name="str_revoke">撤回</string>
+    <string name="str_copy">复制</string>
 </resources>

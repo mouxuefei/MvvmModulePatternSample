@@ -45,22 +45,22 @@ public class DateTimeUtil {
 
     public static String formatSeconds(long seconds) {
         Context context = BaseApplication.Companion.instance();
-        String timeStr = seconds + context.getString(R.string.date_second_short);
+        String timeStr = seconds + context.getString(R.string.str_date_second_short);
         if (seconds > 60) {
             long second = seconds % 60;
             long min = seconds / 60;
-            timeStr = min + context.getString(R.string.date_minute_short) + second + context.getString(R.string.date_second_short);
+            timeStr = min + context.getString(R.string.str_date_minute_short) + second + context.getString(R.string.str_date_second_short);
             if (min > 60) {
                 min = (seconds / 60) % 60;
                 long hour = (seconds / 60) / 60;
-                timeStr = hour + context.getString(R.string.date_hour_short) + min + context.getString(R.string.date_minute_short) + second + context.getString(R.string.date_second_short);
+                timeStr = hour + context.getString(R.string.str_date_hour_short) + min + context.getString(R.string.str_date_minute_short) + second + context.getString(R.string.str_date_second_short);
                 if (hour % 24 == 0) {
                     long day = (((seconds / 60) / 60) / 24);
-                    timeStr = day + context.getString(R.string.date_day_short);
+                    timeStr = day + context.getString(R.string.str_date_day_short);
                 } else if (hour > 24) {
                     hour = ((seconds / 60) / 60) % 24;
                     long day = (((seconds / 60) / 60) / 24);
-                    timeStr = day + context.getString(R.string.date_day_short) + hour + context.getString(R.string.date_hour_short) + min + context.getString(R.string.date_minute_short) + second + context.getString(R.string.date_second_short);
+                    timeStr = day + context.getString(R.string.str_date_day_short) + hour + context.getString(R.string.str_date_hour_short) + min + context.getString(R.string.str_date_minute_short) + second + context.getString(R.string.str_date_second_short);
                 }
             }
         }

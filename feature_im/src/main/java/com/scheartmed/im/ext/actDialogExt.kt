@@ -18,10 +18,10 @@ fun AppCompatActivity.retrySendMessageDialog(listener: View.OnClickListener? = n
         desc = "是否重发该消息？",
         type = TipDialogType.Info,
         buttonRightTitle = "重试",
-        buttonRightColor = ContextCompat.getColor(this, R.color.purple_700),
+        buttonRightColor = ContextCompat.getColor(this, R.color.c_3700B3),
         buttonRightClickListener = listener,
         buttonLeftTitle = "取消",
-        buttonLeftColor = ContextCompat.getColor(this, R.color.purple_700),
+        buttonLeftColor = ContextCompat.getColor(this, R.color.c_3700B3),
     )
     showTipDialog(entity)
 }

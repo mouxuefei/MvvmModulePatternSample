@@ -2,7 +2,7 @@ package com.mou.mvvmmodule.ui.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.core.basemvvm.mvvm.BaseViewModel
-import com.mou.mvvmmodule.data.HomeApiManager
+import com.mou.mvvmmodule.data.Api
 import com.orhanobut.logger.Logger
 
 /**
@@ -31,7 +31,7 @@ class HomeFragmentViewModel : BaseViewModel() {
 
     fun loadUser() {
         launchWithLoading({
-            HomeApiManager.apiService.getArticle()
+            Api.loginService.getArticle()
         }, {
             chapterName.value = it.data.datas[0].chapterName
             link.postValue(it.data.datas[0].link)

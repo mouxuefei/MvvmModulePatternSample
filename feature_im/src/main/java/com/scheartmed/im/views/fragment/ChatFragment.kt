@@ -3,12 +3,10 @@ package com.scheartmed.im.views.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -16,24 +14,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestOptions
+import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.base.BaseFragment
+import com.core.commonsdk.utils.MyLogger
 import com.luck.picture.lib.basic.PictureSelector
+import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
-import com.luck.picture.lib.interfaces.OnResultCallbackListener
-import com.core.basemvvm.BaseApplication
-import com.core.commonsdk.utils.MyLogger
-import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener
+import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.style.PictureSelectorStyle
 import com.luck.picture.lib.style.TitleBarStyle
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.msg.model.NIMMessage
+import com.netease.nimlib.sdk.v2.V2NIMFailureCallback
+import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
+import com.netease.nimlib.sdk.v2.message.V2NIMMessageCreator
+import com.netease.nimlib.sdk.v2.message.V2NIMMessageRevokeNotification
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceipt
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageAudioAttachment
@@ -41,6 +41,7 @@ import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageFileAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageImageAttachment
 import com.netease.nimlib.sdk.v2.message.attachment.V2NIMMessageVideoAttachment
 import com.netease.nimlib.sdk.v2.message.enums.V2NIMMessageType
+import com.netease.nimlib.sdk.v2.message.params.V2NIMMessageRevokeParams
 import com.netease.nimlib.sdk.v2.message.result.V2NIMMessageListResult
 import com.netease.nimlib.sdk.v2.user.V2NIMUserService
 import com.netease.nimlib.sdk.v2.utils.V2NIMConversationIdUtil
@@ -58,17 +59,17 @@ import com.scheartmed.im.utils.FilePickerAndSender
 import com.scheartmed.im.utils.FileUtils
 import com.scheartmed.im.utils.GlideEngine
 import com.scheartmed.im.utils.ImageFileCompressEngine
-import com.scheartmed.im.utils.MediaManager
 import com.scheartmed.im.viewmodels.ChatViewModel
-import com.scheartmed.im.views.activity.PhotoViewerActivity
 import com.scheartmed.im.views.activity.WebViewActivity
 import com.scheartmed.im.views.adapter.ChatAdapter
 import com.scheartmed.im.widget.ChatContextMenu
+import com.scheartmed.im.widget.ChatContextMenu.OnTextClickListener
 import com.scheartmed.im.widget.ChatUiHelper
 import com.scheartmed.im.widget.RelativePopupWindow
 import com.scheartmed.im.widget.morelayout.MoreLayoutItemBean
 import org.greenrobot.eventbus.EventBus
 import java.io.File
+
 
 /**
  * @author: villa_mou
@@ -164,6 +165,39 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     mAdapter?.notifyItemChanged(index)
                 }
             }
+        }
+
+        override fun onMessageRevokeNotifications(revokeNotifications: MutableList<V2NIMMessageRevokeNotification>) {
+            super.onMessageRevokeNotifications(revokeNotifications)
+            if (revokeNotifications.isNotEmpty()) {
+                revokeNotifications.forEach {
+                    MyLogger.getLogger()
+                        .e("onMessageRevokeNotifications-" + it.messageRefer.messageServerId)
+                    mMsgList.forEach { it2 ->
+                        if (it2 is MessageItem.SdkMessage) {
+                            if(it2.message.messageServerId == it.messageRefer.messageServerId){
+                                val index = mMsgList.indexOf(it2)
+                                val v2NIMMessage = V2NIMMessageCreator.createTipsMessage("对方撤回了一条消息")
+                                NIMClient.getService(
+                                    V2NIMMessageService::class.java
+                                ).insertMessageToLocal(v2NIMMessage,
+                                    mChatSession.conversationId,
+                                    it.revokeAccountId,
+                                    it.messageRefer.createTime,
+                                    {
+                                        mAdapter?.notifyItemChanged(index)
+                                    },
+                                    {
+
+                                    })
+
+
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
     }
@@ -572,12 +606,66 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private fun dealAdapterChildItemLoongClick(
         view: View, item: MessageItem.SdkMessage, position: Int
     ) {
+        if (!isNormalMessage(item.message)) {
+            return
+        }
         val chatContextMenu = ChatContextMenu(view.context)
         chatContextMenu.showOnAnchor(
             view,
             RelativePopupWindow.VerticalPosition.ABOVE,
             RelativePopupWindow.HorizontalPosition.CENTER
         )
+        chatContextMenu.setListener(object : OnTextClickListener {
+            override fun onCopy() {
+
+            }
+
+            override fun onRevoke() {
+                onRevokeMessage(item, position)
+            }
+
+        })
+    }
+
+    private fun onRevokeMessage(item: MessageItem.SdkMessage, position: Int) {
+        val v2MessageService = NIMClient.getService(V2NIMMessageService::class.java)
+        val revokeMessage = item.message
+        val revokeParams = V2NIMMessageRevokeParams
+            .V2NIMMessageRevokeParamsBuilder.builder()
+//            .withEnv("路由抄送地址")
+            .withExtension("扩展信息")
+            .withPushContent("推送文案")
+//            .withPushPayload("推送数据")
+            .build()
+
+        v2MessageService.revokeMessage(revokeMessage, revokeParams, {
+            MyLogger.getLogger().e("撤回成功")
+            val v2NIMMessage = V2NIMMessageCreator.createTipsMessage("你撤回了一条消息")
+            NIMClient.getService(
+                V2NIMMessageService::class.java
+            ).insertMessageToLocal(v2NIMMessage,
+                mChatSession.conversationId,
+                item.message.senderId,
+                item.message.createTime,
+                {
+                    mAdapter?.notifyItemChanged(index)
+                },
+                {
+
+                })
+
+
+        }, {
+            MyLogger.getLogger().e("撤回失败" + it.desc + ",code=" + it.code)
+        });
+
+    }
+
+    /**
+     * 是否是用户自己发送的消息类型
+     */
+    private fun isNormalMessage(message: V2NIMMessage): Boolean {
+        return message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO || message.messageType == V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE
     }
 
     /**

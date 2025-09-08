@@ -3,31 +3,31 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_message"
+    android:orientation="horizontal"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:paddingTop="10dp"
-    android:paddingBottom="20dp"
-    android:orientation="horizontal">
+    android:paddingRight="10dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:id="@+id/tv_copy"
-        android:drawablePadding="4dp"
-        android:text="复制"
-        android:textSize="12sp"
-        android:textColor="@color/c_white"
         android:layout_width="0px"
+        android:layout_height="30dp"
         android:layout_weight="1"
+        android:drawablePadding="4dp"
         android:gravity="center"
-        android:layout_height="wrap_content" />
+        android:text="@string/str_copy"
+        android:textColor="@color/c_white"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_transit"
-        android:drawablePadding="4dp"
-        android:text="转发"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="@color/c_white"
         android:layout_width="0px"
+        android:layout_height="30dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content" />
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="@string/str_revoke"
+        android:textColor="@color/c_white"
+        android:textSize="12sp" />
 </LinearLayout>

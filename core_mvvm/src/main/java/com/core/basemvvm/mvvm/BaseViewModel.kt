@@ -64,9 +64,29 @@ abstract class BaseViewModel : ViewModel() {
                 val result = block()
                 onSuccess(result)
             } catch (e: Exception) {
+                hideLoading()
                 onError(e)
             } finally {
                 hideLoading()
+            }
+        }
+    }
+
+    /**
+     * 无 Loading 的协程封装
+     */
+    protected fun <T> launchNormal(
+        block: suspend CoroutineScope.() -> T,
+        onSuccess: (T) -> Unit = {},
+        onError: (Throwable) -> Unit = {},
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = block()
+                onSuccess(result)
+            } catch (e: Exception) {
+                onError(e)
+            } finally {
             }
         }
     }

@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 
 public class ChatContextMenu extends RelativePopupWindow {
 
+
+    private OnTextClickListener textClickListener;
     private Context mContext;
     public ChatContextMenu(Context context) {
         this.mContext = context;
@@ -44,13 +46,17 @@ public class ChatContextMenu extends RelativePopupWindow {
         tvCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyToClipboard();
+               if(textClickListener!=null){
+                   textClickListener.onCopy();
+               }
             }
         });
         tvTransit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                transitContent();
+                if(textClickListener!=null){
+                    textClickListener.onRevoke();
+                }
             }
         });
     }
@@ -73,7 +79,6 @@ public class ChatContextMenu extends RelativePopupWindow {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void circularReveal(@NonNull final View anchor) {
         final View contentView = getContentView();
         contentView.post(new Runnable() {
@@ -95,5 +100,17 @@ public class ChatContextMenu extends RelativePopupWindow {
                 animator.start();
             }
         });
+
+
     }
+
+    public void setListener(OnTextClickListener listener){
+        this.textClickListener = listener;
+    }
+
+    public interface OnTextClickListener {
+        void onCopy();
+        void onRevoke();
+    }
+
 }
