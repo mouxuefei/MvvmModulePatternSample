@@ -167,38 +167,37 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         override fun onMessageRevokeNotifications(revokeNotifications: MutableList<V2NIMMessageRevokeNotification>) {
             super.onMessageRevokeNotifications(revokeNotifications)
             if (revokeNotifications.isNotEmpty()) {
-                revokeNotifications.forEach {
-                    MyLogger.getLogger()
-                        .e("onMessageRevokeNotifications-" + it.messageRefer.messageServerId)
-                    mMsgList.forEach { it2 ->
-                        if (it2 is MessageItem.SdkMessage) {
-                            if (it2.message.messageServerId == it.messageRefer.messageServerId && it.messageRefer.senderId != mChatSession.myInfo?.accountId) {
-                                val index = mMsgList.indexOf(it2)
-                                val v2NIMMessage =
-                                    V2NIMMessageCreator.createTipsMessage("对方撤回了一条消息")
-                                NIMClient.getService(
-                                    V2NIMMessageService::class.java
-                                ).insertMessageToLocal(v2NIMMessage,
-                                    mChatSession.conversationId,
-                                    it.revokeAccountId,
-                                    it.messageRefer.createTime,
-                                    {
-                                        mMsgList[index] = MessageItem.SdkMessage(v2NIMMessage)
-                                        mAdapter?.notifyItemChanged(index)
-                                    },
-                                    {
+                revokeNotifications.forEach { notification ->
+                    val revokedMessageId = notification.messageRefer.messageServerId
+                    val senderId = notification.messageRefer.senderId
+                    val myAccountId = mChatSession.myInfo?.accountId
 
-                                    })
+                    MyLogger.getLogger().e("onMessageRevokeNotifications-$revokedMessageId")
 
-
-                            }
-                        }
+                    mMsgList.indexOfFirst {
+                        it is MessageItem.SdkMessage && it.message.messageServerId == revokedMessageId && senderId != myAccountId
+                    }.takeIf { it >= 0 }?.let { index ->
+                        val tipsMessage =
+                            mChatHandler.createTipsMessage("对方撤回了一条消息")
+                        NIMClient.getService(V2NIMMessageService::class.java)
+                            .insertMessageToLocal(
+                                tipsMessage,
+                                mChatSession.conversationId,
+                                notification.revokeAccountId,
+                                notification.messageRefer.createTime,
+                                {
+                                    mMsgList[index] = MessageItem.SdkMessage(tipsMessage)
+                                    mAdapter?.notifyItemChanged(index)
+                                },
+                                { error ->
+                                    MyLogger.getLogger()
+                                        .e("Failed to insert tips message: ${error.desc}")
+                                }
+                            )
                     }
                 }
             }
-
         }
-
     }
 
 
@@ -250,7 +249,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             ?.bindToAddButton(binding.chatInputContainer.ivAdd)
             ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
             ?.bindAudioBtn(binding.chatInputContainer.btnAudio)
-            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)?.bindMoreLayoutData(
+            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)
+            ?.bindMoreLayoutData(
                 data
             ) { adapter, view, position ->
                 val item = adapter.getItem(position) as MoreLayoutItemBean
@@ -639,7 +639,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             .build()
         v2MessageService.revokeMessage(revokeMessage, revokeParams, {
             MyLogger.getLogger().e("撤回成功")
-            val v2NIMMessage = V2NIMMessageCreator.createTipsMessage("你撤回了一条消息")
+            val v2NIMMessage = mChatHandler.createTipsMessage("你撤回了一条消息")
             NIMClient.getService(
                 V2NIMMessageService::class.java
             ).insertMessageToLocal(v2NIMMessage,
@@ -653,8 +653,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 {
 
                 })
-
-
         }, {
             MyLogger.getLogger().e("撤回失败" + it.desc + ",code=" + it.code)
         });

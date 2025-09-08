@@ -154,20 +154,6 @@ public class ChatMsgHandler {
         return V2NIMMessageCreator.createAudioMessage(path, null, null, time);
     }
 
-//    /**
-//     * 发送视频消息
-//     *
-//     * @param path 视频文件路径
-//     */
-//    public V2NIMMessage createVideoMessage(String path) {
-//        File file = new File(path);
-//        MediaPlayer player = MediaPlayer.create(mContext, Uri.fromFile(file));
-//        int duration = player.getDuration();
-//        int height = player.getVideoHeight();
-//        int width = player.getVideoWidth();
-//        return MessageBuilder.createVideoMessage(mChatSession.getSessionId(),
-//                mChatSession.getSessionType(), file, duration, width, height, null);
-//    }
 
     public V2NIMMessage createFileMessage(String path) {
         return V2NIMMessageCreator.createFileMessage(path, null, null);

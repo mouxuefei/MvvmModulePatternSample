@@ -1,12 +1,12 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
 }
 
 android {
-    namespace 'com.scheartmed.im'
+    namespace 'com.scheartmed.push'
     compileSdk project.properties['TARGET_SDK'].toInteger()
 
     defaultConfig {
@@ -46,9 +46,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation project(':core_common')
-    implementation project(':core_network')
-    implementation project(':core_push')
-    api "com.netease.nimlib:basesdk:10.9.10"
+    api "com.netease.nimlib:push:10.9.10"
+
 
 }

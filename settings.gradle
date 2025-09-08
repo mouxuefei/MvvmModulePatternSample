@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url "https://jitpack.io" }
+        maven {url 'https://developer.huawei.com/repo/'}
 
     }
 }
@@ -15,6 +16,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven {url 'https://developer.huawei.com/repo/'}
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/spring/' }
         maven { url 'https://maven.aliyun.com/repository/google/' }
@@ -27,3 +29,4 @@ dependencyResolutionManagement {
 rootProject.name = "MvvmModulePatternSample"
 include ':app', ':core_mvvm', ':core_common',':core_network', ':feature_im'
 include ':feature_business'
+include ':core_push'

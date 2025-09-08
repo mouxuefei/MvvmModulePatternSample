@@ -1,4 +1,4 @@
-package com.scheartmed.im.receiver;
+package com.scheartmed.push.receiver;
 
 import android.content.Context;
 
