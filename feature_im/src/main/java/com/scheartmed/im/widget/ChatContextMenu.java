@@ -48,6 +48,7 @@ public class ChatContextMenu extends RelativePopupWindow {
             public void onClick(View v) {
                if(textClickListener!=null){
                    textClickListener.onCopy();
+                   dismiss();
                }
             }
         });
@@ -56,6 +57,7 @@ public class ChatContextMenu extends RelativePopupWindow {
             public void onClick(View v) {
                 if(textClickListener!=null){
                     textClickListener.onRevoke();
+                    dismiss();
                 }
             }
         });

@@ -175,9 +175,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                         .e("onMessageRevokeNotifications-" + it.messageRefer.messageServerId)
                     mMsgList.forEach { it2 ->
                         if (it2 is MessageItem.SdkMessage) {
-                            if(it2.message.messageServerId == it.messageRefer.messageServerId){
+                            if (it2.message.messageServerId == it.messageRefer.messageServerId && it.messageRefer.senderId != mChatSession.myInfo?.accountId) {
                                 val index = mMsgList.indexOf(it2)
-                                val v2NIMMessage = V2NIMMessageCreator.createTipsMessage("对方撤回了一条消息")
+                                val v2NIMMessage =
+                                    V2NIMMessageCreator.createTipsMessage("对方撤回了一条消息")
                                 NIMClient.getService(
                                     V2NIMMessageService::class.java
                                 ).insertMessageToLocal(v2NIMMessage,
@@ -185,6 +186,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                                     it.revokeAccountId,
                                     it.messageRefer.createTime,
                                     {
+                                        mMsgList[index] = MessageItem.SdkMessage(v2NIMMessage)
                                         mAdapter?.notifyItemChanged(index)
                                     },
                                     {
@@ -630,14 +632,11 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private fun onRevokeMessage(item: MessageItem.SdkMessage, position: Int) {
         val v2MessageService = NIMClient.getService(V2NIMMessageService::class.java)
         val revokeMessage = item.message
-        val revokeParams = V2NIMMessageRevokeParams
-            .V2NIMMessageRevokeParamsBuilder.builder()
+        val revokeParams = V2NIMMessageRevokeParams.V2NIMMessageRevokeParamsBuilder.builder()
 //            .withEnv("路由抄送地址")
-            .withExtension("扩展信息")
-            .withPushContent("推送文案")
+            .withExtension("扩展信息").withPushContent("推送文案")
 //            .withPushPayload("推送数据")
             .build()
-
         v2MessageService.revokeMessage(revokeMessage, revokeParams, {
             MyLogger.getLogger().e("撤回成功")
             val v2NIMMessage = V2NIMMessageCreator.createTipsMessage("你撤回了一条消息")
@@ -648,7 +647,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 item.message.senderId,
                 item.message.createTime,
                 {
-                    mAdapter?.notifyItemChanged(index)
+                    mMsgList[position] = MessageItem.SdkMessage(v2NIMMessage)
+                    mAdapter?.notifyItemChanged(position)
                 },
                 {
 

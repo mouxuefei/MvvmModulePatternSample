@@ -278,7 +278,7 @@ class ChatAdapter(
             }
 
             MSG_TIPS_L, MSG_TIPS_R -> {
-                //TODO:
+                setTipsType(item, helper)
             }
 
             MSG_CUSTOM_1_L, MSG_CUSTOM_1_R -> {
@@ -288,6 +288,11 @@ class ChatAdapter(
             else -> {
             }
         }
+    }
+
+    private fun setTipsType(item: V2NIMMessage, helper: BaseViewHolder) {
+        val tvTips = helper.getView<TextView>(R.id.tvTips)
+        tvTips.text = item.text
     }
 
     private fun setNotificationType(item: V2NIMMessage, helper: BaseViewHolder) {
@@ -356,13 +361,20 @@ class ChatAdapter(
 
         val imageAttachment = item.attachment as? V2NIMMessageImageAttachment
         imageAttachment?.let {
-            val imageUrl = it.path.takeIf { it2-> !it2.isNullOrEmpty() } ?: it.url
-            val maxWidth = helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2
+            val imageUrl = it.path.takeIf { it2 -> !it2.isNullOrEmpty() } ?: it.url
+            val maxWidth =
+                helper.getView<View>(R.id.bivPic).resources.displayMetrics.widthPixels / 2
 
             if (it.name?.contains(".gif", true) == true) {
                 ChatImageLoader.loadGif(context, imageUrl, helper.getView(R.id.bivPic), maxWidth)
             } else {
-                ChatImageLoader.loadImage(context, imageUrl, helper.getView(R.id.bivPic), maxWidth, 8)
+                ChatImageLoader.loadImage(
+                    context,
+                    imageUrl,
+                    helper.getView(R.id.bivPic),
+                    maxWidth,
+                    8
+                )
             }
         }
     }
