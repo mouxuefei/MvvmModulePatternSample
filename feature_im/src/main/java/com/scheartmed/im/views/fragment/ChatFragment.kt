@@ -26,9 +26,6 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.style.PictureSelectorStyle
 import com.luck.picture.lib.style.TitleBarStyle
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.msg.model.NIMMessage
-import com.netease.nimlib.sdk.v2.V2NIMFailureCallback
-import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
@@ -275,6 +272,9 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     }
                 }
             }
+
+        mChatUiHelper?.attachKeyboardListener()
+
         //底部布局弹出,聊天列表上滑到最后一位
         binding.rvChatList.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if (bottom < oldBottom) {

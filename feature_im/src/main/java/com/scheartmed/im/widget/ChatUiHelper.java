@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -200,12 +201,31 @@ public class ChatUiHelper {
         lockContentHeight();//显示软件盘时，锁定内容高度，防止跳闪。
         hideBottomLayout(true);//隐藏表情布局，显示软件盘
         //软件盘显示后，释放内容高度
-        mEditText.postDelayed(new Runnable() {
+//        unlockContentHeightDelayed();
+    }
+    public void attachKeyboardListener() {
+        final View rootView = mActivity.findViewById(android.R.id.content);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            private int previousHeight = 0;
+
             @Override
-            public void run() {
-                unlockContentHeightDelayed();
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = rootView.getRootView().getHeight();
+                int visibleHeight = r.height();
+                int heightDiff = screenHeight - visibleHeight;
+
+                // 判断键盘是否显示
+                boolean isKeyboardVisible = heightDiff > screenHeight * 0.15;
+
+                if (!isKeyboardVisible && previousHeight != 0) {
+                    // ⬇️ 键盘刚收起
+                    unlockContentHeightDelayed();
+                }
+                previousHeight = visibleHeight;
             }
-        }, 200L);
+        });
     }
 
     //绑定底部布局
@@ -403,7 +423,7 @@ public class ChatUiHelper {
     private void dealShowPanel() {
         lockContentHeight();
         showBottomLayout();
-        unlockContentHeightDelayed();
+//        unlockContentHeightDelayed();
     }
 
 
@@ -441,7 +461,7 @@ public class ChatUiHelper {
     private void dealClosePanel() {
         lockContentHeight();//显示软件盘时，锁定内容高度，防止跳闪。
         hideBottomLayout(true);//隐藏表情布局，显示软件盘
-        unlockContentHeightDelayed();//软件盘显示后，释放内容高度
+//        unlockContentHeightDelayed();//软件盘显示后，释放内容高度
     }
 
 
@@ -569,12 +589,7 @@ public class ChatUiHelper {
      * 释放被锁定的内容高度
      */
     public void unlockContentHeightDelayed() {
-        mEditText.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((LinearLayout.LayoutParams) mContentLayout.getLayoutParams()).weight = 1.0F;
-            }
-        }, 200L);
+        ((LinearLayout.LayoutParams) mContentLayout.getLayoutParams()).weight = 1.0F;
     }
 
 
