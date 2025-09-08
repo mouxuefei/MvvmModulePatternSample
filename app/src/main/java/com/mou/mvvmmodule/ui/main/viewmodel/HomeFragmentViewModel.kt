@@ -16,18 +16,6 @@ class HomeFragmentViewModel : BaseViewModel() {
     val chapterName = MutableLiveData<String>()
     val link = MutableLiveData<String>()
 
-//    fun getArticle(): Single<BaseBean<ArticleBean>> {
-//        return mModel
-//            .getArticle()
-//            .async()
-//            .doOnSuccess {
-//                chapterName.value=it.data.datas[0].chapterName
-//                link.postValue(it.data.datas[0].link)
-//            }
-//            .doOnError {
-//                Logger.d("doOnError")
-//            }
-//    }
 
     fun loadUser() {
         launchWithLoading({
@@ -36,7 +24,6 @@ class HomeFragmentViewModel : BaseViewModel() {
             chapterName.value = it.data.datas[0].chapterName
             link.postValue(it.data.datas[0].link)
         },{
-            Logger.d("doOnError"+it.message)
         })
     }
 

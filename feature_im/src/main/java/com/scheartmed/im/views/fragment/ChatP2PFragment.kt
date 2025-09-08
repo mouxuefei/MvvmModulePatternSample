@@ -45,6 +45,7 @@ import com.scheartmed.im.R
 import com.scheartmed.im.data.MessageItem
 import com.scheartmed.im.data.model.ChatSession
 import com.scheartmed.im.databinding.FragmentChatBinding
+import com.scheartmed.im.databinding.FragmentChatP2pBinding
 import com.scheartmed.im.ext.retrySendMessageDialog
 import com.scheartmed.im.listener.CustomMessageListener
 import com.scheartmed.im.utils.AudioPlayer
@@ -72,8 +73,8 @@ import java.io.File
  * @desc
  */
 class ChatP2PFragment : BaseFragment<ChatViewModel>() {
-    override val binding: FragmentChatBinding by lazy {
-        FragmentChatBinding.inflate(layoutInflater)
+    override val binding: FragmentChatP2pBinding by lazy {
+        FragmentChatP2pBinding.inflate(layoutInflater)
     }
 
     override fun providerVMClass(): Class<ChatViewModel> = ChatViewModel::class.java

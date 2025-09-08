@@ -92,7 +92,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         }
 
-        binding.btnGroup.setOnClickListener {
+        binding.btnGroupLogin.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
             }) { error ->
