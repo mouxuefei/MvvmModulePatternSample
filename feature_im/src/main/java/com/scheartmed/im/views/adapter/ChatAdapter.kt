@@ -174,7 +174,7 @@ class ChatAdapter(
                         )
                 }
             }, {
-                MyLogger.getLogger().e("readReceipt error=" + it.desc)
+                MyLogger.getLogger().e("readReceipt error=" + it.desc + ",code =" + it.code)
             })
         } else {
             tvRead?.let {

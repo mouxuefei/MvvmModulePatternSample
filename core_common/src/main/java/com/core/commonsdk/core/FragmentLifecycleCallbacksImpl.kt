@@ -13,6 +13,6 @@ import com.orhanobut.logger.Logger
 class FragmentLifecycleCallbacksImpl : FragmentManager.FragmentLifecycleCallbacks() {
     override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
         super.onFragmentCreated(fm, f, savedInstanceState)
-        Logger.i("${f.javaClass.simpleName} onFragmentCreated")
+//        Logger.i("${f.javaClass.simpleName} onFragmentCreated")
     }
 }

@@ -50,80 +50,87 @@ class FitFragment : BaseFragment<FitViewModel>() {
     override fun initView() {
 
         binding.btnCreateGroup.setOnClickListener {
-            NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null, {
-                val v2TeamService = NIMClient.getService(
-                    V2NIMTeamService::class.java
-                )
-                val createTeamParams = V2NIMCreateTeamParams()
-                createTeamParams.name = "群聊test名字2"
-                createTeamParams.teamType = V2NIMTeamType.V2NIM_TEAM_TYPE_NORMAL
-                createTeamParams.setAgreeMode(V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH);
-                createTeamParams.setJoinMode(V2NIMTeamJoinMode.V2NIM_TEAM_JOIN_MODE_FREE);
-                createTeamParams.setInviteMode(V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_ALL);
-                createTeamParams.setUpdateInfoMode(V2NIMTeamUpdateInfoMode.V2NIM_TEAM_UPDATE_INFO_MODE_ALL);
-                createTeamParams.setUpdateExtensionMode(V2NIMTeamUpdateExtensionMode.V2NIM_TEAM_UPDATE_EXTENSION_MODE_MANAGER);
-                createTeamParams.memberLimit = 100
-                createTeamParams.intro = "test2"
-                createTeamParams.announcement = "test2"
-                createTeamParams.serverExtension = "test2"
-                val inviteeAccountIds: MutableList<String> = ArrayList()
-                inviteeAccountIds.add("test001")
-                inviteeAccountIds.add("test002")
-                inviteeAccountIds.add("test003")
-                val postscript = "test2"
-                v2TeamService.createTeam(createTeamParams, inviteeAccountIds, postscript, null,
-                    { result ->
-                        Logger.e("createTeam success, teamId: ${result.team.teamId}")
+            NIMClient.getService(V2NIMLoginService::class.java)
+                .login("user@113722", "249bc99f-1b15-4ac7-ac10-f3818110e5f4", null, {
+                    val v2TeamService = NIMClient.getService(
+                        V2NIMTeamService::class.java
+                    )
+                    val createTeamParams = V2NIMCreateTeamParams()
+                    createTeamParams.name = "群聊test名字2"
+                    createTeamParams.teamType = V2NIMTeamType.V2NIM_TEAM_TYPE_NORMAL
+                    createTeamParams.setAgreeMode(V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH);
+                    createTeamParams.setJoinMode(V2NIMTeamJoinMode.V2NIM_TEAM_JOIN_MODE_FREE);
+                    createTeamParams.setInviteMode(V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_ALL);
+                    createTeamParams.setUpdateInfoMode(V2NIMTeamUpdateInfoMode.V2NIM_TEAM_UPDATE_INFO_MODE_ALL);
+                    createTeamParams.setUpdateExtensionMode(V2NIMTeamUpdateExtensionMode.V2NIM_TEAM_UPDATE_EXTENSION_MODE_MANAGER);
+                    createTeamParams.memberLimit = 100
+                    createTeamParams.intro = "test2"
+                    createTeamParams.announcement = "test2"
+                    createTeamParams.serverExtension = "test2"
+                    val inviteeAccountIds: MutableList<String> = ArrayList()
+                    inviteeAccountIds.add("user@113722")
+                    inviteeAccountIds.add("user@113723")
+                    inviteeAccountIds.add("user@113724")
+                    val postscript = "test2"
+                    v2TeamService.createTeam(createTeamParams, inviteeAccountIds, postscript, null,
+                        { result ->
+                            Logger.e("createTeam success, teamId: ${result.team.teamId}")
 
 
-                    },
-                    { error ->
-                        Logger.e("createTeam fail: ${error.desc}")
-                        Logger.e("createTeam fail: ${error.code}")
-                        Logger.e("createTeam fail: ${error.detail.toString()}")
-                    })
-            }) { error ->
-                val code = error.code
-                val desc = error.desc
-                // TODO
-                Logger.e("error==" + desc)
-            }
+                        },
+                        { error ->
+                            Logger.e("createTeam fail: ${error.desc}")
+                            Logger.e("createTeam fail: ${error.code}")
+                            Logger.e("createTeam fail: ${error.detail.toString()}")
+                        })
+                }) { error ->
+                    val code = error.code
+                    val desc = error.desc
+                    // TODO
+                    Logger.e("error==" + desc)
+                }
 
 
         }
 
         binding.btnGroupLogin.setOnClickListener {
-            NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null, {
+            NIMClient.getService(V2NIMLoginService::class.java)
+                .login("user@113722", "249bc99f-1b15-4ac7-ac10-f3818110e5f4", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
-            }) { error ->
-                val code = error.code
-                val desc = error.desc
-                // TODO
-                Logger.e("error==" + desc)
-            }
+                    Logger.e("登录成功==")
+                }) { error ->
+                    val code = error.code
+                    val desc = error.desc
+                    // TODO
+                    Logger.e("error==" + desc)
+                }
         }
 
         binding.btnGroup2.setOnClickListener {
-            NIMClient.getService(V2NIMLoginService::class.java).login("test002", "123456", null, {
+            NIMClient.getService(V2NIMLoginService::class.java)
+                .login("user@113723", "97b168d5-b09b-4bf8-b698-8fdd1505ff3a", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
-            }) { error ->
-                val code = error.code
-                val desc = error.desc
-                // TODO
-                Logger.e("error==" + desc)
-            }
+                    Logger.e("登录成功==")
+                }) { error ->
+                    val code = error.code
+                    val desc = error.desc
+                    // TODO
+                    Logger.e("error==" + desc)
+                }
         }
 
 
         binding.btnGroup3.setOnClickListener {
-            NIMClient.getService(V2NIMLoginService::class.java).login("test003", "123456", null, {
+            NIMClient.getService(V2NIMLoginService::class.java)
+                .login("user@113724", "3a50f0b7-0da2-46db-83d0-f55596d87780", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
-            }) { error ->
-                val code = error.code
-                val desc = error.desc
-                // TODO
-                Logger.e("error==" + desc)
-            }
+                    Logger.e("登录成功==")
+                }) { error ->
+                    val code = error.code
+                    val desc = error.desc
+                    // TODO
+                    Logger.e("error==" + desc)
+                }
         }
 
         binding.btnChat.setOnClickListener {

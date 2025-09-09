@@ -132,11 +132,12 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 Logger.e("senderId==" + it.senderId + ",isSelf=" + it.isSelf)
                 filterReceiptMessages(it)
             }
+            Logger.e("onReceiveMessages  notMyMessages size =" + notMyMessages.size)
             NIMClient.getService(V2NIMMessageService::class.java)
                 .sendTeamMessageReceipts(notMyMessages, {
                     Logger.e("发送已读回执成功1")
                 }) {
-                    Logger.e("发送已读回执失败1" + it.desc)
+                    Logger.e("发送已读回执失败1" + it.desc + ",code =" + it.code)
                 }
         }
 
@@ -178,23 +179,20 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     mMsgList.indexOfFirst {
                         it is MessageItem.SdkMessage && it.message.messageServerId == revokedMessageId && senderId != myAccountId
                     }.takeIf { it >= 0 }?.let { index ->
-                        val tipsMessage =
-                            mChatHandler.createTipsMessage("对方撤回了一条消息")
-                        NIMClient.getService(V2NIMMessageService::class.java)
-                            .insertMessageToLocal(
-                                tipsMessage,
-                                mChatSession.conversationId,
-                                notification.revokeAccountId,
-                                notification.messageRefer.createTime,
-                                {
-                                    mMsgList[index] = MessageItem.SdkMessage(tipsMessage)
-                                    mAdapter?.notifyItemChanged(index)
-                                },
-                                { error ->
-                                    MyLogger.getLogger()
-                                        .e("Failed to insert tips message: ${error.desc}")
-                                }
-                            )
+                        val tipsMessage = mChatHandler.createTipsMessage("对方撤回了一条消息")
+                        NIMClient.getService(V2NIMMessageService::class.java).insertMessageToLocal(
+                            tipsMessage,
+                            mChatSession.conversationId,
+                            notification.revokeAccountId,
+                            notification.messageRefer.createTime,
+                            {
+                                mMsgList[index] = MessageItem.SdkMessage(tipsMessage)
+                                mAdapter?.notifyItemChanged(index)
+                            },
+                            { error ->
+                                MyLogger.getLogger()
+                                    .e("Failed to insert tips message: ${error.desc}")
+                            })
                     }
                 }
             }
@@ -264,8 +262,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             ?.bindToAddButton(binding.chatInputContainer.ivAdd)
             ?.bindToEmojiButton(binding.chatInputContainer.ivEmo)
             ?.bindAudioBtn(binding.chatInputContainer.btnAudio)
-            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)
-            ?.bindMoreLayoutData(
+            ?.bindAudioIv(binding.chatInputContainer.ivAudioIcon)?.bindMoreLayoutData(
                 data
             ) { adapter, view, position ->
                 val item = adapter.getItem(position) as MoreLayoutItemBean
@@ -375,10 +372,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             else -> (mMsgList[0] as? MessageItem.SdkMessage)?.message
         }
         isLoadingMessageList = true
-        Logger.e(
-            "loadMessage anchorMessage==" + (anchorMessage?.messageId
-                ?: "null") + ",mChatSession.conversationId=" + mChatSession.conversationId
-        )
         mChatHandler.loadMessage(anchorMessage, mChatSession.conversationId, {
             handleMsg(it)
             isLoadingMessageList = false
@@ -394,13 +387,16 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             filterReceiptMessages(it)
         }
         Logger.e("notMyMessages ==" + notMyMessages.size)
-        //已读回执
-        NIMClient.getService(V2NIMMessageService::class.java)
-            .sendTeamMessageReceipts(notMyMessages, {
-                MyLogger.getLogger().e("发送已读回执成功")
-            }) {
-                MyLogger.getLogger().e("发送已读回执失败" + it.desc)
-            }
+        if (notMyMessages.isNotEmpty()) {
+            //已读回执
+            NIMClient.getService(V2NIMMessageService::class.java)
+                .sendTeamMessageReceipts(notMyMessages, {
+                    MyLogger.getLogger().e("发送已读回执成功")
+                }) {
+                    MyLogger.getLogger().e("发送已读回执失败" + it.desc)
+                }
+        }
+
         messages.reverse()
         val anchorMessage = it.anchorMessage
         if (messages.isEmpty() || messages.size < ChatMsgHandler.ONE_QUERY_LIMIT) {

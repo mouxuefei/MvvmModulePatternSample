@@ -25,8 +25,8 @@ class App : BaseApplication() {
 
         options.asyncInitSDK = true
         options.reducedIM = false
-        options.checkManifestConfig = false
-        options.enableTeamMsgAck = false
+        options.checkManifestConfig = true
+        options.enableTeamMsgAck = true
         options.enableFcs = false
         options.enableV2CloudConversation = true
 
