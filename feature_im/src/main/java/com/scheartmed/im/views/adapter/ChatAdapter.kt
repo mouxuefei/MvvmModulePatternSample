@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.core.commonsdk.utils.FileUtils
 import com.core.commonsdk.utils.MyLogger
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.uinfo.UserService
@@ -26,7 +27,6 @@ import com.scheartmed.im.R
 import com.scheartmed.im.data.MessageItem
 import com.scheartmed.im.utils.ChatImageLoader
 import com.scheartmed.im.utils.DateTimeUtil
-import com.scheartmed.im.utils.FileUtils
 import com.scheartmed.im.widget.emoji.EmojiUtils.*
 
 

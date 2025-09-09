@@ -1,12 +1,17 @@
 package com.mou.mvvmmodule.core
 
-import com.core.commonsdk.utils.SpUtil
+import android.graphics.Color
 import com.core.basemvvm.BaseApplication
+import com.core.commonsdk.utils.SpUtil
 import com.mou.mvvmmodule.ui.main.views.MainActivity
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.NotificationFoldStyle
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.StatusBarNotificationConfig
+import com.netease.nimlib.sdk.StatusBarNotificationFilter
+import com.netease.nimlib.sdk.StatusBarNotificationFilter.FilterPolicy
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
+import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.scheartmed.im.widget.WebViewPool
 
@@ -47,18 +52,26 @@ class App : BaseApplication() {
         options.statusBarNotificationConfig = config
     }
 
+    /**
+     * 只有 statusBarNotificationConfig 配置不为空时，toggleNotification 和 toggleRevokeMessageNotification 方法才有效。
+     */
     private fun loadStatusBarNotificationConfig(): StatusBarNotificationConfig {
         val config = StatusBarNotificationConfig()
+        // 单击通知需要跳转到的界面
         config.notificationEntrance = MainActivity::class.java
-//        config.notificationSmallIconId = R.mipmap.ic_logo
-//        config.notificationColor = Color.parseColor("#3a9efb")
-//        config.notificationSound = com.netease.yunxin.app.im.NimSDKOptionConfig.NOTIFY_SOUND_KEY
-//        config.notificationFoldStyle = NotificationFoldStyle.ALL
-//        config.downTimeEnableNotification = true
-//        config.ledARGB = Color.GREEN
-//        config.ledOnMs = com.netease.yunxin.app.im.NimSDKOptionConfig.LED_ON_MS
-//        config.ledOffMs = com.netease.yunxin.app.im.NimSDKOptionConfig.LED_OFF_MS
-        config.showBadge = true
+        // 通知铃声的 uri 字符串
+//        config.notificationSound = "raw/msg"
+//        config.notificationFolded = true
+        config.notificationFoldStyle = NotificationFoldStyle.ALL
+        config.downTimeEnableNotification = true
+        // 呼吸灯配置
+        config.ledARGB = Color.GREEN
+        config.ledOnMs = 1000
+        config.ledOffMs = 1500
+        // 是否 App ICON 显示未读数红点(安卓 O 有效)
+        config.showBadge = false
+
+        config.notificationFilter = StatusBarNotificationFilter { FilterPolicy.DEFAULT }
         return config
     }
 

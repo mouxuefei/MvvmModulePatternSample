@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
+import com.core.commonsdk.utils.FileUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.v2.V2NIMFailureCallback;
 import com.netease.nimlib.sdk.v2.V2NIMProgressCallback;

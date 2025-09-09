@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.scheartmed.im">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.scheartmed.im">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +14,7 @@
            若两处都提供，优先使用 SDKOptions 中的值 -->
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="e8e39ee4489561a3d820185d79887792" />
+            android:value="${NIM_KEY}" />
 
         <!-- 云信后台服务声明 -->
         <service android:name="com.netease.nimlib.service.NimServiceV2" />
@@ -22,9 +23,6 @@
             android:name="com.netease.nimlib.ipc.NIMContentProviderV2"
             android:authorities="${applicationId}.ipc.provider.v2"
             android:exported="false" />
-
-
-
 
         <activity
             android:name=".views.activity.ChatGroupActivity"

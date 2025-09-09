@@ -22,12 +22,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestOptions;
+import com.core.commonsdk.utils.FileUtils;
 import com.core.commonsdk.utils.MyLogger;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
 import com.orhanobut.logger.Logger;
 import com.scheartmed.im.R;
-import com.scheartmed.im.utils.FileUtils;
 import com.scheartmed.im.widget.countdown.IntervalTimer;
 
 

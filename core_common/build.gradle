@@ -74,4 +74,7 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     api 'org.greenrobot:eventbus:3.3.1'
+
+    api 'com.qiniu:qiniu-android-sdk:8.9.+'
+
 }

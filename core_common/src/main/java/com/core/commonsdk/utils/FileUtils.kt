@@ -1,4 +1,4 @@
-package com.scheartmed.im.utils
+package com.core.commonsdk.utils
 
 import android.content.Context
 import android.graphics.Bitmap

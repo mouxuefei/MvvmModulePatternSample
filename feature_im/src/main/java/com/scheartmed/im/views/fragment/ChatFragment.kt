@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.base.BaseFragment
+import com.core.commonsdk.utils.FileUtils
 import com.core.commonsdk.utils.MyLogger
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
@@ -26,10 +27,11 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.style.PictureSelectorStyle
 import com.luck.picture.lib.style.TitleBarStyle
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
 import com.netease.nimlib.sdk.v2.conversation.enums.V2NIMConversationType
 import com.netease.nimlib.sdk.v2.message.V2NIMMessage
-import com.netease.nimlib.sdk.v2.message.V2NIMMessageCreator
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageRevokeNotification
 import com.netease.nimlib.sdk.v2.message.V2NIMMessageService
 import com.netease.nimlib.sdk.v2.message.V2NIMTeamMessageReadReceipt
@@ -53,7 +55,6 @@ import com.scheartmed.im.listener.CustomMessageListener
 import com.scheartmed.im.utils.AudioPlayer
 import com.scheartmed.im.utils.ChatMsgHandler
 import com.scheartmed.im.utils.FilePickerAndSender
-import com.scheartmed.im.utils.FileUtils
 import com.scheartmed.im.utils.GlideEngine
 import com.scheartmed.im.utils.ImageFileCompressEngine
 import com.scheartmed.im.viewmodels.ChatViewModel
@@ -216,6 +217,20 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     override fun initData() {
         createChatSession()
         loadMessage()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setChattingAccount()
+    }
+
+    /**
+     *  进入聊天界面，建议放在 onResume 中，表示来自 account 的消息无需进行消息提醒。
+     */
+    private fun setChattingAccount() {
+        val teamId = getTeamId()
+        NIMClient.getService(MsgService::class.java)
+            .setChattingAccount(teamId, SessionTypeEnum.Team);
     }
 
 

@@ -83,6 +83,10 @@
 # 保留 OkHttp 内部平台类，防止 R8 删除
 -keep class okhttp3.internal.platform.** { *; }
 -dontwarn okhttp3.internal.platform.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
 
 # 保留 BouncyCastle 的 TLS 支持
 -keep class org.bouncycastle.** { *; }
@@ -146,3 +150,34 @@
 -keep class com.huawei.hianalytics.**{*;}
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}
+
+#七牛
+-keep class com.qiniu.**{*;}
+-keep class com.qiniu.**{public <init>();}
+-ignorewarnings
+
+# 保留类名、方法名、字段名（不混淆日志打印等）
+-dontwarn javax.annotation.**
+-dontwarn kotlin.**
+-dontwarn org.jetbrains.annotations.**
+-dontwarn sun.misc.**
+
+
+
+# Retrofit
+-keepattributes *Annotation*
+-keep class retrofit2.** { *; }
+-dontwarn retrofit2.**
+-keep interface * implements retrofit2.Call
+
+# EventBus
+-keepclassmembers class ** {
+    public void onEvent*(***);
+}
+
+-keepclassmembers class kotlin.Metadata { *; }
+-dontwarn kotlinx.coroutines.**
+
+# Lottie
+-keep class com.airbnb.lottie.** { *; }
+-dontwarn com.airbnb.lottie.**

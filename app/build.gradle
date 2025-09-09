@@ -19,6 +19,7 @@ android {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
 
+        manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
     }
 
     buildFeatures {
@@ -50,6 +51,7 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
         }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
@@ -61,6 +63,8 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            //TODO:
+            manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
         }
     }
 
@@ -99,6 +103,7 @@ android {
             dimension "env"
             buildConfigField "String", "BASE_URL", "\"https://dev.api.example.com/\""
             buildConfigField "String", "ENV_TYPE", "\"dev\""
+            buildConfigField "String", "IM_KEY", "\"5b604697b06a9f09b36154c8909cbc39\""
         }
 
         qa {   // 用 qa 或 staging 代替 test
