@@ -27,7 +27,7 @@ class ChatGroupActivity : BaseActivity<ChatGroupViewModel>() {
     override fun initData() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragContainer, ChatFragment.newInstance("48153481770"))
+            .replace(R.id.fragContainer, ChatFragment.newInstance("48253702358"))
             .commit()
     }
 

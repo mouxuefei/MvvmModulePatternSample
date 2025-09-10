@@ -1,12 +1,15 @@
 package com.mou.mvvmmodule.ui.login.views
 
+import android.app.Activity
 import com.core.commonsdk.base.BaseActivity
 import com.core.commonsdk.utils.ActRouter
-import com.google.zxing.integration.android.IntentIntegrator
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.XXPermissions
+import com.hjq.permissions.permission.PermissionLists
+import com.hjq.permissions.permission.base.IPermission
 import com.mou.mvvmmodule.databinding.ActivityLoginBinding
 import com.mou.mvvmmodule.ui.login.viewmodel.LoginViewModel
 import com.mou.mvvmmodule.ui.main.views.MainActivity
-import com.mou.mvvmmodule.ui.main.views.QRScanActivity
 
 /**
  * @FileName: LoginActivity.java
@@ -22,8 +25,15 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     override fun initView() {
         binding.btnLogin.setOnClickListener {
-            ActRouter.startActivity(this, MainActivity::class.java)
-            // 在 Activity 中
+            XXPermissions.with(this).permission(PermissionLists.getPostNotificationsPermission())
+                .request(
+                    OnPermissionCallback { grantedList: List<IPermission?>?, deniedList: List<IPermission?> ->
+                        val allGranted = deniedList.isEmpty()
+                        if (!allGranted) {
+                            return@OnPermissionCallback
+                        }
+                        ActRouter.startActivity(this, MainActivity::class.java)
+                    })
 
         }
     }

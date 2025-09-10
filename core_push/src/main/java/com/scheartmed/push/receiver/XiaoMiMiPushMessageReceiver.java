@@ -2,6 +2,7 @@ package com.scheartmed.push.receiver;
 
 import android.content.Context;
 
+import com.core.commonsdk.utils.MyLogger;
 import com.netease.nimlib.sdk.mixpush.MiPushMessageReceiver;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
@@ -16,9 +17,11 @@ public class XiaoMiMiPushMessageReceiver extends MiPushMessageReceiver {
 
 
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
+        MyLogger.getLogger().d("MiPushMessageReceiver onReceivePassThroughMessage message=" + message.getContent());
     }
 
     public void onNotificationMessageClicked(Context context, MiPushMessage message) {
+        MyLogger.getLogger().d("MiPushMessageReceiver onNotificationMessageClicked message=" + message.getContent());
     }
 
     public void onNotificationMessageArrived(Context context, MiPushMessage message) {
@@ -31,5 +34,6 @@ public class XiaoMiMiPushMessageReceiver extends MiPushMessageReceiver {
     }
 
     public void onRequirePermissions(Context context, String[] strings) {
+        MyLogger.getLogger().d("MiPushMessageReceiver onRequirePermissions message=" + strings.toString());
     }
 }

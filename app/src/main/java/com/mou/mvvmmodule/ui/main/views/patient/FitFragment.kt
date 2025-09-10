@@ -108,7 +108,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         binding.btnGroup2.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
-                .login("user@113723", "97b168d5-b09b-4bf8-b698-8fdd1505ff3a", null, {
+                .login("user@113723", "123456", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->

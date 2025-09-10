@@ -91,7 +91,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private var mAdapter: ChatAdapter? = null
     private var mChatUiHelper: ChatUiHelper? = null
     private lateinit var mChatHandler: ChatMsgHandler
-    private lateinit var mChatSession: ChatSession
+    private var mChatSession: ChatSession? = null
     private lateinit var mMsgList: ArrayList<MessageItem>
     private var isLoadingMessageList = false
     private var hasMore = true // 是否还有更多历史消息
@@ -106,7 +106,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         private fun shouldAddTimeMessage(imMessage: V2NIMMessage, lastMsg: MessageItem?): Boolean {
             return imMessage.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && V2NIMConversationIdUtil.conversationTargetId(
                 imMessage.conversationId
-            ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession.conversationId) && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
+            ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession?.conversationId) && (lastMsg == null || (lastMsg is MessageItem.SdkMessage && imMessage.createTime - lastMsg.message.createTime > ChatMsgHandler.TEN_MINUTE))
         }
 
         override fun onReceiveMessages(messages: MutableList<V2NIMMessage>) {
@@ -118,7 +118,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             val newMessages = messages.filter {
                 it.conversationType == V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM && V2NIMConversationIdUtil.conversationTargetId(
                     it.conversationId
-                ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession.conversationId)
+                ) == V2NIMConversationIdUtil.conversationTargetId(mChatSession?.conversationId)
             }
             newMessages.forEach {
                 mMsgList.add(MessageItem.SdkMessage(it))
@@ -172,7 +172,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                 revokeNotifications.forEach { notification ->
                     val revokedMessageId = notification.messageRefer.messageServerId
                     val senderId = notification.messageRefer.senderId
-                    val myAccountId = mChatSession.myInfo?.accountId
+                    val myAccountId = mChatSession?.myInfo?.accountId
 
                     MyLogger.getLogger().e("onMessageRevokeNotifications-$revokedMessageId")
 
@@ -182,7 +182,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                         val tipsMessage = mChatHandler.createTipsMessage("对方撤回了一条消息")
                         NIMClient.getService(V2NIMMessageService::class.java).insertMessageToLocal(
                             tipsMessage,
-                            mChatSession.conversationId,
+                            mChatSession?.conversationId,
                             notification.revokeAccountId,
                             notification.messageRefer.createTime,
                             {
@@ -219,7 +219,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        setChattingAccount()
+//        setChattingAccount()
     }
 
     /**
@@ -233,17 +233,14 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
 
     private fun createChatSession() {
-        val teamId = getTeamId()
-        if (teamId == null) {
-            return
-        }
+        val teamId = getTeamId() ?: return
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
         mChatSession = ChatSession()
-        mChatSession.myInfo = myUsrInfo
-        mChatSession.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
-        mChatSession.conversationId = V2NIMConversationIdUtil.teamConversationId(teamId)
+        mChatSession?.myInfo = myUsrInfo
+        mChatSession?.conversationType = V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+        mChatSession?.conversationId = V2NIMConversationIdUtil.teamConversationId(teamId)
         mChatHandler = ChatMsgHandler(context)
 
     }
@@ -375,7 +372,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             else -> (mMsgList[0] as? MessageItem.SdkMessage)?.message
         }
         isLoadingMessageList = true
-        mChatHandler.loadMessage(anchorMessage, mChatSession.conversationId, {
+        mChatHandler.loadMessage(anchorMessage, mChatSession?.conversationId, {
             handleMsg(it)
             MyLogger.getLogger().e("loadMessage success==" + it.messages.size)
             isLoadingMessageList = false
@@ -529,12 +526,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private fun sendMessage(newMessage: V2NIMMessage, isRetry: Boolean = false) {
-        mChatHandler.sendMsg(newMessage, mChatSession.conversationId, {
-
+        mChatHandler.sendMsg(newMessage, mChatSession?.conversationId, {
         }, {
-
+            MyLogger.getLogger().e("消息发送失败：" + it.desc)
         }, {
-
         })
         if (!isRetry) {
             sendMessageSuccess(newMessage)
@@ -657,7 +652,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             NIMClient.getService(
                 V2NIMMessageService::class.java
             ).insertMessageToLocal(v2NIMMessage,
-                mChatSession.conversationId,
+                mChatSession?.conversationId,
                 item.message.senderId,
                 item.message.createTime,
                 {
@@ -842,9 +837,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             }).startActivityPreview(position, false, photoList)
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         NIMClient.getService(V2NIMMessageService::class.java).removeMessageListener(messageListener)
     }
+
+
 }

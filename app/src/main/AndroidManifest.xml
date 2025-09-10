@@ -42,6 +42,10 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-sdk tools:overrideLibrary="com.huawei.android.hms.base,com.huawei.android.hms.push"/>
+
     <!--Android 11 使用相机-->
     <queries package="${applicationId}">
         <intent>

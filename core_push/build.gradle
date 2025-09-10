@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.kapt'
     id 'kotlin-parcelize'
     id 'com.huawei.agconnect'
 }
@@ -47,10 +47,13 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation project(':core_common')
+
     api "com.netease.nimlib:push:10.9.10"
     api "com.netease.nimlib:basesdk:10.9.10"
 
     api("com.huawei.hms:push:6.10.0.300")
     api('com.huawei.agconnect:agconnect-core:1.9.1.302')
+
 
 }

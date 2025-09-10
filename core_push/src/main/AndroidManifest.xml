@@ -15,6 +15,15 @@
         </receiver>
 
 
+        <!--华为推送配置-->
+        <service
+            android:name="com.netease.nimlib.mixpush.hw.HWPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+
+        </service>
         <service
             android:name=".receiver.HuaWeiHWPushMessageService"
             android:exported="false">

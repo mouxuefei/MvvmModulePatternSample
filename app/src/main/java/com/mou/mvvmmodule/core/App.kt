@@ -1,14 +1,9 @@
 package com.mou.mvvmmodule.core
 
-import android.content.Context
 import android.graphics.Color
 import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.utils.SpUtil
-import com.core.network.ApiException
-import com.huawei.agconnect.AGConnectOptionsBuilder
-import com.huawei.agconnect.config.AGConnectServicesConfig
-import com.huawei.hms.aaid.HmsInstanceId
-import com.huawei.hms.push.HmsMessaging
+import com.huawei.hms.support.common.ActivityMgr
 import com.mou.mvvmmodule.ui.main.views.MainActivity
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.NotificationFoldStyle
@@ -17,9 +12,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig
 import com.netease.nimlib.sdk.StatusBarNotificationFilter
 import com.netease.nimlib.sdk.StatusBarNotificationFilter.FilterPolicy
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
-import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
-import com.orhanobut.logger.Logger
 import com.scheartmed.im.widget.WebViewPool
 
 
@@ -37,42 +30,17 @@ class App : BaseApplication() {
         options.enableFcs = false
         options.enableV2CloudConversation = true
 
-        val config = getMixPushConfig()
+        val mixConfig = getMixPushConfig()
+        options.mixPushConfig = mixConfig
 
-        options.mixPushConfig = config
+        val statusBarConfig = loadStatusBarNotificationConfig()
+        options.statusBarNotificationConfig = statusBarConfig
 
-
-        initStatusBarNotificationConfig(options)
         NIMClient.initV2(this, options)
 
         WebViewPool.getInstance(this).preCreateWebView()
-
-        getPushToken()
     }
 
-    fun getPushToken() {
-
-        // 获取 token
-        Thread {
-            try {
-                val token = HmsInstanceId.getInstance(this).getToken("115244125", "HCM")
-                Logger.d("Token: $token")
-            } catch (e: Exception) {
-                Logger.e("获取 token 失败" + e.message)
-            }
-        }.start()
-    }
-
-    private fun initStatusBarNotificationConfig(options: SDKOptions) {
-        // load notification
-        val config: StatusBarNotificationConfig =
-            loadStatusBarNotificationConfig()
-        // load 用户的 StatusBarNotificationConfig 设置项
-        // SDK statusBarNotificationConfig 生效
-//        config.notificationFilter =
-//            StatusBarNotificationFilter { imMessage: IMMessage? -> if (IMApplication.getForegroundActCount() > 0) StatusBarNotificationFilter.FilterPolicy.DENY else StatusBarNotificationFilter.FilterPolicy.DEFAULT }
-        options.statusBarNotificationConfig = config
-    }
 
     /**
      * 只有 statusBarNotificationConfig 配置不为空时，toggleNotification 和 toggleRevokeMessageNotification 方法才有效。
@@ -93,42 +61,43 @@ class App : BaseApplication() {
         // 是否 App ICON 显示未读数红点(安卓 O 有效)
         config.showBadge = false
 
-        config.notificationFilter = StatusBarNotificationFilter { FilterPolicy.DEFAULT }
+        config.notificationFilter = StatusBarNotificationFilter { FilterPolicy.PERMIT }
+//        config.postNotificationsRequester =
         return config
     }
 
     private fun getMixPushConfig(): MixPushConfig {
+
+        // huawei push
+        ActivityMgr.INST.init(this)
+
         val config = MixPushConfig()
         // 传入从小米推送平台获取到的 AppId 与 AppKey
         // 传入从小米推送平台获取到的 AppId 与 AppKey
-        config.xmAppId = "xxxx"
-        config.xmAppKey = "xxxx"
-        // 传入网易云信控制台上小米推送对应的证书名
-        config.xmCertificateName = "xxxx"
+//        config.xmAppId = "xxxx"
+//        config.xmAppKey = "xxxx"
+//        // 传入网易云信控制台上小米推送对应的证书名
+//        config.xmCertificateName = "xxxx"
 
         // 传入华为推送的 App ID
-        config.hwAppId = "115238861";
+        config.hwAppId = "115244125";
         // 传入网易云信控制台上华为推送证书名
         config.hwCertificateName = "huawei";
 
         // 传入荣耀推送证书名，荣耀推送的 appId 请在 AndroidManifest.xml 文件中配置
-        config.honorCertificateName = "xxxx"
+//        config.honorCertificateName = "xxxx"
 
         // 传入网易云信控制台上配置的 vivo 推送证书名,vivo 推送的 appId appKey 请在 AndroidManifest.xml 文件中配置
-        config.vivoCertificateName = "xxxx"
+//        config.vivoCertificateName = "xxxx"
 
 
-        config.oppoAppId = "xxxx";
-        config.oppoAppKey = "xxxxxx";
-        // 注意区分 AppSercet 与 MasterSecret
-        config.oppoAppSercet = "xxxxxxx";
-        // 传入网易云信控制台上配置的 oppo 推送证书名
-        config.oppoCertificateName = "xxxx";
+//        config.oppoAppId = "xxxx";
+//        config.oppoAppKey = "xxxxxx";
+//        // 注意区分 AppSercet 与 MasterSecret
+//        config.oppoAppSercet = "xxxxxxx";
+//        // 传入网易云信控制台上配置的 oppo 推送证书名
+//        config.oppoCertificateName = "xxxx";
 
-        //魅族
-        config.mzAppId = "xxx";
-        config.mzAppKey = "xxxx";
-        config.mzCertificateName = "xxxx"
 
         //TODO：荣耀和oppo
         if (NIMUtil.isMainProcess(this)) {
