@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'kotlin-parcelize'
+    id 'com.huawei.agconnect'
 }
-apply plugin: 'com.huawei.agconnect'
 
 android {
     namespace "com.mou.mvvmmodule" // 新版必须指定
