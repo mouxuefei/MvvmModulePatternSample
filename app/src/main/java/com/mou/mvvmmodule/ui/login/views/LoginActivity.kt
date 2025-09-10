@@ -25,7 +25,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     override fun initView() {
         binding.btnLogin.setOnClickListener {
-            XXPermissions.with(this).permission(PermissionLists.getPostNotificationsPermission())
+            XXPermissions.with(this).permissions(mutableListOf(PermissionLists.getPostNotificationsPermission(),PermissionLists.getWriteExternalStoragePermission()))
                 .request(
                     OnPermissionCallback { grantedList: List<IPermission?>?, deniedList: List<IPermission?> ->
                         val allGranted = deniedList.isEmpty()

@@ -181,3 +181,6 @@
 # Lottie
 -keep class com.airbnb.lottie.** { *; }
 -dontwarn com.airbnb.lottie.**
+
+-keep class com.scheartmed.push.receiver.XiaoMiMiPushMessageReceiver {*;}
+-keep class com.scheartmed.push.receiver.HuaWeiHWPushMessageService {*;}

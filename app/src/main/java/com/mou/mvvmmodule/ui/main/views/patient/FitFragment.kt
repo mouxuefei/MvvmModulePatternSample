@@ -1,6 +1,16 @@
 package com.mou.mvvmmodule.ui.main.views.patient
 
+import android.Manifest
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.core.commonsdk.base.BaseFragment
 import com.core.commonsdk.utils.ActRouter
 import com.luck.picture.lib.basic.PictureSelector
@@ -9,6 +19,7 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener
 import com.luck.picture.lib.style.PictureSelectorStyle
 import com.luck.picture.lib.style.TitleBarStyle
+import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.FragmentFitBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.FitViewModel
 import com.netease.nimlib.sdk.NIMClient
@@ -134,14 +145,15 @@ class FitFragment : BaseFragment<FitViewModel>() {
         }
 
         binding.btnChat.setOnClickListener {
-            NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null, {
-                ActRouter.startActivity(mContext, ChatP2PActivity::class.java)
-            }) { error ->
-                val code = error.code
-                val desc = error.desc
-                // TODO
-                Logger.e("error==" + desc)
-            }
+//            NIMClient.getService(V2NIMLoginService::class.java).login("test001", "123456", null, {
+//                ActRouter.startActivity(mContext, ChatP2PActivity::class.java)
+//            }) { error ->
+//                val code = error.code
+//                val desc = error.desc
+//                // TODO
+//                Logger.e("error==" + desc)
+//            }
+            activity?.let { it1 -> showTestNotification(it1) }
         }
         binding.btnVideo.setOnClickListener {
             val video1 =
@@ -182,6 +194,59 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         }
 
+    }
+
+    fun showTestNotification(context: Context) {
+        val channelId = "test_channel_id"
+        val channelName = "测试通知渠道"
+
+        // 1. Android 13+ 申请通知权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (context is Activity) {
+                    ActivityCompat.requestPermissions(
+                        context,
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        1001
+                    )
+                } else {
+                    Log.w("villa", "无法申请通知权限，需要 Activity context")
+                }
+                return
+            }
+        }
+
+        // 2. 创建通知渠道 (Android 8.0+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "测试通知"
+                enableLights(true)
+                enableVibration(true)
+            }
+            val manager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+
+        // 3. 构建通知
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher) // 替换为你的图标
+            .setContentTitle("测试通知")
+            .setContentText("这是一条测试通知")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        // 4. 发送通知
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(1001, builder.build())
     }
 
     override fun initData() {

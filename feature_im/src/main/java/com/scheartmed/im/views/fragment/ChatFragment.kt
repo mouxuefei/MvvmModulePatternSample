@@ -219,7 +219,14 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     override fun onResume() {
         super.onResume()
-//        setChattingAccount()
+        setChattingAccount()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 退出聊天界面或离开最近联系人列表界面，建议放在 onPause 中。表示所有消息都可以进行消息提醒。
+        NIMClient.getService(MsgService::class.java)
+            .setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
     }
 
     /**
@@ -840,6 +847,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     override fun onDestroyView() {
         super.onDestroyView()
         NIMClient.getService(V2NIMMessageService::class.java).removeMessageListener(messageListener)
+
     }
 
 

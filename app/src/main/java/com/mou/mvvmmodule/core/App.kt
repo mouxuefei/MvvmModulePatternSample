@@ -2,8 +2,10 @@ package com.mou.mvvmmodule.core
 
 import android.graphics.Color
 import com.core.basemvvm.BaseApplication
+import com.core.commonsdk.utils.FileUtils
 import com.core.commonsdk.utils.SpUtil
 import com.huawei.hms.support.common.ActivityMgr
+import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.ui.main.views.MainActivity
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.NotificationFoldStyle
@@ -14,21 +16,32 @@ import com.netease.nimlib.sdk.StatusBarNotificationFilter.FilterPolicy
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.scheartmed.im.widget.WebViewPool
+import java.io.File
 
 
 class App : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
+        initSp()
+        initIM()
+        initWebView()
+    }
+
+    private fun initSp() {
         SpUtil.init(this)
+    }
+
+    private fun initIM() {
         val options = SDKOptions()
-
-
         options.asyncInitSDK = true
         options.reducedIM = false
         options.checkManifestConfig = true
         options.enableTeamMsgAck = true
         options.enableFcs = false
         options.enableV2CloudConversation = true
+
+        options.sdkStorageRootPath =
+            getExternalFilesDir(null)?.absolutePath + File.separatorChar + "nim"
 
         val mixConfig = getMixPushConfig()
         options.mixPushConfig = mixConfig
@@ -37,7 +50,9 @@ class App : BaseApplication() {
         options.statusBarNotificationConfig = statusBarConfig
 
         NIMClient.initV2(this, options)
+    }
 
+    private fun initWebView() {
         WebViewPool.getInstance(this).preCreateWebView()
     }
 
@@ -49,9 +64,10 @@ class App : BaseApplication() {
         val config = StatusBarNotificationConfig()
         // 单击通知需要跳转到的界面
         config.notificationEntrance = MainActivity::class.java
+        config.notificationSmallIconId = R.mipmap.ic_launcher
         // 通知铃声的 uri 字符串
 //        config.notificationSound = "raw/msg"
-//        config.notificationFolded = true
+        config.notificationFolded = true
         config.notificationFoldStyle = NotificationFoldStyle.ALL
         config.downTimeEnableNotification = true
         // 呼吸灯配置
@@ -59,10 +75,9 @@ class App : BaseApplication() {
         config.ledOnMs = 1000
         config.ledOffMs = 1500
         // 是否 App ICON 显示未读数红点(安卓 O 有效)
-        config.showBadge = false
+        config.showBadge = true
 
         config.notificationFilter = StatusBarNotificationFilter { FilterPolicy.PERMIT }
-//        config.postNotificationsRequester =
         return config
     }
 
