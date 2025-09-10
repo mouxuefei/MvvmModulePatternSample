@@ -1,8 +1,14 @@
 package com.mou.mvvmmodule.core
 
+import android.content.Context
 import android.graphics.Color
 import com.core.basemvvm.BaseApplication
 import com.core.commonsdk.utils.SpUtil
+import com.core.network.ApiException
+import com.huawei.agconnect.AGConnectOptionsBuilder
+import com.huawei.agconnect.config.AGConnectServicesConfig
+import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.push.HmsMessaging
 import com.mou.mvvmmodule.ui.main.views.MainActivity
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.NotificationFoldStyle
@@ -13,6 +19,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationFilter.FilterPolicy
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
+import com.orhanobut.logger.Logger
 import com.scheartmed.im.widget.WebViewPool
 
 
@@ -39,6 +46,21 @@ class App : BaseApplication() {
         NIMClient.initV2(this, options)
 
         WebViewPool.getInstance(this).preCreateWebView()
+
+        getPushToken()
+    }
+
+    fun getPushToken() {
+
+        // 获取 token
+        Thread {
+            try {
+                val token = HmsInstanceId.getInstance(this).getToken("115244125", "HCM")
+                Logger.d("Token: $token")
+            } catch (e: Exception) {
+                Logger.e("获取 token 失败" + e.message)
+            }
+        }.start()
     }
 
     private fun initStatusBarNotificationConfig(options: SDKOptions) {
@@ -85,9 +107,9 @@ class App : BaseApplication() {
         config.xmCertificateName = "xxxx"
 
         // 传入华为推送的 App ID
-        config.hwAppId = "xxxx";
+        config.hwAppId = "115238861";
         // 传入网易云信控制台上华为推送证书名
-        config.hwCertificateName = "xxxx";
+        config.hwCertificateName = "huawei";
 
         // 传入荣耀推送证书名，荣耀推送的 appId 请在 AndroidManifest.xml 文件中配置
         config.honorCertificateName = "xxxx"

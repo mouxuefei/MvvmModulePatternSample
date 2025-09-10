@@ -47,6 +47,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     api "com.netease.nimlib:push:10.9.10"
+    api "com.netease.nimlib:basesdk:10.9.10"
 
+    api("com.huawei.hms:push:6.10.0.300")
+    api("com.huawei.agconnect:agconnect-core:1.7.2.300")
 
 }

@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
     id 'kotlin-parcelize'
 }
-
+apply plugin: 'com.huawei.agconnect'
 
 android {
     namespace "com.mou.mvvmmodule" // 新版必须指定
@@ -19,7 +19,7 @@ android {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
 
-        manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
+        manifestPlaceholders = [NIM_KEY: "e8e39ee4489561a3d820185d79887792"]
     }
 
     buildFeatures {
@@ -51,7 +51,7 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
-            manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
+            manifestPlaceholders = [NIM_KEY: "e8e39ee4489561a3d820185d79887792"]
         }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
@@ -64,7 +64,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             //TODO:
-            manifestPlaceholders = [NIM_KEY: "5b604697b06a9f09b36154c8909cbc39"]
+            manifestPlaceholders = [NIM_KEY: "e8e39ee4489561a3d820185d79887792"]
         }
     }
 
@@ -141,7 +141,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core_common')
     implementation project(':core_network')
+    implementation project(':core_push')
     implementation project(':feature_im')
     implementation project(':feature_business')
-
 }

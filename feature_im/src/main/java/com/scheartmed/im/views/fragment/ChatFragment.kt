@@ -226,7 +226,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
      *  进入聊天界面，建议放在 onResume 中，表示来自 account 的消息无需进行消息提醒。
      */
     private fun setChattingAccount() {
-        val teamId = getTeamId()
+        val teamId = getTeamId() ?: return
         NIMClient.getService(MsgService::class.java)
             .setChattingAccount(teamId, SessionTypeEnum.Team);
     }
@@ -234,8 +234,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     private fun createChatSession() {
         val teamId = getTeamId()
+        if (teamId == null) {
+            return
+        }
         val myAccountId = NIMClient.getService(V2NIMLoginService::class.java).loginUser
-        Logger.e("login myAccountId==" + myAccountId)
         val userService = NIMClient.getService(V2NIMUserService::class.java)
         val myUsrInfo = userService.getUserInfo(myAccountId).data
         mChatSession = ChatSession()
@@ -355,17 +357,18 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 //        loadAnchorMessage()
     }
 
-    private fun getTeamId(): String {
+    private fun getTeamId(): String? {
         val arguments = arguments
-        var teamId = ""
+        var teamId: String? = null
         arguments?.let {
-            teamId = it.getString("teamId") ?: ""
+            teamId = it.getString("teamId")
         }
         return teamId
     }
 
 
     private fun loadMessage() {
+        getTeamId() ?: return
         val anchorMessage = when {
             mMsgList.isEmpty() -> null
             mMsgList[0] is MessageItem.TimeDivider -> (mMsgList.getOrNull(1) as? MessageItem.SdkMessage)?.message
@@ -374,9 +377,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         isLoadingMessageList = true
         mChatHandler.loadMessage(anchorMessage, mChatSession.conversationId, {
             handleMsg(it)
+            MyLogger.getLogger().e("loadMessage success==" + it.messages.size)
             isLoadingMessageList = false
         }, {
-            Logger.e("loadMessage error==" + it.desc)
+            MyLogger.getLogger().e("loadMessage error==" + it.desc)
             isLoadingMessageList = false
         })
     }
@@ -386,7 +390,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         val notMyMessages = messages.filter {
             filterReceiptMessages(it)
         }
-        Logger.e("notMyMessages ==" + notMyMessages.size)
+        MyLogger.getLogger().e("别人发送的消息的长度：" + notMyMessages.size)
         if (notMyMessages.isNotEmpty()) {
             //已读回执
             NIMClient.getService(V2NIMMessageService::class.java)
@@ -396,7 +400,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
                     MyLogger.getLogger().e("发送已读回执失败" + it.desc)
                 }
         }
-
         messages.reverse()
         val anchorMessage = it.anchorMessage
         if (messages.isEmpty() || messages.size < ChatMsgHandler.ONE_QUERY_LIMIT) {

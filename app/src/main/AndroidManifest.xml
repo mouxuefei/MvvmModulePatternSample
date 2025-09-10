@@ -56,6 +56,16 @@
         </intent>
     </queries>
 
+    <!--适配Android11，使应用可以访问HMS Core（APK）-->
+    <queries>
+        <intent>
+            <action android:name="com.huawei.hms.core.aidlservice" />
+        </intent>
+    </queries>
+
+
+
+
     <application
         android:name=".core.App"
         android:allowBackup="true"
@@ -65,6 +75,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:networkSecurityConfig"
         tools:targetApi="m">
+
+
+
         <activity
             android:name=".ui.main.views.SplashActivity"
             android:exported="true"

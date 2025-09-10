@@ -8,6 +8,24 @@ pluginManagement {
         maven {url 'https://developer.huawei.com/repo/'}
 
     }
+
+    plugins {}
+    resolutionStrategy {
+        eachPlugin {
+            if (it.requested.id.getNamespace() == 'com.huawei.agconnect') {
+                println ">> ${it.requested.id.id}"
+                if (it.requested.id.id == 'com.huawei.agconnect.agcp') {
+                    it.useModule('com.huawei.agconnect:agcp:1.7.3.302')
+                }
+                if (it.requested.id.id == 'com.huawei.agconnect.apms') {
+                    it.useModule('com.huawei.agconnect:agconnect-apms-plugin:1.6.1.300')
+                }
+                println ">> ${it.target}"
+            } else {
+                println ">  ${it.target}"
+            }
+        }
+    }
 }
 
 dependencyResolutionManagement {

@@ -51,7 +51,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         binding.btnCreateGroup.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
-                .login("user@113722", "249bc99f-1b15-4ac7-ac10-f3818110e5f4", null, {
+                .login("user@113722", "123456", null, {
                     val v2TeamService = NIMClient.getService(
                         V2NIMTeamService::class.java
                     )
@@ -95,7 +95,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         binding.btnGroupLogin.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
-                .login("user@113722", "249bc99f-1b15-4ac7-ac10-f3818110e5f4", null, {
+                .login("user@113722", "123456", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->
@@ -122,7 +122,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
 
         binding.btnGroup3.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
-                .login("user@113724", "3a50f0b7-0da2-46db-83d0-f55596d87780", null, {
+                .login("user@113724", "123456", null, {
                 ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->

@@ -49,6 +49,6 @@ dependencies {
     implementation project(':core_common')
     implementation project(':core_network')
     implementation project(':core_push')
-    api "com.netease.nimlib:basesdk:10.9.10"
+
 
 }
