@@ -1,4 +1,4 @@
-package com.core.commonsdk.base
+package com.core.basemvvm.base
 
 import android.content.Context
 import android.os.Bundle
@@ -82,7 +82,7 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment(), IView, IActivity {
 
 
     private fun initLoadingObserver() {
-        mViewModel.loadingState.observe(viewLifecycleOwner) { state ->
+        mViewModel.loadingDialogState.observe(viewLifecycleOwner) { state ->
             if (state.isLoading) {
                 showLoading(state.message)
             } else {

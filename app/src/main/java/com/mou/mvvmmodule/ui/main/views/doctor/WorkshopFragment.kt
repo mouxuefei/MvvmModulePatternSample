@@ -1,10 +1,7 @@
 package com.mou.mvvmmodule.ui.main.views.doctor
 
-import androidx.viewbinding.ViewBinding
-import com.core.commonsdk.base.BaseFragment
-import com.mou.mvvmmodule.databinding.FragmentMedicalResearchBinding
+import com.core.basemvvm.base.BaseFragment
 import com.mou.mvvmmodule.databinding.FragmentWorkShopBinding
-import com.mou.mvvmmodule.ui.main.viewmodel.MedicalResearchViewModel
 import com.mou.mvvmmodule.ui.main.viewmodel.WorkShopViewModel
 
 /**

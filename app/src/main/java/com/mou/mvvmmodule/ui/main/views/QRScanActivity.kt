@@ -1,15 +1,8 @@
 package com.mou.mvvmmodule.ui.main.views
 
-import android.animation.ValueAnimator
-import android.app.Activity
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.google.zxing.ResultPoint
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.XXPermissions
-import com.hjq.permissions.permission.PermissionLists
-import com.hjq.permissions.permission.base.IPermission
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.mou.mvvmmodule.databinding.ActivityQrScanBinding

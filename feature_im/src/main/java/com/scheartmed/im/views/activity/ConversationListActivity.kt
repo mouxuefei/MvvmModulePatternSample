@@ -1,6 +1,6 @@
 package com.scheartmed.im.views.activity
 
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.scheartmed.im.databinding.ActivityConversationListBinding
 import com.scheartmed.im.viewmodels.ConversationListViewModel
 

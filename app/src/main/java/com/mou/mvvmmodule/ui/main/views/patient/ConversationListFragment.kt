@@ -1,8 +1,7 @@
 package com.mou.mvvmmodule.ui.main.views.patient
 
-import androidx.viewbinding.ViewBinding
 import com.core.basemvvm.mvvm.EmptyViewModel
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.mou.mvvmmodule.databinding.FragmentConversationListBinding
 
 /**

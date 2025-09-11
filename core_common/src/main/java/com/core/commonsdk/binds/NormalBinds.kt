@@ -64,7 +64,7 @@ fun bindStatus(multipleStatusView: MultipleStatusView, @PageStateType stateType:
 @BindingAdapter(value = ["onError"])
 fun bindOnErrorListener(multipleStatusView: MultipleStatusView, listListener: RefreshPresenter?) {
     multipleStatusView.setOnRetryClickListener(View.OnClickListener {
-        listListener?.loadData(true)
+        listListener?.refresh()
     })
 }
 
@@ -76,12 +76,12 @@ fun bindOnErrorListener(multipleStatusView: MultipleStatusView, listListener: Re
 fun bindOnRefresh(smartRefreshLayout: SmartRefreshLayout, listListener: RefreshPresenter?) {
     smartRefreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
         override fun onLoadMore(refreshLayout: RefreshLayout) {
-            listListener?.loadData(false)
+            listListener?.loadMore()
         }
 
         override fun onRefresh(refreshLayout: RefreshLayout) {
             smartRefreshLayout.setNoMoreData(false)
-            listListener?.loadData(true)
+            listListener?.refresh()
         }
 
     })

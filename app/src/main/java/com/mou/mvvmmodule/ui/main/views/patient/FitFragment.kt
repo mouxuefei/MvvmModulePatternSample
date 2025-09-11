@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.core.commonsdk.utils.ActRouter
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
@@ -23,11 +23,7 @@ import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.FragmentFitBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.FitViewModel
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.v2.V2NIMError
-import com.netease.nimlib.sdk.v2.V2NIMFailureCallback
-import com.netease.nimlib.sdk.v2.V2NIMSuccessCallback
 import com.netease.nimlib.sdk.v2.auth.V2NIMLoginService
-import com.netease.nimlib.sdk.v2.common.V2NIMAntispamConfig
 import com.netease.nimlib.sdk.v2.team.V2NIMTeamService
 import com.netease.nimlib.sdk.v2.team.enums.V2NIMTeamAgreeMode
 import com.netease.nimlib.sdk.v2.team.enums.V2NIMTeamInviteMode
@@ -36,11 +32,9 @@ import com.netease.nimlib.sdk.v2.team.enums.V2NIMTeamType
 import com.netease.nimlib.sdk.v2.team.enums.V2NIMTeamUpdateExtensionMode
 import com.netease.nimlib.sdk.v2.team.enums.V2NIMTeamUpdateInfoMode
 import com.netease.nimlib.sdk.v2.team.params.V2NIMCreateTeamParams
-import com.netease.nimlib.sdk.v2.team.result.V2NIMCreateTeamResult
 import com.orhanobut.logger.Logger
 import com.scheartmed.im.utils.GlideEngine
 import com.scheartmed.im.views.activity.ChatGroupActivity
-import com.scheartmed.im.views.activity.ChatP2PActivity
 
 
 /**
@@ -107,7 +101,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
         binding.btnGroupLogin.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
                 .login("user@113722", "123456", null, {
-                ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
+                    ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->
                     val code = error.code
@@ -120,7 +114,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
         binding.btnGroup2.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
                 .login("user@113723", "123456", null, {
-                ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
+                    ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->
                     val code = error.code
@@ -134,7 +128,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
         binding.btnGroup3.setOnClickListener {
             NIMClient.getService(V2NIMLoginService::class.java)
                 .login("user@113724", "123456", null, {
-                ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
+                    ActRouter.startActivity(mContext, ChatGroupActivity::class.java)
                     Logger.e("登录成功==")
                 }) { error ->
                     val code = error.code
@@ -192,6 +186,10 @@ class FitFragment : BaseFragment<FitViewModel>() {
                 })
                 .startActivityPreview(0, false, list)
 
+        }
+
+        binding.btnList.setOnClickListener {
+//            context?.let { it1 -> ActRouter.startActivity(it1, TestListActivity::class.java) }
         }
 
     }

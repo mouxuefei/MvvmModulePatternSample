@@ -1,7 +1,6 @@
 package com.mou.mvvmmodule.ui.main.views.doctor
 
-import androidx.viewbinding.ViewBinding
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.mou.mvvmmodule.databinding.FragmentMedicalResearchBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MedicalResearchViewModel
 
@@ -12,7 +11,7 @@ import com.mou.mvvmmodule.ui.main.viewmodel.MedicalResearchViewModel
  * @version V1.0 <描述当前版本功能>
  * @desc
  */
-class MedicalResearchFragment:BaseFragment<MedicalResearchViewModel>() {
+class MedicalResearchFragment: BaseFragment<MedicalResearchViewModel>() {
     override val binding: FragmentMedicalResearchBinding by lazy {
         FragmentMedicalResearchBinding.inflate(layoutInflater)
     }

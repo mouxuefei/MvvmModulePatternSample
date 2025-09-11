@@ -4,7 +4,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.core.commonsdk.utils.MyLogger
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.ActivityMainBinding

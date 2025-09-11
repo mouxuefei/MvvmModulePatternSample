@@ -1,7 +1,7 @@
 package com.mou.mvvmmodule.ui.main.views.patient
 
 import androidx.fragment.app.Fragment
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.mou.mvvmmodule.R
 import com.mou.mvvmmodule.databinding.FragmentMessageBinding
 import com.mou.mvvmmodule.ui.main.viewmodel.MessageViewModel

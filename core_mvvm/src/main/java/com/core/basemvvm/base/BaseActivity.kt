@@ -1,4 +1,4 @@
-package com.core.commonsdk.base
+package com.core.basemvvm.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import com.core.basemvvm.mvvm.BaseViewModel
 import com.core.basemvvm.mvvm.IActivity
 import com.core.basemvvm.mvvm.IView
 import com.core.basemvvm.widget.LoadDialog
-import org.greenrobot.eventbus.EventBus
 
 /***
  *
@@ -47,7 +46,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity(), IView, IA
     }
 
     private fun initLoadingObserver() {
-        mViewModel.loadingState.observe(this) { state ->
+        mViewModel.loadingDialogState.observe(this) { state ->
             if (state.isLoading) {
                 showLoading(state.message)
             } else {

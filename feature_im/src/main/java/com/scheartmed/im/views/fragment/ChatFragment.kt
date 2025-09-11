@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.core.basemvvm.BaseApplication
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.core.commonsdk.utils.FileUtils
 import com.core.commonsdk.utils.MyLogger
 import com.luck.picture.lib.basic.PictureSelector

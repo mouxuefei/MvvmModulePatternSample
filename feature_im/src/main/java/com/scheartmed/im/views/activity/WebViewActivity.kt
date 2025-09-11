@@ -10,7 +10,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.core.basemvvm.mvvm.EmptyViewModel
 import com.scheartmed.im.databinding.ActivityWebviewBinding
 import com.scheartmed.im.widget.WebViewPool

@@ -1,7 +1,7 @@
 package com.scheartmed.im.views.activity
 
 import androidx.viewpager2.widget.ViewPager2
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.core.basemvvm.mvvm.EmptyViewModel
 import com.scheartmed.im.databinding.ActivityPhotoViewerBinding
 import com.scheartmed.im.views.adapter.PhotoPagerAdapter

@@ -7,9 +7,8 @@ package com.core.basemvvm.helper.listener
  */
 
 interface RefreshPresenter {
-    /**
-     * 加载数据
-     * isRefresh:true 下拉刷新,false 上拉加载更多
-     */
-    fun loadData(isRefresh: Boolean)
+
+    fun refresh()
+
+    fun loadMore()
 }

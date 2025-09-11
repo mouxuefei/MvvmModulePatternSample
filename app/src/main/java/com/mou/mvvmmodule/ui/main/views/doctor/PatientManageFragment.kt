@@ -1,7 +1,7 @@
 package com.mou.mvvmmodule.ui.main.views.doctor
 
 import android.os.Bundle
-import com.core.commonsdk.base.BaseFragment
+import com.core.basemvvm.base.BaseFragment
 import com.core.commonsdk.utils.ActRouter
 import com.core.commonsdk.utils.MyLogger
 import com.mou.mvvmmodule.databinding.FragmentHomeBinding
@@ -114,8 +114,6 @@ class PatientManageFragment : BaseFragment<HomeFragmentViewModel>() {
     }
 
     override fun initData() {
-
-
         mViewModel.chapterName.observe(this) {
             it?.let { binding.name.text = it }
         }

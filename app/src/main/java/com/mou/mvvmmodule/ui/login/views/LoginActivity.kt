@@ -1,7 +1,6 @@
 package com.mou.mvvmmodule.ui.login.views
 
-import android.app.Activity
-import com.core.commonsdk.base.BaseActivity
+import com.core.basemvvm.base.BaseActivity
 import com.core.commonsdk.utils.ActRouter
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.XXPermissions

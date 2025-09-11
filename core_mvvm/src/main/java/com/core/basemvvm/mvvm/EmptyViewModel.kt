@@ -1,5 +1,8 @@
 package com.core.basemvvm.mvvm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+
 /**
  * @FileName: EmptyViewModel.java
  * @author: villa_mou
@@ -8,4 +11,5 @@ package com.core.basemvvm.mvvm
  * @desc
  */
 class EmptyViewModel: BaseViewModel() {
+
 }

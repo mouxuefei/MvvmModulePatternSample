@@ -1,12 +1,10 @@
 package com.core.basemvvm.mvvm
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.core.basemvvm.helper.annotation.PageStateType
-import com.core.basemvvm.helper.annotation.RefreshType
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -28,24 +26,26 @@ import kotlinx.coroutines.launch
  */
 
 abstract class BaseViewModel : ViewModel() {
-    //页面状态
-    @SuppressLint("SupportAnnotationUsage")
+//    //页面状态
     @PageStateType
     val pageState = MutableLiveData<Int>()
+//
+//    //刷新/加载更多状态
+//    @RefreshType
+//    val listState = MutableLiveData<Int>()
 
-    //刷新/加载更多状态
-    @SuppressLint("SupportAnnotationUsage")
-    @RefreshType
-    val listState = MutableLiveData<Int>()
 
+    /**
+     * 全局弹窗
+     */
     private val _loadingState = MutableLiveData<LoadingState>()
-    val loadingState: LiveData<LoadingState> get() = _loadingState
+    val loadingDialogState: LiveData<LoadingState> get() = _loadingState
 
     private var requestCount = 0
 
     init {
         pageState.value = PageStateType.NORMAL
-        listState.value = RefreshType.NORMAL
+//        listState.value = RefreshType.NORMAL
     }
 
 

@@ -39,9 +39,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="单聊" />
+
     <Button
         android:id="@+id/btnVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="视频" />
+
+    <Button
+        android:id="@+id/btnList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="列表" />
 </LinearLayout>
