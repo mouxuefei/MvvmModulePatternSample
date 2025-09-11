@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:background="@mipmap/public_back_icon"/>
+            android:background="@mipmap/icon_back_black"/>
 
     </RelativeLayout>
 

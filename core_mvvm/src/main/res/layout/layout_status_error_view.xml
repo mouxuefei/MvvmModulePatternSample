@@ -16,14 +16,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:text="页面数据加载失败"
-        android:textColor="@color/public_hintText"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="12sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="点击空白处重新加载"
-        android:textColor="@color/public_hintText"
-        android:textSize="@dimen/text_size_14" />
+        android:textSize="14sp" />
 </LinearLayout>

@@ -39,7 +39,7 @@ class LoadDialog private constructor(private val context: Context) {
     }
 
     private val contentView by lazy {
-        LayoutInflater.from(context).inflate(R.layout.public_dialog_load, null)
+        LayoutInflater.from(context).inflate(R.layout.layout_dialog_load, null)
     }
 
     private val titleTv by lazy {

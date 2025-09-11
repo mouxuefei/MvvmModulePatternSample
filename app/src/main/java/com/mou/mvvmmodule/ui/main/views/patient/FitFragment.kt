@@ -189,7 +189,7 @@ class FitFragment : BaseFragment<FitViewModel>() {
         }
 
         binding.btnList.setOnClickListener {
-//            context?.let { it1 -> ActRouter.startActivity(it1, TestListActivity::class.java) }
+            context?.let { it1 -> ActRouter.startActivity(it1, TestListActivity::class.java) }
         }
 
     }

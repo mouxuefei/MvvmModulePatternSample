@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/no_network_view"
@@ -14,25 +13,25 @@
     <ImageView
         android:layout_width="56dp"
         android:layout_height="50dp"
-        android:src="@mipmap/icon_status_network"/>
+        android:src="@mipmap/icon_status_network" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
-        android:text="似乎已断开与互联网的连接"/>
+        android:text="似乎已断开与互联网的连接" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="温馨提示："/>
+        android:text="温馨提示：" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="请确保手机连接的Wi-Fi或者运营商网络正常，如果正常，请点击“重新加载”重新加载页面信息；"/>
+        android:text="请确保手机连接的Wi-Fi或者运营商网络正常，如果正常，请点击“重新加载”重新加载页面信息；" />
 
     <Button
         android:id="@+id/public_no_network_retry_view"
@@ -40,6 +39,5 @@
         android:layout_height="50dp"
         android:layout_marginTop="100dp"
         android:text="重新加载"
-        android:textColor="@color/c_whiteColor"
-       />
+        android:textColor="#ffffff" />
 </LinearLayout>

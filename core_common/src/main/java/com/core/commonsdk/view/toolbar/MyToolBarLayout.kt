@@ -16,7 +16,7 @@ import com.core.commonsdk.R
  */
 
 class MyToolBarLayout(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
-    private var backIcon: Int = R.mipmap.public_back_icon
+    private var backIcon: Int =R.mipmap.public_back_icon
     private var toolTitle: String? = null
     private var toolRight: String? = null
     private var iconVisible: Boolean = true

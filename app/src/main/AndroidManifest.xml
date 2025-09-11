@@ -107,10 +107,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
 
-<!--        <activity-->
-<!--            android:name=".ui.main.views.patient.TestListActivity"-->
-<!--            android:exported="true"-->
-<!--            android:screenOrientation="portrait" />-->
+        <activity
+            android:name=".ui.main.views.patient.TestListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
 
 
         <!-- 适配7.0获取uri路径 -->

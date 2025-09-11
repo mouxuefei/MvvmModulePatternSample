@@ -9,6 +9,5 @@ class UserAdapter : BaseQuickAdapter<User, BaseViewHolder>(R.layout.item_user) {
 
     override fun convert(holder: BaseViewHolder, item: User) {
         holder.setText(R.id.tvName, item.name)
-        holder.setText(R.id.tvAge, "年龄: ${item.age}")
     }
 }

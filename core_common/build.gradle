@@ -42,39 +42,6 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api project(':core_mvvm')
-    api "androidx.cardview:cardview:1.0.0"
-    api "io.github.scwang90:refresh-layout-kernel:2.0.5"
-    api "io.github.scwang90:refresh-header-classics:2.0.5"
 
-    api 'io.github.h07000223:flycoTabLayout:3.0.0'
-    api "com.gyf.immersionbar:immersionbar:2.3.1"
-    api "com.contrarywind:Android-PickerView:4.1.6"
-
-    api("com.airbnb.android:lottie:6.3.0")
-
-    kapt "androidx.lifecycle:lifecycle-compiler:2.9.2"
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
-    api "androidx.lifecycle:lifecycle-livedata-ktx:2.9.2"
-
-    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
-
-    // 设备兼容框架：https://github.com/getActivity/DeviceCompat
-    api 'com.github.getActivity:DeviceCompat:1.0'
-    // 权限请求框架：https://github.com/getActivity/XXPermissions
-    api 'com.github.getActivity:XXPermissions:26.5'
-
-    api 'io.github.lucksiege:pictureselector:v3.11.2'
-    api 'io.github.lucksiege:compress:v3.11.2'
-
-    api "com.google.code.gson:gson:2.10.1"
-
-    api "com.github.bumptech.glide:glide:4.16.0"
-
-    api 'com.google.zxing:core:3.5.1'
-    api 'com.journeyapps:zxing-android-embedded:4.3.0'
-
-    api 'org.greenrobot:eventbus:3.3.1'
-
-    api 'com.qiniu:qiniu-android-sdk:8.9.+'
 
 }

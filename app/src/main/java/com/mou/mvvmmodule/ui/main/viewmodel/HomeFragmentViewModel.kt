@@ -29,12 +29,6 @@ class HomeFragmentViewModel : BaseViewModel() {
 
     fun loadUsers() {
         // 模拟网络/本地数据
-        val list = mutableListOf(
-            User(1, "张三", 20),
-            User(2, "李四", 25),
-            User(3, "王五", 30)
-        )
-        _users.value = list
     }
 
     fun addUser(user: User) {
