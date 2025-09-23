@@ -79,9 +79,9 @@ dependencies {
     api 'com.github.getActivity:DeviceCompat:1.0'
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     api 'com.github.getActivity:XXPermissions:26.5'
-
-    api 'io.github.lucksiege:pictureselector:v3.11.2'
-    api 'io.github.lucksiege:compress:v3.11.2'
+//
+//    api 'io.github.lucksiege:pictureselector:v3.11.2'
+//    api 'io.github.lucksiege:compress:v3.11.2'
 
     api "com.google.code.gson:gson:2.10.1"
 
@@ -94,4 +94,8 @@ dependencies {
 
     api 'com.qiniu:qiniu-android-sdk:8.9.+'
 
+
+    api project(':selector')
+    api project(':compress')
+    api project(":ijkplayer-java")
 }

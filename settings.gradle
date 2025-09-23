@@ -48,3 +48,6 @@ rootProject.name = "MvvmModulePatternSample"
 include ':app', ':core_mvvm', ':core_common',':core_network', ':feature_im'
 include ':feature_business'
 include ':core_push'
+include ':selector'
+include ':ijkplayer-java'
+include ':compress'
